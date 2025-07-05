@@ -1,183 +1,202 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>VINILOS</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: gray;
-            margin: 0;
-            padding: 20px;
-        }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>VINILOS</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: gray;
+      margin: 0;
+      padding: 20px;
+    }
 
-        h1 {
-            text-align: center;
-        }
+    h1 {
+      text-align: center;
+      color: white;
+    }
 
-        #search {
-            margin-bottom: 20px;
-            padding: 10px;
-            width: 100%;
-            max-width: 300px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            display: block;
-            margin-left: auto;
-            margin-right: auto;
-        }
+    #search {
+      margin: 0 auto 20px;
+      padding: 10px;
+      width: 100%;
+      max-width: 300px;
+      font-size: 16px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      display: block;
+    }
 
-        #artists {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 20px;
-        }
+    #artists {
+      margin: 0 auto;
+    }
 
-        .artist {
-            background: #9b9796;
-            border-radius: 5px;
-            padding: 15px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-        }
+    .artist {
+      width: 300px;
+      background: #9b9796;
+      border-radius: 5px;
+      padding: 15px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      margin-bottom: 20px;
+      box-sizing: border-box;
+    }
 
-        .artist-name {
-            font-weight: bold;
-            margin-bottom: 10px;
-            font-size: 1.1em;
-        }
+    .artist-name {
+      font-weight: bold;
+      margin-bottom: 10px;
+      font-size: 1.1em;
+    }
 
-        .album {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            margin-bottom: 8px;
-        }
+    .album {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 8px;
+    }
 
-        .album img {
-            width: 100px;
-            height: 100px;
-            object-fit: cover;
-            border-radius: 5px;
-        }
-    </style>
+    .album img {
+      width: 100px;
+      height: 100px;
+      object-fit: cover;
+      border-radius: 5px;
+    }
+  </style>
+
+  <!-- 🧱 Masonry.js CDN -->
+  <script src="https://unpkg.com/masonry-layout@4/dist/masonry.pkgd.min.js"></script>
 </head>
 <body>
 
-    <h1>Artistas y Álbumes</h1>
-    <input type="text" id="search" placeholder="Buscar artista o álbum...">
+  <h1>Artistas y Álbumes</h1>
+  <input type="text" id="search" placeholder="Buscar artista o álbum..." />
+  <div id="artists"></div>
 
-    <div id="artists"></div>
+  <script>
+    const data = {
+      "C. Tangana": [
+        { name: "Avida Dollars", image: "img/dollars.jpg" },
+        { name: "El Madrileño", image: "img/mad.jpeg" }
+      ],
+      "Choclock": [
+        { name: "Daltónico pero me siento Azul", image: "img/dalton.jpeg" }
+      ],
+      "Cruz Cafuné": [
+        { name: "Blu€s", image: "img/azul.jpg" },
+        { name: "Me Muevo Con Dios", image: "img/MMCD.png" }
+      ],
+      "Dellafuente": [
+        { name: "Ansia Viva", image: "img/ansia.jpg" },
+        { name: "Torii Yama", image: "img/yama.jpg" },
+        { name: "Lagrimas pa otro dia", image: "img/lagrimas.jpg" }
+      ],
+      "Diego900": [
+        { name: "La Espalda Del Sol", image: "img/espalda.jpeg" }
+      ],
+      "Elio Toffana": [
+        { name: "Shock Wave", image: "img/wave.jpg" }
+      ],
+      "Enry-K": [
+        { name: "KDOT", image: "img/dot.jpg" },
+        { name: "Luz Rosa", image: "img/rosa.jpeg" }
+      ],
+      "Extremoduro": [
+        { name: "Canciones Prohibidas", image: "img/canciones.jpeg" }
+      ],
+      "Judelline": [
+        { name: "Bodhiria", image: "img/bodhiria.jpg" }
+      ],
+      "Juicy Bae": [
+        { name: "Antes De Conocerte", image: "img/antes.jpg" },
+        { name: "El Secreto", image: "img/secreto.jpg" },
+        { name: "PTSD", image: "img/ptsd.jpg" }
+      ],
+      "Quevedo": [
+        { name: "Buenas Noches", image: "img/noches.jpg" }
+      ],
+      "Raul Clyde": [
+        { name: "Destino 2014", image: "img/destino.jpeg" }
+      ],
+      "Recycled J": [
+        { name: "Casanova", image: "img/casanova.jpg" },
+        { name: "Preludio", image: "img/pre.jpg" }
+      ],
+      "Rels B": [
+        { name: "A New Star", image: "img/star.jpeg" }
+      ],
+      "Rosalia": [
+        { name: "El Mal Querer", image: "img/querer.jpg" },
+        { name: "Motomami", image: "img/moto.jpg" }
+      ],
+      "Sen Senra": [
+        { name: "Sensaciones", image: "img/sens.jpg" }
+      ],
+      "Taifa Yallah": [
+        { name: "Causa", image: "img/causa.jpg" }
+      ]
+    };
 
-    <script>
-        const data = {
-            "C. Tangana": [
-                { name: "Avida Dollars", image: "img/dollars.jpg" },
-                { name: "El Madrileño", image: "img/mad.jpeg" }
-            ],
-            "Choclock": [
-                { name: "Daltónico pero me siento Azul", image: "img/dalton.jpeg" }
-            ],
-            "Cruz Cafuné": [
-                { name: "Blu€s", image: "img/azul.jpg" },
-                { name: "Me Muevo Con Dios", image: "img/MMCD.png" }
-            ],
-            "Dellafuente": [
-                { name: "Ansia Viva", image: "img/ansia.jpg" },
-                { name: "Torii Yama", image: "img/yama.jpg" },
-                { name: "Lagrimas pa otro dia", image: "img/lagrimas.jpg" }
-            ],
-            "Diego900": [
-                { name: "La Espalda Del Sol", image: "img/espalda.jpeg" }
-            ],
-            "Elio Toffana": [
-                { name: "Shock Wave", image: "img/wave.jpg" }
-            ],
-            "Enry-K": [
-                { name: "KDOT", image: "img/dot.jpg" },
-                { name: "Luz Rosa", image: "img/rosa.jpeg" }
-            ],
-            "Extremoduro": [
-                { name: "Canciones Prohibidas", image: "img/canciones.jpeg" }
-            ],
-            "Judelline": [
-                { name: "Bodhiria", image: "img/bodhiria.jpg" }
-            ],
-            "Juicy Bae": [
-                { name: "Antes De Conocerte", image: "img/antes.jpg" },
-                { name: "El Secreto", image: "img/secreto.jpg" },
-                { name: "PTSD", image: "img/ptsd.jpg" }
-            ],
-            "Quevedo": [
-                { name: "Buenas Noches", image: "img/noches.jpg" }
-            ],
-            "Raul Clyde": [
-                { name: "Destino 2014", image: "img/destino.jpeg" }
-            ],
-            "Recycled J": [
-                { name: "Casanova", image: "img/casanova.jpg" },
-                { name: "Preludio", image: "img/pre.jpg" }
-            ],
-            "Rels B": [
-                { name: "A New Star", image: "img/star.jpeg" }
-            ],
-            "Rosalia": [
-                { name: "El Mal Querer", image: "img/querer.jpg" },
-                { name: "Motomami", image: "img/moto.jpg" }
-            ],
-            "Sen Senra": [
-                { name: "Sensaciones", image: "img/sens.jpg" }
-            ],
-            "Taifa Yallah": [
-                { name: "Causa", image: "img/causa.jpg" }
-            ]
-        };
+    let masonry;
 
-        function displayArtists(artists) {
-            const artistsDiv = document.getElementById('artists');
-            artistsDiv.innerHTML = '';
+    function initMasonry() {
+      // Destruir Masonry previo si existe
+      if (masonry) masonry.destroy();
+      masonry = new Masonry('#artists', {
+        itemSelector: '.artist',
+        columnWidth: 300,
+        gutter: 20,
+        fitWidth: true
+      });
+    }
 
-            for (const artist in artists) {
-                const artistDiv = document.createElement('div');
-                artistDiv.className = 'artist';
+    function displayArtists(artists) {
+      const artistsDiv = document.getElementById('artists');
+      artistsDiv.innerHTML = '';
 
-                const nameDiv = document.createElement('div');
-                nameDiv.className = 'artist-name';
-                nameDiv.textContent = artist;
-                artistDiv.appendChild(nameDiv);
+      for (const artist in artists) {
+        const artistDiv = document.createElement('div');
+        artistDiv.className = 'artist';
 
-                artists[artist].forEach(album => {
-                    const albumDiv = document.createElement('div');
-                    albumDiv.className = 'album';
-                    albumDiv.innerHTML = `
-                        <img src="${album.image}" alt="${album.name}">
-                        <span>${album.name}</span>
-                    `;
-                    artistDiv.appendChild(albumDiv);
-                });
+        const nameDiv = document.createElement('div');
+        nameDiv.className = 'artist-name';
+        nameDiv.textContent = artist;
+        artistDiv.appendChild(nameDiv);
 
-                artistsDiv.appendChild(artistDiv);
-            }
+        artists[artist].forEach(album => {
+          const albumDiv = document.createElement('div');
+          albumDiv.className = 'album';
+          albumDiv.innerHTML = `
+            <img src="${album.image}" alt="${album.name}">
+            <span>${album.name}</span>
+          `;
+          artistDiv.appendChild(albumDiv);
+        });
+
+        artistsDiv.appendChild(artistDiv);
+      }
+
+      // Esperar un frame y aplicar Masonry
+      setTimeout(initMasonry, 100);
+    }
+
+    function searchArtists() {
+      const query = document.getElementById('search').value.toLowerCase();
+      const filteredArtists = {};
+      for (const artist in data) {
+        const albums = data[artist].filter(album =>
+          artist.toLowerCase().includes(query) ||
+          album.name.toLowerCase().includes(query)
+        );
+        if (albums.length > 0) {
+          filteredArtists[artist] = albums;
         }
+      }
+      displayArtists(filteredArtists);
+    }
 
-        function searchArtists() {
-            const query = document.getElementById('search').value.toLowerCase();
-            const filteredArtists = {};
-            for (const artist in data) {
-                const albums = data[artist].filter(album =>
-                    artist.toLowerCase().includes(query) ||
-                    album.name.toLowerCase().includes(query)
-                );
-                if (albums.length > 0) {
-                    filteredArtists[artist] = albums;
-                }
-            }
-            displayArtists(filteredArtists);
-        }
+    document.getElementById('search').addEventListener('input', searchArtists);
 
-        document.getElementById('search').addEventListener('input', searchArtists);
-        displayArtists(data);
-    </script>
-
+    displayArtists(data);
+  </script>
 </body>
 </html>
