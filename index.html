@@ -17,8 +17,8 @@
       color: white;
     }
 
-    #search {
-      margin: 0 auto 20px;
+    #search, #tag-filter {
+      margin: 10px auto 20px;
       padding: 10px;
       width: 100%;
       max-width: 300px;
@@ -63,98 +63,118 @@
     }
   </style>
 
-  <!-- 🧱 Masonry.js CDN -->
   <script src="https://unpkg.com/masonry-layout@4/dist/masonry.pkgd.min.js"></script>
 </head>
 <body>
 
   <h1>Artistas y Álbumes</h1>
   <input type="text" id="search" placeholder="Buscar artista o álbum..." />
+  <select id="tag-filter">
+    <option value="">Filtrar por estilo...</option>
+  </select>
   <div id="artists"></div>
 
   <script>
     const data = {
       "C. Tangana": [
-        { name: "Avida Dollars", image: "img/dollars.jpg" },
-        { name: "El Madrileño", image: "img/mad.jpeg" }
+        { name: "Avida Dollars", image: "img/dollars.jpg", tags: ["rap", "urbano", "trap"] },
+        { name: "El Madrileño", image: "img/mad.jpeg", tags: ["flamenco", "fusión", "latino"] }
       ],
       "Choclock": [
-        { name: "Daltónico pero me siento Azul", image: "img/dalton.jpeg" }
+        { name: "Daltónico pero me siento Azul", image: "img/dalton.jpeg", tags: ["r&b", "soul", "trap suave"] }
       ],
       "Cruz Cafuné": [
-        { name: "Blu€s", image: "img/azul.jpg" },
-        { name: "Me Muevo Con Dios", image: "img/MMCD.png" }
+        { name: "Blu€s", image: "img/azul.jpg", tags: ["trap", "urbano", "r&b"] },
+        { name: "Me Muevo Con Dios", image: "img/MMCD.png", tags: ["rap", "urbano", "experimental"] }
       ],
       "Dellafuente": [
-        { name: "Ansia Viva", image: "img/ansia.jpg" },
-        { name: "Torii Yama", image: "img/yama.jpg" },
-        { name: "Lagrimas pa otro dia", image: "img/lagrimas.jpg" }
+        { name: "Ansia Viva", image: "img/ansia.jpg", tags: ["trap", "flamenco", "fusión"] },
+        { name: "Torii Yama", image: "img/yama.jpg", tags: ["trap", "experimental", "urbano"] },
+        { name: "Lagrimas pa otro dia", image: "img/lagrimas.jpg", tags: ["flamenco", "urbano", "soul"] }
       ],
       "Diego900": [
-        { name: "La Espalda Del Sol", image: "img/espalda.jpeg" }
+        { name: "La Espalda Del Sol", image: "img/espalda.jpeg", tags: ["rap", "underground", "boombap"] }
       ],
       "Eladio Carrión": [
-        { name: "DON KBRON", image: "img/kbron.jpeg" }
+        { name: "DON KBRON", image: "img/kbron.jpeg", tags: ["trap", "reggaetón", "urbano"] }
       ],
       "Elio Toffana": [
-        { name: "Shock Wave", image: "img/wave.jpg" }
+        { name: "Shock Wave", image: "img/wave.jpg", tags: ["rap", "boombap", "underground"] }
       ],
       "Enry-K": [
-        { name: "KDOT", image: "img/dot.jpg" },
-        { name: "Luz Rosa", image: "img/rosa.jpeg" }
+        { name: "KDOT", image: "img/dot.jpg", tags: ["trap", "electrónica", "urbano"] },
+        { name: "Luz Rosa", image: "img/rosa.jpeg", tags: ["trap suave", "pop", "experimental"] }
       ],
       "Extremoduro": [
-        { name: "Canciones Prohibidas", image: "img/canciones.jpeg" }
+        { name: "Canciones Prohibidas", image: "img/canciones.jpeg", tags: ["rock", "rock español", "hard rock"] }
       ],
       "Judelline": [
-        { name: "Bodhiria", image: "img/bodhiria.jpg" }
+        { name: "Bodhiria", image: "img/bodhiria.jpg", tags: ["r&b", "alternativo", "experimental"] }
       ],
       "Juicy Bae": [
-        { name: "Antes De Conocerte", image: "img/antes.jpg" },
-        { name: "El Secreto", image: "img/secreto.jpg" },
-        { name: "PTSD", image: "img/ptsd.jpg" }
+        { name: "Antes De Conocerte", image: "img/antes.jpg", tags: ["trap", "r&b", "urbano"] },
+        { name: "El Secreto", image: "img/secreto.jpg", tags: ["r&b", "alternativo", "soul"] },
+        { name: "PTSD", image: "img/ptsd.jpg", tags: ["trap", "r&b", "melancólico"] }
       ],
       "Quevedo": [
-        { name: "Buenas Noches", image: "img/noches.jpg" }
+        { name: "Buenas Noches", image: "img/noches.jpg", tags: ["reggaetón", "trap", "urbano"] }
       ],
       "Raul Clyde": [
-        { name: "Destino 2014", image: "img/destino.jpeg" }
+        { name: "Destino 2014", image: "img/destino.jpeg", tags: ["rap", "emo rap", "underground"] }
       ],
       "Recycled J": [
-        { name: "Casanova", image: "img/casanova.jpg" },
-        { name: "Preludio", image: "img/pre.jpg" }
+        { name: "Casanova", image: "img/casanova.jpg", tags: ["pop", "urbano", "r&b"] },
+        { name: "Preludio", image: "img/pre.jpg", tags: ["rap", "boombap", "urbano"] }
       ],
       "Rels B": [
-        { name: "A New Star", image: "img/star.jpeg" }
+        { name: "A New Star", image: "img/star.jpeg", tags: ["pop", "trap suave", "r&b"] }
       ],
       "Rosalia": [
-        { name: "El Mal Querer", image: "img/querer.jpg" },
-        { name: "Motomami", image: "img/moto.jpg" }
+        { name: "El Mal Querer", image: "img/querer.jpg", tags: ["flamenco", "pop", "experimental"] },
+        { name: "Motomami", image: "img/moto.jpg", tags: ["experimental", "pop", "urbano"] }
       ],
       "Sen Senra": [
-        { name: "Sensaciones", image: "img/sens.jpg" }
+        { name: "Sensaciones", image: "img/sens.jpg", tags: ["pop", "alternativo", "indie"] }
       ],
       "SZA": [
-        { name: "Ctrl", image: "img/ctrl.jpg" }
+        { name: "Ctrl", image: "img/ctrl.jpg", tags: ["r&b", "neo soul", "alternativo"] }
       ],
       "Taifa Yallah": [
-        { name: "Causa", image: "img/causa.jpg" }
+        { name: "Causa", image: "img/causa.jpg", tags: ["rap", "afrotrap", "alternativo"] }
       ],
       "The Weeknd": [
-        { name: "Starboy", image: "img/starboy.jpg" }
+        { name: "Starboy", image: "img/starboy.jpg", tags: ["pop", "r&b", "synthpop"] }
       ]
     };
+
 
     let masonry;
 
     function initMasonry() {
-      // Destruir Masonry previo si existe
       if (masonry) masonry.destroy();
       masonry = new Masonry('#artists', {
         itemSelector: '.artist',
         columnWidth: 300,
         gutter: 20,
         fitWidth: true
+      });
+    }
+
+    function getAllTags() {
+      const tagsSet = new Set();
+      for (const albums of Object.values(data)) {
+        albums.forEach(album => album.tags.forEach(tag => tagsSet.add(tag)));
+      }
+      return Array.from(tagsSet).sort();
+    }
+
+    function populateTagFilter() {
+      const select = document.getElementById('tag-filter');
+      getAllTags().forEach(tag => {
+        const option = document.createElement('option');
+        option.value = tag;
+        option.textContent = tag;
+        select.appendChild(option);
       });
     }
 
@@ -184,27 +204,37 @@
         artistsDiv.appendChild(artistDiv);
       }
 
-      // Esperar un frame y aplicar Masonry
       setTimeout(initMasonry, 100);
     }
 
-    function searchArtists() {
+    function searchAndFilterArtists() {
       const query = document.getElementById('search').value.toLowerCase();
+      const selectedTag = document.getElementById('tag-filter').value;
       const filteredArtists = {};
+
       for (const artist in data) {
-        const albums = data[artist].filter(album =>
-          artist.toLowerCase().includes(query) ||
-          album.name.toLowerCase().includes(query)
-        );
+        const albums = data[artist].filter(album => {
+          const matchesQuery =
+            artist.toLowerCase().includes(query) ||
+            album.name.toLowerCase().includes(query);
+
+          const matchesTag = !selectedTag || album.tags.includes(selectedTag);
+
+          return matchesQuery && matchesTag;
+        });
+
         if (albums.length > 0) {
           filteredArtists[artist] = albums;
         }
       }
+
       displayArtists(filteredArtists);
     }
 
-    document.getElementById('search').addEventListener('input', searchArtists);
+    document.getElementById('search').addEventListener('input', searchAndFilterArtists);
+    document.getElementById('tag-filter').addEventListener('change', searchAndFilterArtists);
 
+    populateTagFilter();
     displayArtists(data);
   </script>
 </body>
