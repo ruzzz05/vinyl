@@ -11,12 +11,10 @@
       margin: 0;
       padding: 20px;
     }
-
     h1 {
       text-align: center;
       color: white;
     }
-
     #search, #tag-filter {
       margin: 10px auto 20px;
       padding: 10px;
@@ -27,11 +25,9 @@
       border-radius: 5px;
       display: block;
     }
-
     #artists {
       margin: 0 auto;
     }
-
     .artist {
       width: 300px;
       background: #9b9796;
@@ -41,25 +37,23 @@
       margin-bottom: 20px;
       box-sizing: border-box;
     }
-
     .artist-name {
       font-weight: bold;
       margin-bottom: 10px;
       font-size: 1.1em;
     }
-
     .album {
       display: flex;
       align-items: center;
       gap: 10px;
       margin-bottom: 8px;
     }
-
     .album img {
       width: 100px;
       height: 100px;
       object-fit: cover;
       border-radius: 5px;
+      cursor: pointer;
     }
   </style>
 
@@ -150,8 +144,6 @@
       ]
     };
 
-
-
     let masonry;
 
     function initMasonry() {
@@ -199,7 +191,9 @@
           const albumDiv = document.createElement('div');
           albumDiv.className = 'album';
           albumDiv.innerHTML = `
-            <img src="${album.image}" alt="${album.name}">
+            <a href="${album.url}" target="_blank">
+              <img src="${album.image}" alt="${album.name}">
+            </a>
             <span>${album.name}</span>
           `;
           artistDiv.appendChild(albumDiv);
@@ -221,9 +215,7 @@
           const matchesQuery =
             artist.toLowerCase().includes(query) ||
             album.name.toLowerCase().includes(query);
-
           const matchesTag = !selectedTag || album.tags.includes(selectedTag);
-
           return matchesQuery && matchesTag;
         });
 
