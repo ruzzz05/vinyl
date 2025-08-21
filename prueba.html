@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>VINILOS</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: gray;
+      margin: 0;
+      padding: 20px;
+    }
+    h1 {
+      text-align: center;
+      color: white;
+    }
+    #search, #tag-filter {
+      margin: 10px auto 20px;
+      padding: 10px;
+      width: 100%;
+      max-width: 300px;
+      font-size: 16px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      display: block;
+    }
+    #artists {
+      margin: 0 auto;
+    }
+    .artist {
+      width: 300px;
+      background: #9b9796;
+      border-radius: 5px;
+      padding: 15px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      margin-bottom: 20px;
+      box-sizing: border-box;
+    }
+    .artist-name {
+      font-weight: bold;
+      margin-bottom: 10px;
+      font-size: 1.1em;
+    }
+    .album {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 8px;
+    }
+    .album img {
+      width: 100px;
+      height: 100px;
+      object-fit: cover;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+  </style>
+
+  <script src="https://unpkg.com/masonry-layout@4/dist/masonry.pkgd.min.js"></script>
+</head>
+<body>
+
+  <h1>Artistas y Álbumes</h1>
+  <input type="text" id="search" placeholder="Buscar artista o álbum..." />
+  <select id="tag-filter">
+    <option value="">Filtrar por estilo...</option>
+  </select>
+  <div id="artists"></div>
+
+  <script>
+    const data = {
+      "C. Tangana": [
+        { 
+          name: "Avida Dollars", 
+          image: "img/dollars.jpg", 
+          tags: ["rap"], 
+          url: "https://open.spotify.com/album/7Dl3kd377FvNAEVHHOMSTM"
+        },
+        { 
+          name: "El Madrileño", 
+          image: "img/mad.jpeg", 
+          tags: ["fusión", "flamenco"], 
+          url: "https://open.spotify.com/album/52QyC9nSbgtHFXyQRHsXJ9"
+        }
+      ]
+      // Aquí puedes seguir añadiendo el resto de artistas y álbumes...
+    };
+
+    let masonry;
+
+    function initMasonry() {
+      if (masonry) masonry.destroy();
+      masonry = new Masonry('#artists', {
+        itemSelector: '.artist',
+        columnWidth: 300,
+        gutter: 20,
+        fitWidth: true
+      });
+    }
+
+    function getAllTags() {
+      const tagsSet = new Set();
+      for (const albums of Object.values(data)) {
+        albums.forEach(album => album.tags.forEach(tag => tagsSet.add(tag)));
+      }
+      return Array.from(tagsSet).sort();
+    }
+
+    function populateTagFilter() {
+      const select = document.getElementById('tag-filter');
+      getAllTags().forEach(tag => {
+        const option = document.createElement('option');
+        option.value = tag;
+        option.textContent = tag;
+        select.appendChild(option);
+      });
+    }
+
+    function displayArtists(artists) {
+      const artistsDiv = document.getElementById('artists');
+      artistsDiv.innerHTML = '';
+
+      for (const artist in artists) {
+        const artistDiv = document.createElement('div');
+        artistDiv.className = 'artist';
+
+        const nameDiv = document.createElement('div');
+        nameDiv.className = 'artist-name';
+        nameDiv.textContent = artist;
+        artistDiv.appendChild(nameDiv);
+
+        artists[artist].forEach(album => {
+          const albumDiv = document.createElement('div');
+          albumDiv.className = 'album';
+          albumDiv.innerHTML = `
+            <a href="${album.url}" target="_blank">
+              <img src="${album.image}" alt="${album.name}">
+            </a>
+            <span>${album.name}</span>
+          `;
+          artistDiv.appendChild(albumDiv);
+        });
+
+        artistsDiv.appendChild(artistDiv);
+      }
+
+      setTimeout(initMasonry, 100);
+    }
+
+    function searchAndFilterArtists() {
+      const query = document.getElementById('search').value.toLowerCase();
+      const selectedTag = document.getElementById('tag-filter').value;
+      const filteredArtists = {};
+
+      for (const artist in data) {
+        const albums = data[artist].filter(album => {
+          const matchesQuery =
+            artist.toLowerCase().includes(query) ||
+            album.name.toLowerCase().includes(query);
+          const matchesTag = !selectedTag || album.tags.includes(selectedTag);
+          return matchesQuery && matchesTag;
+        });
+
+        if (albums.length > 0) {
+          filteredArtists[artist] = albums;
+        }
+      }
+
+      displayArtists(filteredArtists);
+    }
+
+    document.getElementById('search').addEventListener('input', searchAndFilterArtists);
+    document.getElementById('tag-filter').addEventListener('change', searchAndFilterArtists);
+
+    populateTagFilter();
+    displayArtists(data);
+  </script>
+</body>
+</html>
