@@ -24,8 +24,8 @@
       width: 100%;
       max-width: 300px;
       font-size: 16px;
-      border: 1px solid #ccc;
       border-radius: 5px;
+      border: 1px solid #ccc;
       display: block;
     }
 
@@ -45,16 +45,11 @@
       background: #444;
     }
 
-    #artists {
-      margin: 0 auto;
-    }
-
     .artist {
       width: 300px;
       background: #9b9796;
       border-radius: 5px;
       padding: 15px;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
       margin-bottom: 20px;
       box-sizing: border-box;
     }
@@ -62,7 +57,6 @@
     .artist-name {
       font-weight: bold;
       margin-bottom: 10px;
-      font-size: 1.1em;
     }
 
     .album {
@@ -110,6 +104,17 @@
       font-size: 22px;
       cursor: pointer;
     }
+
+
+
+    #artists-wrapper {
+      display: flex;
+      justify-content: center;
+    }
+
+    #artists {
+      width: auto;
+    }
   </style>
 
   <script src="https://unpkg.com/masonry-layout@4/dist/masonry.pkgd.min.js"></script>
@@ -117,33 +122,33 @@
 
 <body>
 
-  <h1>Artistas y Álbumes</h1>
+<h1>Artistas y Álbumes</h1>
 
-  <input type="text" id="search" placeholder="Buscar artista o álbum..." />
-  <select id="tag-filter">
-    <option value="">Filtrar por estilo...</option>
-  </select>
+<input id="search" type="text" placeholder="Buscar artista o álbum..." />
+<select id="tag-filter">
+  <option value="">Filtrar por estilo...</option>
+</select>
 
-  <button id="random-btn"> Disco Random</button>
+<button id="random-btn">🎲 Disco Random</button>
 
+<div id="artists-wrapper">
   <div id="artists"></div>
+</div>
 
-  <!-- MODAL -->
-  <div id="random-modal" class="modal">
-    <div class="modal-content">
-      <span class="close">&times;</span>
-      <h2 id="random-title"></h2>
-      <p id="random-artist"></p>
-      <a id="random-link" href="#" target="_blank">
-        <img id="random-image" src="" alt="">
-      </a>
-    </div>
+<!-- MODAL -->
+<div id="random-modal" class="modal">
+  <div class="modal-content">
+    <span class="close">&times;</span>
+    <h2 id="random-title"></h2>
+    <p id="random-artist"></p>
+    <a id="random-link" target="_blank">
+      <img id="random-image">
+    </a>
   </div>
+</div>
 
-
-
-  <script>
-    const data = {
+<script>
+const data = {
       "C. Tangana": [
         { name: "Avida Dollars", image: "img/dollars.jpg", tags: ["rap"], url: "https://open.spotify.com/album/7Dl3kd377FvNAEVHHOMSTM?si=cFDrlHX7TQ6fKeVtiIr-dg" },
         { name: "El Madrileño", image: "img/mad.jpeg", tags: ["fusión", "flamenco"], url: "https://open.spotify.com/album/52QyC9nSbgtHFXyQRHsXJ9?si=NcbMIrJzTcWSAqImcDSruQ" }
@@ -240,107 +245,112 @@
         { name: "Grandes del Jazz Vol. 6", image: "img/grandes.jpg", tags: ["jazz"], url: "" }
       ]
     };  
+</script>
 
-    let masonry;
+<script>
+const searchInput = document.getElementById('search');
+const tagFilter = document.getElementById('tag-filter');
+const artistsDiv = document.getElementById('artists');
 
-    function initMasonry() {
-      if (masonry) masonry.destroy();
-      masonry = new Masonry('#artists', {
-        itemSelector: '.artist',
-        columnWidth: 300,
-        gutter: 20,
-        fitWidth: true
-      });
-    }
+let masonry;
 
-    function getAllTags() {
-      const tags = new Set();
-      Object.values(data).forEach(albums =>
-        albums.forEach(a => a.tags.forEach(t => tags.add(t)))
-      );
-      return [...tags].sort();
-    }
+function initMasonry() {
+  if (masonry) masonry.destroy();
+  masonry = new Masonry('#artists', {
+    itemSelector: '.artist',
+    columnWidth: 300,
+    gutter: 20,
+    fitWidth: true
+  });
+}
 
-    function populateTagFilter() {
-      const select = document.getElementById('tag-filter');
-      getAllTags().forEach(tag => {
-        const opt = document.createElement('option');
-        opt.value = tag;
-        opt.textContent = tag;
-        select.appendChild(opt);
-      });
-    }
+function getAllTags() {
+  const tags = new Set();
+  Object.values(data).forEach(albums =>
+    albums.forEach(a => a.tags.forEach(t => tags.add(t)))
+  );
+  return [...tags].sort();
+}
 
-    function displayArtists(artists) {
-      const div = document.getElementById('artists');
-      div.innerHTML = '';
+function populateTagFilter() {
+  getAllTags().forEach(tag => {
+    const option = document.createElement('option');
+    option.value = tag;
+    option.textContent = tag;
+    tagFilter.appendChild(option);
+  });
+}
 
-      for (const artist in artists) {
-        const artistDiv = document.createElement('div');
-        artistDiv.className = 'artist';
+function displayArtists(artists) {
+  artistsDiv.innerHTML = '';
 
-        artistDiv.innerHTML = `<div class="artist-name">${artist}</div>`;
+  for (const artist in artists) {
+    const artistDiv = document.createElement('div');
+    artistDiv.className = 'artist';
 
-        artists[artist].forEach(album => {
-          artistDiv.innerHTML += `
-            <div class="album">
-              <a href="${album.url}" target="_blank">
-                <img src="${album.image}">
-              </a>
-              <span>${album.name}</span>
-            </div>`;
-        });
+    artistDiv.innerHTML = `<div class="artist-name">${artist}</div>`;
 
-        div.appendChild(artistDiv);
-      }
-      setTimeout(initMasonry, 100);
-    }
+    artists[artist].forEach(album => {
+      artistDiv.innerHTML += `
+        <div class="album">
+          <a href="${album.url}" target="_blank">
+            <img src="${album.image}">
+          </a>
+          <span>${album.name}</span>
+        </div>`;
+    });
 
-    function searchAndFilterArtists() {
-      const q = search.value.toLowerCase();
-      const tag = tagFilter.value;
-      const result = {};
+    artistsDiv.appendChild(artistDiv);
+  }
 
-      for (const artist in data) {
-        const albums = data[artist].filter(a =>
-          (artist.toLowerCase().includes(q) || a.name.toLowerCase().includes(q)) &&
-          (!tag || a.tags.includes(tag))
-        );
-        if (albums.length) result[artist] = albums;
-      }
-      displayArtists(result);
-    }
+  setTimeout(initMasonry, 100);
+}
 
-    document.getElementById('search').addEventListener('input', searchAndFilterArtists);
-    document.getElementById('tag-filter').addEventListener('change', searchAndFilterArtists);
+function searchAndFilterArtists() {
+  const q = searchInput.value.toLowerCase();
+  const tag = tagFilter.value;
+  const result = {};
 
-    /* DISCO RANDOM */
-    const modal = document.getElementById('random-modal');
-    const closeBtn = document.querySelector('.close');
+  for (const artist in data) {
+    const albums = data[artist].filter(a =>
+      (artist.toLowerCase().includes(q) || a.name.toLowerCase().includes(q)) &&
+      (!tag || a.tags.includes(tag))
+    );
+    if (albums.length) result[artist] = albums;
+  }
 
-    document.getElementById('random-btn').onclick = () => {
-      const allAlbums = [];
-      for (const artist in data) {
-        data[artist].forEach(album => {
-          allAlbums.push({ ...album, artist });
-        });
-      }
+  displayArtists(result);
+}
 
-      const random = allAlbums[Math.floor(Math.random() * allAlbums.length)];
+searchInput.addEventListener('input', searchAndFilterArtists);
+tagFilter.addEventListener('change', searchAndFilterArtists);
 
-      document.getElementById('random-title').textContent = random.name;
-      document.getElementById('random-artist').textContent = random.artist;
-      document.getElementById('random-image').src = random.image;
-      document.getElementById('random-link').href = random.url || "#";
+/* DISCO RANDOM */
+const modal = document.getElementById('random-modal');
+const closeBtn = document.querySelector('.close');
 
-      modal.style.display = 'flex';
-    };
+document.getElementById('random-btn').onclick = () => {
+  const allAlbums = [];
+  for (const artist in data) {
+    data[artist].forEach(album => allAlbums.push({ ...album, artist }));
+  }
 
-    closeBtn.onclick = () => modal.style.display = 'none';
-    window.onclick = e => { if (e.target === modal) modal.style.display = 'none'; };
+  const random = allAlbums[Math.floor(Math.random() * allAlbums.length)];
 
-    populateTagFilter();
-    displayArtists(data);
-  </script>
+  document.getElementById('random-title').textContent = random.name;
+  document.getElementById('random-artist').textContent = random.artist;
+  document.getElementById('random-image').src = random.image;
+  document.getElementById('random-link').href = random.url || "#";
+
+  modal.style.display = 'flex';
+};
+
+closeBtn.onclick = () => modal.style.display = 'none';
+window.onclick = e => { if (e.target === modal) modal.style.display = 'none'; };
+
+populateTagFilter();
+displayArtists(data);
+</script>
+
 </body>
 </html>
