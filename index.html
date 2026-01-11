@@ -4,6 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>VINILOS</title>
+
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -11,10 +12,12 @@
       margin: 0;
       padding: 20px;
     }
+
     h1 {
       text-align: center;
       color: white;
     }
+
     #search, #tag-filter {
       margin: 10px auto 20px;
       padding: 10px;
@@ -25,9 +28,27 @@
       border-radius: 5px;
       display: block;
     }
+
+    #random-btn {
+      display: block;
+      margin: 0 auto 20px;
+      padding: 10px 20px;
+      font-size: 16px;
+      background: #222;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    #random-btn:hover {
+      background: #444;
+    }
+
     #artists {
       margin: 0 auto;
     }
+
     .artist {
       width: 300px;
       background: #9b9796;
@@ -37,17 +58,20 @@
       margin-bottom: 20px;
       box-sizing: border-box;
     }
+
     .artist-name {
       font-weight: bold;
       margin-bottom: 10px;
       font-size: 1.1em;
     }
+
     .album {
       display: flex;
       align-items: center;
       gap: 10px;
       margin-bottom: 8px;
     }
+
     .album img {
       width: 100px;
       height: 100px;
@@ -55,18 +79,68 @@
       border-radius: 5px;
       cursor: pointer;
     }
+
+    /* MODAL */
+    .modal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.7);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .modal-content {
+      background: #9b9796;
+      padding: 20px;
+      border-radius: 8px;
+      text-align: center;
+      max-width: 300px;
+    }
+
+    .modal-content img {
+      width: 200px;
+      border-radius: 8px;
+      margin-top: 10px;
+    }
+
+    .close {
+      float: right;
+      font-size: 22px;
+      cursor: pointer;
+    }
   </style>
 
   <script src="https://unpkg.com/masonry-layout@4/dist/masonry.pkgd.min.js"></script>
 </head>
+
 <body>
 
   <h1>Artistas y Álbumes</h1>
+
   <input type="text" id="search" placeholder="Buscar artista o álbum..." />
   <select id="tag-filter">
     <option value="">Filtrar por estilo...</option>
   </select>
+
+  <button id="random-btn"> Disco Random</button>
+
   <div id="artists"></div>
+
+  <!-- MODAL -->
+  <div id="random-modal" class="modal">
+    <div class="modal-content">
+      <span class="close">&times;</span>
+      <h2 id="random-title"></h2>
+      <p id="random-artist"></p>
+      <a id="random-link" href="#" target="_blank">
+        <img id="random-image" src="" alt="">
+      </a>
+    </div>
+  </div>
+
+
 
   <script>
     const data = {
@@ -180,78 +254,90 @@
     }
 
     function getAllTags() {
-      const tagsSet = new Set();
-      for (const albums of Object.values(data)) {
-        albums.forEach(album => album.tags.forEach(tag => tagsSet.add(tag)));
-      }
-      return Array.from(tagsSet).sort();
+      const tags = new Set();
+      Object.values(data).forEach(albums =>
+        albums.forEach(a => a.tags.forEach(t => tags.add(t)))
+      );
+      return [...tags].sort();
     }
 
     function populateTagFilter() {
       const select = document.getElementById('tag-filter');
       getAllTags().forEach(tag => {
-        const option = document.createElement('option');
-        option.value = tag;
-        option.textContent = tag;
-        select.appendChild(option);
+        const opt = document.createElement('option');
+        opt.value = tag;
+        opt.textContent = tag;
+        select.appendChild(opt);
       });
     }
 
     function displayArtists(artists) {
-      const artistsDiv = document.getElementById('artists');
-      artistsDiv.innerHTML = '';
+      const div = document.getElementById('artists');
+      div.innerHTML = '';
 
       for (const artist in artists) {
         const artistDiv = document.createElement('div');
         artistDiv.className = 'artist';
 
-        const nameDiv = document.createElement('div');
-        nameDiv.className = 'artist-name';
-        nameDiv.textContent = artist;
-        artistDiv.appendChild(nameDiv);
+        artistDiv.innerHTML = `<div class="artist-name">${artist}</div>`;
 
         artists[artist].forEach(album => {
-          const albumDiv = document.createElement('div');
-          albumDiv.className = 'album';
-          albumDiv.innerHTML = `
-            <a href="${album.url}" target="_blank">
-              <img src="${album.image}" alt="${album.name}">
-            </a>
-            <span>${album.name}</span>
-          `;
-          artistDiv.appendChild(albumDiv);
+          artistDiv.innerHTML += `
+            <div class="album">
+              <a href="${album.url}" target="_blank">
+                <img src="${album.image}">
+              </a>
+              <span>${album.name}</span>
+            </div>`;
         });
 
-        artistsDiv.appendChild(artistDiv);
+        div.appendChild(artistDiv);
       }
-
       setTimeout(initMasonry, 100);
     }
 
     function searchAndFilterArtists() {
-      const query = document.getElementById('search').value.toLowerCase();
-      const selectedTag = document.getElementById('tag-filter').value;
-      const filteredArtists = {};
+      const q = search.value.toLowerCase();
+      const tag = tagFilter.value;
+      const result = {};
 
       for (const artist in data) {
-        const albums = data[artist].filter(album => {
-          const matchesQuery =
-            artist.toLowerCase().includes(query) ||
-            album.name.toLowerCase().includes(query);
-          const matchesTag = !selectedTag || album.tags.includes(selectedTag);
-          return matchesQuery && matchesTag;
-        });
-
-        if (albums.length > 0) {
-          filteredArtists[artist] = albums;
-        }
+        const albums = data[artist].filter(a =>
+          (artist.toLowerCase().includes(q) || a.name.toLowerCase().includes(q)) &&
+          (!tag || a.tags.includes(tag))
+        );
+        if (albums.length) result[artist] = albums;
       }
-
-      displayArtists(filteredArtists);
+      displayArtists(result);
     }
 
     document.getElementById('search').addEventListener('input', searchAndFilterArtists);
     document.getElementById('tag-filter').addEventListener('change', searchAndFilterArtists);
+
+    /* DISCO RANDOM */
+    const modal = document.getElementById('random-modal');
+    const closeBtn = document.querySelector('.close');
+
+    document.getElementById('random-btn').onclick = () => {
+      const allAlbums = [];
+      for (const artist in data) {
+        data[artist].forEach(album => {
+          allAlbums.push({ ...album, artist });
+        });
+      }
+
+      const random = allAlbums[Math.floor(Math.random() * allAlbums.length)];
+
+      document.getElementById('random-title').textContent = random.name;
+      document.getElementById('random-artist').textContent = random.artist;
+      document.getElementById('random-image').src = random.image;
+      document.getElementById('random-link').href = random.url || "#";
+
+      modal.style.display = 'flex';
+    };
+
+    closeBtn.onclick = () => modal.style.display = 'none';
+    window.onclick = e => { if (e.target === modal) modal.style.display = 'none'; };
 
     populateTagFilter();
     displayArtists(data);
