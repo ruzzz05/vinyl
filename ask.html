@@ -9,7 +9,6 @@
         :root {
             --mode-yonunca: 209, 213%, 56%;
             --mode-ask: 0, 79%, 72%;
-            --mode-normal: 120, 60%, 50%; /* Nuevo modo normal */
         }
         
         body {
@@ -45,12 +44,6 @@
             border-bottom: 4px solid hsl(var(--mode-ask));
             color: hsl(var(--mode-ask));
         }
-
-        .btn-mode.normal.active {
-            background-color: hsla(var(--mode-normal), 0.2);
-            border-bottom: 4px solid hsl(var(--mode-normal));
-            color: hsl(var(--mode-normal));
-        }
         
         .card {
             background-color: #fff;
@@ -65,10 +58,6 @@
             border-top: 8px solid hsl(var(--mode-ask));
         }
 
-        .card.normal {
-            border-top: 8px solid hsl(var(--mode-normal));
-        }
-        
         .btn-next {
             background-color: #e5e7eb;
             color: #4b5563;
@@ -85,11 +74,6 @@
         
         .btn-next.ask:hover {
             background-color: hsl(var(--mode-ask));
-            color: white;
-        }
-
-        .btn-next.normal:hover {
-            background-color: hsl(var(--mode-normal));
             color: white;
         }
         
@@ -125,9 +109,6 @@
             <button id="btn-ask" class="btn-mode ask px-6 py-2 rounded-t-lg transition-colors">
                 Ask
             </button>
-            <button id="btn-normal" class="btn-mode normal px-6 py-2 rounded-t-lg transition-colors">
-                Normal
-            </button>
         </div>
     </header>
 
@@ -147,12 +128,10 @@
         let currentMode = 'yonunca';
         let yonuncaQuestions = [];
         let askQuestions = [];
-        let normalQuestions = []; // Preguntas para el modo normal
         
         // Elementos del DOM
         const btnYoNunca = document.getElementById('btn-yonunca');
         const btnAsk = document.getElementById('btn-ask');
-        const btnNormal = document.getElementById('btn-normal'); // Botón para el modo normal
         const btnNext = document.getElementById('btn-next');
         const cardContainer = document.getElementById('card-container');
         const questionElement = document.getElementById('question');
@@ -374,10 +353,6 @@
                 
                 askQuestions = [
                 ];
-
-                normalQuestions = [
-                    
-                ];
                 
                 console.log('Preguntas cargadas correctamente');
             } catch (error) {
@@ -388,12 +363,10 @@
         // Cambiar entre modos
         function switchMode(newMode) {
             currentMode = newMode;
-            
-            // Actualizar botones de modo
+
             btnYoNunca.classList.remove('active');
             btnAsk.classList.remove('active');
-            btnNormal.classList.remove('active'); // Desactivar el botón normal
-            
+
             if (newMode === 'yonunca') {
                 btnYoNunca.classList.add('active');
                 cardContainer.className = 'card yonunca max-w-2xl w-full p-8 rounded-lg text-center transition-all fade-in';
@@ -404,20 +377,18 @@
                 cardContainer.className = 'card ask max-w-2xl w-full p-8 rounded-lg text-center transition-all fade-in';
                 modeTitle.textContent = 'Ask';
                 btnNext.className = 'btn-next ask mt-4 px-8 py-3 rounded-lg font-medium transition-all shadow-md';
-            } else {
-                btnNormal.classList.add('active');
-                cardContainer.className = 'card normal max-w-2xl w-full p-8 rounded-lg text-center transition-all fade-in';
-                modeTitle.textContent = 'Normal';
-                btnNext.className = 'btn-next normal mt-4 px-8 py-3 rounded-lg font-medium transition-all shadow-md';
             }
-            
-            // Mostrar pregunta aleatoria del nuevo modo
+
             showRandomQuestion();
         }
+
         
         // Mostrar pregunta aleatoria
         function showRandomQuestion() {
-            const questions = currentMode === 'yonunca' ? yonuncaQuestions : (currentMode === 'ask' ? askQuestions : normalQuestions);
+            const questions = currentMode === 'yonunca'
+                ? yonuncaQuestions
+                : askQuestions;
+
             
             if (questions.length === 0) {
                 questionElement.textContent = 'No hay preguntas disponibles';
@@ -436,7 +407,6 @@
         // Event listeners
         btnYoNunca.addEventListener('click', () => switchMode('yonunca'));
         btnAsk.addEventListener('click', () => switchMode('ask'));
-        btnNormal.addEventListener('click', () => switchMode('normal')); // Evento para el modo normal
         btnNext.addEventListener('click', showRandomQuestion);
         
         // Inicialización
