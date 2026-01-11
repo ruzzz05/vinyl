@@ -115,6 +115,31 @@
     #artists {
       width: auto;
     }
+
+    .nav {
+      background: #222;
+      padding: 12px;
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+    }
+
+    .nav a {
+      color: white;
+      text-decoration: none;
+      padding: 8px 14px;
+      border-radius: 5px;
+      font-weight: bold;
+    }
+
+    .nav a:hover {
+      background: #444;
+    }
+
+    .nav a.active {
+      background: #555;
+    }
+
   </style>
 
   <script src="https://unpkg.com/masonry-layout@4/dist/masonry.pkgd.min.js"></script>
@@ -122,6 +147,11 @@
 
 <body>
 
+
+  <nav class="nav">
+    <a href="index.html" class="active">🎵 Música</a>
+    <a href="ask.html">❓ Juego de Preguntas</a>
+  </nav>
 <h1>Artistas y Álbumes</h1>
 
 <input id="search" type="text" placeholder="Buscar artista o álbum..." />
