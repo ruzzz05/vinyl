@@ -1,157 +1,187 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>VINILOS</title>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>VINILOS</title>
 
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background-color: gray;
-      margin: 0;
-      padding: 20px;
-    }
+<style>
+body {
+  font-family: Arial, sans-serif;
+  background-color: gray;
+  margin: 0;
+  padding: 20px;
+}
 
-    h1 {
-      text-align: center;
-      color: white;
-    }
+h1 {
+  text-align: center;
+  color: white;
+}
 
-    #search, #tag-filter {
-      margin: 10px auto 20px;
-      padding: 10px;
-      width: 100%;
-      max-width: 300px;
-      font-size: 16px;
-      border-radius: 5px;
-      border: 1px solid #ccc;
-      display: block;
-    }
+/* INPUTS */
+#search, #tag-filter {
+  margin: 10px auto 20px;
+  padding: 10px;
+  width: 100%;
+  max-width: 300px;
+  font-size: 16px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  display: block;
+}
 
-    #random-btn {
-      display: block;
-      margin: 0 auto 20px;
-      padding: 10px 20px;
-      font-size: 16px;
-      background: #222;
-      color: white;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-    }
+#random-btn {
+  display: block;
+  margin: 0 auto 20px;
+  padding: 10px 20px;
+  font-size: 16px;
+  background: #222;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
 
-    #random-btn:hover {
-      background: #444;
-    }
+#random-btn:hover {
+  background: #444;
+}
 
-    .artist {
-      width: 300px;
-      background: #9b9796;
-      border-radius: 5px;
-      padding: 15px;
-      margin-bottom: 20px;
-      box-sizing: border-box;
-    }
+/* VINILOS */
+.artist {
+  width: 300px;
+  background: #9b9796;
+  border-radius: 5px;
+  padding: 15px;
+  margin-bottom: 20px;
+  box-sizing: border-box;
+}
 
-    .artist-name {
-      font-weight: bold;
-      margin-bottom: 10px;
-    }
+.artist-name {
+  font-weight: bold;
+  margin-bottom: 10px;
+}
 
-    .album {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      margin-bottom: 8px;
-    }
+.album {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 8px;
+}
 
-    .album img {
-      width: 100px;
-      height: 100px;
-      object-fit: cover;
-      border-radius: 5px;
-      cursor: pointer;
-    }
+.album img {
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+  border-radius: 5px;
+  cursor: pointer;
+}
 
-    /* MODAL */
-    .modal {
-      display: none;
-      position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,0.7);
-      z-index: 1000;
-      align-items: center;
-      justify-content: center;
-    }
+/* WRAPPER MASONRY (NO TOCAR) */
+#artists-wrapper {
+  display: flex;
+  justify-content: center;
+}
 
-    .modal-content {
-      background: #9b9796;
-      padding: 20px;
-      border-radius: 8px;
-      text-align: center;
-      max-width: 300px;
-    }
+#artists {
+  width: auto;
+}
 
-    .modal-content img {
-      width: 200px;
-      border-radius: 8px;
-      margin-top: 10px;
-    }
+/* MODAL */
+.modal {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.7);
+  z-index: 2000;
+  align-items: center;
+  justify-content: center;
+}
 
-    .close {
-      float: right;
-      font-size: 22px;
-      cursor: pointer;
-    }
+.modal-content {
+  background: #9b9796;
+  padding: 20px;
+  border-radius: 8px;
+  text-align: center;
+  max-width: 300px;
+}
 
+.modal-content img {
+  width: 200px;
+  border-radius: 8px;
+  margin-top: 10px;
+}
 
+.close {
+  float: right;
+  font-size: 22px;
+  cursor: pointer;
+}
 
-    #artists-wrapper {
-      display: flex;
-      justify-content: center;
-    }
+/* ========================= */
+/* 🔥 MENÚ LATERAL           */
+/* ========================= */
 
-    #artists {
-      width: auto;
-    }
+.menu-btn {
+  position: fixed;
+  top: 15px;
+  left: 15px;
+  z-index: 3000;
+  background: #222;
+  color: white;
+  border: none;
+  padding: 10px 14px;
+  font-size: 20px;
+  border-radius: 6px;
+  cursor: pointer;
+}
 
-    .nav {
-      background: #222;
-      padding: 12px;
-      display: flex;
-      justify-content: center;
-      gap: 20px;
-    }
+.sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 240px;
+  height: 100%;
+  background: #222;
+  color: white;
+  padding: 20px;
+  transform: translateX(-100%);
+  transition: transform 0.3s ease;
+  z-index: 2500;
+}
 
-    .nav a {
-      color: white;
-      text-decoration: none;
-      padding: 8px 14px;
-      border-radius: 5px;
-      font-weight: bold;
-    }
+.sidebar.active {
+  transform: translateX(0);
+}
 
-    .nav a:hover {
-      background: #444;
-    }
+.sidebar a {
+  display: block;
+  color: white;
+  text-decoration: none;
+  padding: 10px;
+  border-radius: 5px;
+  margin-bottom: 10px;
+}
 
-    .nav a.active {
-      background: #555;
-    }
+.sidebar a:hover {
+  background: #444;
+}
+</style>
 
-  </style>
-
-  <script src="https://unpkg.com/masonry-layout@4/dist/masonry.pkgd.min.js"></script>
+<script src="https://unpkg.com/masonry-layout@4/dist/masonry.pkgd.min.js"></script>
 </head>
 
 <body>
 
+<!-- BOTÓN MENÚ -->
+<button class="menu-btn" onclick="toggleMenu()">☰</button>
 
-  <nav class="nav">
-    <a href="index.html" class="active">🎵 Música</a>
-    <a href="ask.html">❓ Juego de Preguntas</a>
-  </nav>
+<!-- SIDEBAR -->
+<div class="sidebar" id="sidebar">
+  <h2>Menú</h2>
+  <a href="index.html">🎵 Música</a>
+  <a href="ask.html">❓ Juego de Preguntas</a>
+</div>
+
 <h1>Artistas y Álbumes</h1>
 
 <input id="search" type="text" placeholder="Buscar artista o álbum..." />
@@ -159,7 +189,7 @@
   <option value="">Filtrar por estilo...</option>
 </select>
 
-<button id="random-btn"> Disco Random</button>
+<button id="random-btn">Disco Random</button>
 
 <div id="artists-wrapper">
   <div id="artists"></div>
@@ -178,6 +208,12 @@
 </div>
 
 <script>
+/* MENÚ */
+function toggleMenu() {
+  document.getElementById('sidebar').classList.toggle('active');
+}
+
+//<script>
 const data = {
       "Bad Bunny": [
           { name: "DeBÍ TiRAR MáS FOToS", image: "img/fotos.jpg", tags: ["reguetón"], url: "https://open.spotify.com/album/5K79FLRUCSysQnVESLcTdb?si=s7bQEJFWTr61xfkm0wYzvw" }
@@ -296,7 +332,6 @@ const data = {
 const searchInput = document.getElementById('search');
 const tagFilter = document.getElementById('tag-filter');
 const artistsDiv = document.getElementById('artists');
-
 let masonry;
 
 function initMasonry() {
@@ -332,7 +367,6 @@ function displayArtists(artists) {
   for (const artist in artists) {
     const artistDiv = document.createElement('div');
     artistDiv.className = 'artist';
-
     artistDiv.innerHTML = `<div class="artist-name">${artist}</div>`;
 
     artists[artist].forEach(album => {
@@ -370,7 +404,7 @@ function searchAndFilterArtists() {
 searchInput.addEventListener('input', searchAndFilterArtists);
 tagFilter.addEventListener('change', searchAndFilterArtists);
 
-/* DISCO RANDOM */
+/* RANDOM */
 const modal = document.getElementById('random-modal');
 const closeBtn = document.querySelector('.close');
 
@@ -379,14 +413,11 @@ document.getElementById('random-btn').onclick = () => {
   for (const artist in data) {
     data[artist].forEach(album => allAlbums.push({ ...album, artist }));
   }
-
   const random = allAlbums[Math.floor(Math.random() * allAlbums.length)];
-
   document.getElementById('random-title').textContent = random.name;
   document.getElementById('random-artist').textContent = random.artist;
   document.getElementById('random-image').src = random.image;
   document.getElementById('random-link').href = random.url || "#";
-
   modal.style.display = 'flex';
 };
 
