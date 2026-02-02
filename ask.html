@@ -372,7 +372,29 @@
                     "El que haya tenido más parejas sexuales reparte 3",
                     "El que haya tenido menos parejas sexuales reparte 5 ",
                     "{name} está funcionando",
-                    "Ronda de Yo Nunca. Una por cada participante del Ask"
+                    "Ronda de Yo Nunca. Una por cada participante del Ask",
+                    "Prohibido coger el movil. El primero que lo coja chupito",
+                    "{name} Dale un trago de tu copa al que mejor te caiga y al que peor, no digas quien es quien",
+                    "TODOS BEBEN",
+                    "Al siguiente que le toque beber, bebe doble x2",
+                    "El último que haya cumplido años reparte su edad entre 10, ( 20 años = 2 tragos )",
+                    "Si has llegado tarde, bebes 1 por cada 10 minutos que hayas llegado tarde",
+                    "Si has venido en transporte público, bebes 2",
+                    "Si has venido en coche, bebes 3",
+                    "Si has venido andando, bebes 1",
+                    "{name} dale un beso donde quieras a {name} ",
+                    "Los solteros beben ",
+                    "Los que tengan pareja beben 3",
+                    "El que haya vuelto con su ex alguna vez bebe 3",
+                    "El que lleve más tiempo sin sexo bebe 2 (para ahogar las penas)",
+                    "El que haya enviado 'nudes' alguna vez reparte 3",
+                    "{name}, dale un masaje en los hombros a {name} o bebe 5",
+                    "Si te has liado con alguien de esta habitación, bebe",
+                    "{name} y {name}: Piedra, papel o tijera. El que pierda bebe fondo",
+                    "Guerra de miradas: {name} contra {name}. El primero que parpadee bebe 3",
+                    "{name}, haz una rima. El que no rime o repita bebe. (Sentido horario)",
+                    "Intercambio de ropa: {name} y {name} deben intercambiarse una prenda o beber fondo",
+                    "{name}, cuéntanos un chiste. Si nadie se ríe, bebes 3. Si se ríen, repartes 3",
                     
                 ];
                 
@@ -420,28 +442,41 @@
                 ? yonuncaQuestions
                 : askQuestions;
 
-            
             if (questions.length === 0) {
                 questionElement.textContent = 'No hay preguntas disponibles';
                 return;
             }
-            
-            // Animación de transición
+
+            // Quitar animación previa
             questionElement.classList.remove('fade-in');
+
             setTimeout(() => {
                 let randomIndex = Math.floor(Math.random() * questions.length);
                 let selectedQuestion = questions[randomIndex];
 
-                // Si estamos en ASK y hay nombres, reemplazar {name} con un nombre aleatorio
+                // Lógica especial para ASK con múltiples {name}
                 if (currentMode === 'ask' && names.length > 0 && selectedQuestion.includes('{name}')) {
-                    const randomName = names[Math.floor(Math.random() * names.length)];
-                    selectedQuestion = selectedQuestion.replace(/{name}/g, randomName);
+
+                    const nameCount = (selectedQuestion.match(/{name}/g) || []).length;
+
+                    if (names.length < nameCount) {
+                        questionElement.textContent = 'No hay suficientes nombres para esta pregunta';
+                        return;
+                    }
+
+                    // Copia y baraja los nombres
+                    const shuffledNames = [...names].sort(() => Math.random() - 0.5);
+
+                    let i = 0;
+                    selectedQuestion = selectedQuestion.replace(/{name}/g, () => shuffledNames[i++]);
                 }
 
                 questionElement.textContent = selectedQuestion;
                 questionElement.classList.add('fade-in');
+
             }, 200);
         }
+
         
         // Event listeners
         btnYoNunca.addEventListener('click', () => switchMode('yonunca'));
