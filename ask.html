@@ -86,6 +86,10 @@
         .fade-in {
             animation: fadeIn 0.3s ease-out forwards;
         }
+
+        #names-input {
+            display: none;
+        }
     </style>
 </head>
 <body class="bg-gray-100">
@@ -116,6 +120,7 @@
         <div id="card-container" class="card yonunca max-w-2xl w-full p-8 rounded-lg text-center transition-all">
             <h2 class="text-xl font-semibold mb-2" id="mode-title">Yo Nunca</h2>
             <div class="h-px bg-gray-200 my-4"></div>
+            <textarea id="names-input" class="w-full p-2 border rounded mb-4" placeholder="Introduce los nombres, uno por línea"></textarea>
             <p id="question" class="text-2xl font-medium my-8">Presiona "Siguiente" para comenzar</p>
             <button id="btn-next" class="btn-next yonunca mt-4 px-8 py-3 rounded-lg font-medium transition-all shadow-md">
                 Siguiente 🔄
@@ -128,6 +133,7 @@
         let currentMode = 'yonunca';
         let yonuncaQuestions = [];
         let askQuestions = [];
+        let names = [];
         
         // Elementos del DOM
         const btnYoNunca = document.getElementById('btn-yonunca');
@@ -136,6 +142,7 @@
         const cardContainer = document.getElementById('card-container');
         const questionElement = document.getElementById('question');
         const modeTitle = document.getElementById('mode-title');
+        const namesInput = document.getElementById('names-input');
         
         // Cargar preguntas desde archivos CSV
         async function loadQuestions() {
@@ -364,6 +371,8 @@
                     "El que lleve un condón encima bebe",
                     "El que haya tenido más parejas sexuales reparte 3",
                     "El que haya tenido menos parejas sexuales reparte 5 ",
+                    "{name} está funcionando",
+                    "Ronda de Yo Nunca. Una por cada participante del Ask"
                     
                 ];
                 
@@ -371,7 +380,7 @@
             } catch (error) {
                 console.error('Error al cargar preguntas:', error);
             }
-        }
+        }	
         
         // Cambiar entre modos
         function switchMode(newMode) {
@@ -385,16 +394,25 @@
                 cardContainer.className = 'card yonunca max-w-2xl w-full p-8 rounded-lg text-center transition-all fade-in';
                 modeTitle.textContent = 'Yo Nunca';
                 btnNext.className = 'btn-next yonunca mt-4 px-8 py-3 rounded-lg font-medium transition-all shadow-md';
+                namesInput.style.display = 'none';
             } else if (newMode === 'ask') {
                 btnAsk.classList.add('active');
                 cardContainer.className = 'card ask max-w-2xl w-full p-8 rounded-lg text-center transition-all fade-in';
                 modeTitle.textContent = 'Ask';
                 btnNext.className = 'btn-next ask mt-4 px-8 py-3 rounded-lg font-medium transition-all shadow-md';
+                namesInput.style.display = 'block';
+                // Actualizar lista de nombres al cambiar a ASK
+                updateNames();
             }
 
             showRandomQuestion();
         }
 
+        // Actualizar la lista de nombres desde el textarea
+        function updateNames() {
+            const input = namesInput.value.trim();
+            names = input ? input.split('\n').map(name => name.trim()).filter(name => name) : [];
+        }
         
         // Mostrar pregunta aleatoria
         function showRandomQuestion() {
@@ -411,8 +429,16 @@
             // Animación de transición
             questionElement.classList.remove('fade-in');
             setTimeout(() => {
-                const randomIndex = Math.floor(Math.random() * questions.length);
-                questionElement.textContent = questions[randomIndex];
+                let randomIndex = Math.floor(Math.random() * questions.length);
+                let selectedQuestion = questions[randomIndex];
+
+                // Si estamos en ASK y hay nombres, reemplazar {name} con un nombre aleatorio
+                if (currentMode === 'ask' && names.length > 0 && selectedQuestion.includes('{name}')) {
+                    const randomName = names[Math.floor(Math.random() * names.length)];
+                    selectedQuestion = selectedQuestion.replace(/{name}/g, randomName);
+                }
+
+                questionElement.textContent = selectedQuestion;
                 questionElement.classList.add('fade-in');
             }, 200);
         }
@@ -421,6 +447,7 @@
         btnYoNunca.addEventListener('click', () => switchMode('yonunca'));
         btnAsk.addEventListener('click', () => switchMode('ask'));
         btnNext.addEventListener('click', showRandomQuestion);
+        namesInput.addEventListener('input', updateNames); // Actualizar nombres en tiempo real
         
         // Inicialización
         document.addEventListener('DOMContentLoaded', () => {
