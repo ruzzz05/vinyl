@@ -15,7 +15,6 @@
             --text-main: #e5e5e5;     /* Blanco suave */
             --text-on-yellow: #000000;/* Negro para leer sobre amarillo */
             
-            /* Mantenemos los colores de los modos sutilmente para bordes */
             --mode-yonunca: 209, 213%, 56%;
             --mode-ask: 0, 79%, 72%;      
         }
@@ -31,7 +30,7 @@
 
         /* BARRA DE NAVEGACIÓN */
         nav {
-            background-color: #000000; /* Negro puro */
+            background-color: #000000;
             border-bottom: 1px solid #333;
         }
         
@@ -52,11 +51,10 @@
             border: 2px solid transparent;
         }
         
-        /* ESTADO ACTIVO: AMARILLO */
         .btn-mode.active {
             color: var(--accent-yellow);
             border-bottom: 2px solid var(--accent-yellow);
-            background-color: rgba(255, 215, 0, 0.05); /* Brillo amarillo sutil */
+            background-color: rgba(255, 215, 0, 0.05);
         }
         
         /* TARJETA PRINCIPAL */
@@ -66,11 +64,10 @@
             border: 1px solid #333;
         }
         
-        /* Bordes sutiles según el juego, pero predominando el estilo oscuro */
         .card.yonunca { border-top: 4px solid var(--accent-yellow); }
         .card.ask { border-top: 4px solid var(--accent-yellow); }
 
-        /* INPUT DE NOMBRES */
+        /* INPUT */
         textarea {
             background-color: var(--bg-input) !important;
             color: white !important;
@@ -81,14 +78,14 @@
             outline: none;
         }
 
-        /* BOTÓN SIGUIENTE (ESTILO CYBERPUNK) */
+        /* BOTÓN */
         .btn-next {
             background-color: var(--accent-yellow);
             color: var(--text-on-yellow);
             font-weight: 800;
             text-transform: uppercase;
             letter-spacing: 1px;
-            box-shadow: 0 4px 0 #b39700; /* Sombra sólida para efecto 3D */
+            box-shadow: 0 4px 0 #b39700;
             transition: all 0.1s;
         }
         
@@ -112,7 +109,6 @@
 
         #names-input { display: none; }
         
-        /* Títulos */
         h2 { color: var(--accent-yellow); }
         .divider { background-color: #333; }
 
@@ -163,7 +159,6 @@
         let currentMode = 'yonunca';
         let yonuncaQuestions = [];
         let askQuestions = [];
-        let musicaData = []; 
         let names = [];
         
         const btnYoNunca = document.getElementById('btn-yonunca');
@@ -184,7 +179,6 @@
                     .filter(line => line.length > 0 && !line.startsWith('//')); 
             } catch (error) {
                 console.error(`Error cargando ${url}:`, error);
-                // Mensaje de error más amigable en pantalla
                 return ["⚠️ No se encontró el archivo " + url];
             }
         }
@@ -192,21 +186,13 @@
         async function loadQuestions() {
             questionElement.textContent = "Leyendo base de datos...";
             
-            const [dataYoNunca, dataAsk, dataMusica] = await Promise.all([
+            const [dataYoNunca, dataAsk] = await Promise.all([
                 fetchCSV('yonunca.csv'),
-                fetchCSV('ask.csv'),
-                fetchCSV('musica.csv')
+                fetchCSV('ask.csv')
             ]);
 
             yonuncaQuestions = dataYoNunca;
             askQuestions = dataAsk;
-            musicaData = dataMusica;
-
-            console.log('Datos cargados:', {
-                yoNunca: yonuncaQuestions.length,
-                ask: askQuestions.length,
-                musica: musicaData.length
-            });
 
             showRandomQuestion();
         }   
@@ -216,11 +202,7 @@
 
             btnYoNunca.classList.remove('active');
             btnAsk.classList.remove('active');
-
-            // Reiniciar clases base
             cardContainer.className = 'card max-w-2xl w-full p-8 rounded-lg text-center transition-all fade-in';
-            // El botón siempre mantiene el estilo amarillo en este diseño
-            btnNext.className = 'btn-next mt-6 px-10 py-4 rounded font-bold w-full sm:w-auto';
 
             if (newMode === 'yonunca') {
                 btnYoNunca.classList.add('active');
@@ -244,10 +226,7 @@
         }
         
         function showRandomQuestion() {
-            let questions = [];
-
-            if (currentMode === 'yonunca') questions = yonuncaQuestions;
-            else if (currentMode === 'ask') questions = askQuestions;
+            let questions = currentMode === 'yonunca' ? yonuncaQuestions : askQuestions;
             
             if (!questions || questions.length === 0 || questions[0].startsWith("⚠️")) {
                 questionElement.textContent = questions[0] || 'No hay preguntas disponibles.';
@@ -260,21 +239,26 @@
                 let randomIndex = Math.floor(Math.random() * questions.length);
                 let selectedQuestion = questions[randomIndex];
 
+                // 1. REEMPLAZO DE NOMBRES {name}
                 if (currentMode === 'ask' && names.length > 0 && selectedQuestion.includes('{name}')) {
                     const nameCount = (selectedQuestion.match(/{name}/g) || []).length;
-
                     if (names.length < nameCount) {
                         questionElement.textContent = `⚠️ Faltan nombres. Necesito ${nameCount} personas.`;
                         questionElement.classList.add('fade-in');
                         return;
                     }
-
                     const shuffledNames = [...names].sort(() => Math.random() - 0.5);
                     let i = 0;
+                    // Los nombres también salen en amarillo
                     selectedQuestion = selectedQuestion.replace(/{name}/g, () => `<span style="color:var(--accent-yellow)">${shuffledNames[i++]}</span>`);
                 }
 
-                questionElement.innerHTML = selectedQuestion; // Usar innerHTML para el color de los nombres
+                // 2. REEMPLAZO DE ASTERISCOS *texto* POR AMARILLO
+                // Esta expresión regular busca cualquier cosa entre asteriscos
+                selectedQuestion = selectedQuestion.replace(/\*(.*?)\*/g, '<span style="color:var(--accent-yellow)">$1</span>');
+
+                // Usamos innerHTML para que el navegador interprete los spans con color
+                questionElement.innerHTML = selectedQuestion;
                 questionElement.classList.add('fade-in');
 
             }, 200);
