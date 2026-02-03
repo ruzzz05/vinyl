@@ -7,62 +7,101 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         :root {
+            /* PALETA DE COLORES */
+            --bg-body: #121212;       /* Casi negro */
+            --bg-card: #1e1e1e;       /* Gris oscuro para tarjetas */
+            --bg-input: #2d2d2d;      /* Gris para inputs */
+            --accent-yellow: #FFD700; /* Amarillo fuerte */
+            --text-main: #e5e5e5;     /* Blanco suave */
+            --text-on-yellow: #000000;/* Negro para leer sobre amarillo */
+            
+            /* Mantenemos los colores de los modos sutilmente para bordes */
             --mode-yonunca: 209, 213%, 56%;
             --mode-ask: 0, 79%, 72%;      
-            --mode-musica: 142, 71%, 45%;
         }
         
         body {
-            background-color: #f3f4f6;
-            color: #333;
+            background-color: var(--bg-body);
+            color: var(--text-main);
             font-family: 'Inter', sans-serif;
             min-height: 100vh;
             display: flex;
             flex-direction: column;
         }
+
+        /* BARRA DE NAVEGACIÓN */
+        nav {
+            background-color: #000000; /* Negro puro */
+            border-bottom: 1px solid #333;
+        }
         
+        .nav-link:hover {
+            color: var(--accent-yellow);
+        }
+
+        /* SELECTOR DE MODO */
         .mode-selector {
-            background-color: #e5e7eb;
+            background-color: var(--bg-card);
+            border-bottom: 1px solid #333;
         }
         
         .btn-mode {
-            background-color: #d1d5db;
-            color: #4b5563;
+            background-color: transparent;
+            color: #888;
+            font-weight: 600;
+            border: 2px solid transparent;
         }
         
+        /* ESTADO ACTIVO: AMARILLO */
         .btn-mode.active {
-            font-weight: bold;
+            color: var(--accent-yellow);
+            border-bottom: 2px solid var(--accent-yellow);
+            background-color: rgba(255, 215, 0, 0.05); /* Brillo amarillo sutil */
         }
         
-        .btn-mode.yonunca.active {
-            background-color: hsla(var(--mode-yonunca), 0.2);
-            border-bottom: 4px solid hsl(var(--mode-yonunca));
-            color: hsl(var(--mode-yonunca));
-        }
-        
-        .btn-mode.ask.active {
-            background-color: hsla(var(--mode-ask), 0.2);
-            border-bottom: 4px solid hsl(var(--mode-ask));
-            color: hsl(var(--mode-ask));
-        }
-        
+        /* TARJETA PRINCIPAL */
         .card {
-            background-color: #fff;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            background-color: var(--bg-card);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+            border: 1px solid #333;
         }
         
-        .card.yonunca { border-top: 8px solid hsl(var(--mode-yonunca)); }
-        .card.ask { border-top: 8px solid hsl(var(--mode-ask)); }
+        /* Bordes sutiles según el juego, pero predominando el estilo oscuro */
+        .card.yonunca { border-top: 4px solid var(--accent-yellow); }
+        .card.ask { border-top: 4px solid var(--accent-yellow); }
 
+        /* INPUT DE NOMBRES */
+        textarea {
+            background-color: var(--bg-input) !important;
+            color: white !important;
+            border: 1px solid #444 !important;
+        }
+        textarea:focus {
+            border-color: var(--accent-yellow) !important;
+            outline: none;
+        }
+
+        /* BOTÓN SIGUIENTE (ESTILO CYBERPUNK) */
         .btn-next {
-            background-color: #e5e7eb;
-            color: #4b5563;
+            background-color: var(--accent-yellow);
+            color: var(--text-on-yellow);
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            box-shadow: 0 4px 0 #b39700; /* Sombra sólida para efecto 3D */
+            transition: all 0.1s;
         }
         
-        .btn-next:hover { transform: translateY(-2px); }
+        .btn-next:hover { 
+            transform: translateY(2px); 
+            box-shadow: 0 2px 0 #b39700;
+            filter: brightness(1.1);
+        }
         
-        .btn-next.yonunca:hover { background-color: hsl(var(--mode-yonunca)); color: white; }
-        .btn-next.ask:hover { background-color: hsl(var(--mode-ask)); color: white; }
+        .btn-next:active {
+            transform: translateY(4px);
+            box-shadow: none;
+        }
         
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(10px); }
@@ -72,16 +111,21 @@
         .fade-in { animation: fadeIn 0.3s ease-out forwards; }
 
         #names-input { display: none; }
+        
+        /* Títulos */
+        h2 { color: var(--accent-yellow); }
+        .divider { background-color: #333; }
+
     </style>
 </head>
-<body class="bg-gray-100">
+<body>
 
-    <nav class="bg-gray-800 text-white p-4">
+    <nav class="p-4">
         <div class="container mx-auto flex justify-center space-x-6">
-            <a href="index.html" class="px-4 py-2 rounded hover:bg-gray-700">
+            <a href="index.html" class="nav-link px-4 py-2 rounded transition-colors">
                 🎵 Música
             </a>
-            <a href="#" class="px-4 py-2 rounded bg-gray-700 font-bold">
+            <a href="#" class="nav-link px-4 py-2 rounded font-bold text-yellow-400">
                 ❓ Juego de Preguntas
             </a>
         </div>
@@ -90,24 +134,26 @@
     <header class="mode-selector p-4 shadow-md">
         <div class="container mx-auto flex justify-center space-x-4">
             <button id="btn-yonunca" class="btn-mode yonunca active px-6 py-2 rounded-t-lg transition-colors">
-                Yo Nunca
+                YO NUNCA
             </button>
             <button id="btn-ask" class="btn-mode ask px-6 py-2 rounded-t-lg transition-colors">
-                Ask
+                ASK
             </button>
         </div>
     </header>
 
     <main class="flex-grow flex items-center justify-center p-4">
         <div id="card-container" class="card yonunca max-w-2xl w-full p-8 rounded-lg text-center transition-all">
-            <h2 class="text-xl font-semibold mb-2" id="mode-title">Yo Nunca</h2>
-            <div class="h-px bg-gray-200 my-4"></div>
+            <h2 class="text-2xl font-bold mb-2 uppercase tracking-wider" id="mode-title">Yo Nunca</h2>
+            <div class="divider h-px w-20 mx-auto my-4"></div>
             
-            <textarea id="names-input" class="w-full p-2 border rounded mb-4" placeholder="Introduce los nombres, uno por línea"></textarea>
+            <textarea id="names-input" class="w-full p-3 rounded mb-4" placeholder="Introduce los nombres, uno por línea..."></textarea>
             
-            <p id="question" class="text-2xl font-medium my-8">Cargando preguntas...</p>
+            <div class="min-h-[100px] flex items-center justify-center">
+                <p id="question" class="text-2xl font-medium my-4 leading-relaxed">Cargando preguntas...</p>
+            </div>
             
-            <button id="btn-next" class="btn-next yonunca mt-4 px-8 py-3 rounded-lg font-medium transition-all shadow-md">
+            <button id="btn-next" class="btn-next yonunca mt-6 px-10 py-4 rounded font-bold w-full sm:w-auto">
                 Siguiente 🔄
             </button>
         </div>
@@ -138,12 +184,13 @@
                     .filter(line => line.length > 0 && !line.startsWith('//')); 
             } catch (error) {
                 console.error(`Error cargando ${url}:`, error);
-                return ["Error al cargar el archivo: " + url];
+                // Mensaje de error más amigable en pantalla
+                return ["⚠️ No se encontró el archivo " + url];
             }
         }
 
         async function loadQuestions() {
-            questionElement.textContent = "Leyendo archivos CSV...";
+            questionElement.textContent = "Leyendo base de datos...";
             
             const [dataYoNunca, dataAsk, dataMusica] = await Promise.all([
                 fetchCSV('yonunca.csv'),
@@ -170,20 +217,20 @@
             btnYoNunca.classList.remove('active');
             btnAsk.classList.remove('active');
 
+            // Reiniciar clases base
             cardContainer.className = 'card max-w-2xl w-full p-8 rounded-lg text-center transition-all fade-in';
-            btnNext.className = 'btn-next mt-4 px-8 py-3 rounded-lg font-medium transition-all shadow-md';
+            // El botón siempre mantiene el estilo amarillo en este diseño
+            btnNext.className = 'btn-next mt-6 px-10 py-4 rounded font-bold w-full sm:w-auto';
 
             if (newMode === 'yonunca') {
                 btnYoNunca.classList.add('active');
                 cardContainer.classList.add('yonunca');
-                btnNext.classList.add('yonunca');
-                modeTitle.textContent = 'Yo Nunca';
+                modeTitle.textContent = 'YO NUNCA';
                 namesInput.style.display = 'none';
             } else if (newMode === 'ask') {
                 btnAsk.classList.add('active');
                 cardContainer.classList.add('ask');
-                btnNext.classList.add('ask');
-                modeTitle.textContent = 'Ask';
+                modeTitle.textContent = 'ASK';
                 namesInput.style.display = 'block';
                 updateNames();
             }
@@ -202,9 +249,8 @@
             if (currentMode === 'yonunca') questions = yonuncaQuestions;
             else if (currentMode === 'ask') questions = askQuestions;
             
-
-            if (!questions || questions.length === 0 || questions[0].startsWith("Error")) {
-                questionElement.textContent = questions[0] || 'No hay preguntas disponibles. Revisa los archivos CSV.';
+            if (!questions || questions.length === 0 || questions[0].startsWith("⚠️")) {
+                questionElement.textContent = questions[0] || 'No hay preguntas disponibles.';
                 return;
             }
 
@@ -218,17 +264,17 @@
                     const nameCount = (selectedQuestion.match(/{name}/g) || []).length;
 
                     if (names.length < nameCount) {
-                        questionElement.textContent = `Faltan nombres. Esta pregunta requiere ${nameCount} personas.`;
+                        questionElement.textContent = `⚠️ Faltan nombres. Necesito ${nameCount} personas.`;
                         questionElement.classList.add('fade-in');
                         return;
                     }
 
                     const shuffledNames = [...names].sort(() => Math.random() - 0.5);
                     let i = 0;
-                    selectedQuestion = selectedQuestion.replace(/{name}/g, () => shuffledNames[i++]);
+                    selectedQuestion = selectedQuestion.replace(/{name}/g, () => `<span style="color:var(--accent-yellow)">${shuffledNames[i++]}</span>`);
                 }
 
-                questionElement.textContent = selectedQuestion;
+                questionElement.innerHTML = selectedQuestion; // Usar innerHTML para el color de los nombres
                 questionElement.classList.add('fade-in');
 
             }, 200);
