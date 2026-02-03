@@ -1,432 +1,487 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>VINILOS</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fiesta & Vinilos App</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/masonry-layout@4/dist/masonry.pkgd.min.js"></script>
 
-<style>
-body {
-  font-family: Arial, sans-serif;
-  background-color: gray;
-  margin: 0;
-  padding: 20px;
-}
+    <style>
+        /* --- ESTILOS GENERALES Y DE MODOS --- */
+        :root {
+            --mode-yonunca: 209, 213%, 56%;
+            --mode-ask: 0, 79%, 72%;
+            --mode-musica: 30, 100%, 50%; /* Color anaranjado/gris para vinilos */
+        }
 
-h1 {
-  text-align: center;
-  color: white;
-}
+        body {
+            background-color: #f3f4f6;
+            font-family: 'Inter', sans-serif;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
 
-/* INPUTS */
-#search, #tag-filter {
-  margin: 10px auto 20px;
-  padding: 10px;
-  width: 100%;
-  max-width: 300px;
-  font-size: 16px;
-  border-radius: 5px;
-  border: 1px solid #ccc;
-  display: block;
-}
+        /* --- BOTONES DE NAVEGACIÓN --- */
+        .btn-mode { background-color: #d1d5db; color: #4b5563; font-weight: 600; }
+        .btn-mode.active { font-weight: bold; }
+        
+        .btn-mode.yonunca.active { background-color: white; border-bottom: 4px solid hsl(var(--mode-yonunca)); color: hsl(var(--mode-yonunca)); }
+        .btn-mode.ask.active { background-color: white; border-bottom: 4px solid hsl(var(--mode-ask)); color: hsl(var(--mode-ask)); }
+        .btn-mode.vinilos.active { background-color: #9b9796; border-bottom: 4px solid #222; color: white; }
 
-#random-btn {
-  display: block;
-  margin: 0 auto 20px;
-  padding: 10px 20px;
-  font-size: 16px;
-  background: #222;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-}
+        /* --- SECCIÓN JUEGOS (YO NUNCA / ASK) --- */
+        .game-card {
+            background-color: #fff;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            border-radius: 0.5rem;
+            transition: all 0.3s ease;
+        }
+        .game-card.yonunca { border-top: 8px solid hsl(var(--mode-yonunca)); }
+        .game-card.ask { border-top: 8px solid hsl(var(--mode-ask)); }
 
-#random-btn:hover {
-  background: #444;
-}
+        .btn-next { background-color: #e5e7eb; color: #4b5563; }
+        .btn-next:hover { transform: translateY(-2px); }
+        .btn-next.yonunca:hover { background-color: hsl(var(--mode-yonunca)); color: white; }
+        .btn-next.ask:hover { background-color: hsl(var(--mode-ask)); color: white; }
 
-/* VINILOS */
-.artist {
-  width: 300px;
-  background: #9b9796;
-  border-radius: 5px;
-  padding: 15px;
-  margin-bottom: 20px;
-  box-sizing: border-box;
-}
+        /* --- SECCIÓN VINILOS (ESTILOS ORIGINALES ADAPTADOS) --- */
+        #vinyl-section {
+            background-color: gray; /* Fondo gris original */
+            padding: 20px;
+            width: 100%;
+            min-height: 80vh;
+            display: none; /* Oculto por defecto */
+        }
 
-.artist-name {
-  font-weight: bold;
-  margin-bottom: 10px;
-}
+        .vinyl-controls input, .vinyl-controls select {
+            padding: 10px;
+            width: 100%;
+            max-width: 300px;
+            font-size: 16px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            display: block;
+            margin: 10px auto;
+        }
 
-.album {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  margin-bottom: 8px;
-}
+        .btn-random {
+            display: block;
+            margin: 20px auto;
+            padding: 10px 20px;
+            font-size: 16px;
+            background: #222;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .btn-random:hover { background: #444; }
 
-.album img {
-  width: 100px;
-  height: 100px;
-  object-fit: cover;
-  border-radius: 5px;
-  cursor: pointer;
-}
+        /* MASONRY CARDS */
+        .artist {
+            width: 300px;
+            background: #9b9796;
+            border-radius: 5px;
+            padding: 15px;
+            margin-bottom: 20px;
+            box-sizing: border-box;
+        }
+        
+        .artist-name { font-weight: bold; margin-bottom: 10px; color: #222; }
+        
+        .album {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 8px;
+            background: rgba(255,255,255,0.1);
+            padding: 5px;
+            border-radius: 5px;
+        }
+        
+        .album img {
+            width: 80px;
+            height: 80px;
+            object-fit: cover;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        .album img:hover { transform: scale(1.05); }
 
-/* WRAPPER MASONRY (NO TOCAR) */
-#artists-wrapper {
-  display: flex;
-  justify-content: center;
-}
+        .album span { font-size: 0.9rem; color: white; }
 
-#artists {
-  width: auto;
-}
+        /* MODAL */
+        .modal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.8);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+        }
 
-/* MODAL */
-.modal {
-  display: none;
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,0.7);
-  z-index: 2000;
-  align-items: center;
-  justify-content: center;
-}
+        .modal-content {
+            background: #9b9796;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+            max-width: 300px;
+            position: relative;
+        }
+        
+        .modal-content h2 { margin-top: 0; color: #222; }
+        .modal-content img { width: 100%; border-radius: 8px; margin-top: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.3); }
 
-.modal-content {
-  background: #9b9796;
-  padding: 20px;
-  border-radius: 8px;
-  text-align: center;
-  max-width: 300px;
-}
+        .close {
+            position: absolute;
+            top: 5px;
+            right: 15px;
+            font-size: 28px;
+            cursor: pointer;
+            color: #222;
+        }
 
-.modal-content img {
-  width: 200px;
-  border-radius: 8px;
-  margin-top: 10px;
-}
-
-.close {
-  float: right;
-  font-size: 22px;
-  cursor: pointer;
-}
-
-/* ========================= */
-/* 🔥 MENÚ LATERAL           */
-/* ========================= */
-
-.menu-btn {
-  position: fixed;
-  top: 15px;
-  left: 15px;
-  z-index: 3000;
-  background: #222;
-  color: white;
-  border: none;
-  padding: 10px 14px;
-  font-size: 20px;
-  border-radius: 6px;
-  cursor: pointer;
-}
-
-.sidebar {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 240px;
-  height: 100%;
-  background: #222;
-  color: white;
-  padding: 20px;
-  transform: translateX(-100%);
-  transition: transform 0.3s ease;
-  z-index: 2500;
-}
-
-.sidebar.active {
-  transform: translateX(0);
-}
-
-.sidebar a {
-  display: block;
-  color: white;
-  text-decoration: none;
-  padding: 10px;
-  border-radius: 5px;
-  margin-bottom: 10px;
-}
-
-.sidebar a:hover {
-  background: #444;
-}
-</style>
-
-<script src="https://unpkg.com/masonry-layout@4/dist/masonry.pkgd.min.js"></script>
+        /* Utilidades animación */
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .fade-in { animation: fadeIn 0.3s ease-out forwards; }
+    </style>
 </head>
-
 <body>
 
-<!-- BOTÓN MENÚ -->
-<button class="menu-btn" onclick="toggleMenu()">☰</button>
+    <header class="bg-gray-800 shadow-md sticky top-0 z-50">
+        <div class="container mx-auto px-4 py-2">
+            <h1 class="text-white text-center text-xl font-bold mb-3">🔥 Fiesta App & Vinilos</h1>
+            <div class="flex justify-center space-x-2">
+                <button id="btn-yonunca" class="btn-mode yonunca active px-4 py-2 rounded-t-lg transition-colors w-1/3">Yo Nunca</button>
+                <button id="btn-ask" class="btn-mode ask px-4 py-2 rounded-t-lg transition-colors w-1/3">Ask</button>
+                <button id="btn-vinilos" class="btn-mode vinilos px-4 py-2 rounded-t-lg transition-colors w-1/3">🎵 Vinilos</button>
+            </div>
+        </div>
+    </header>
 
-<!-- SIDEBAR -->
-<div class="sidebar" id="sidebar">
-  <h2>Menú</h2>
-  <a href="index.html">🎵 Música</a>
-  <a href="ask.html">❓ Juego de Preguntas</a>
-</div>
+    <main id="main-container" class="flex-grow flex flex-col items-center justify-center p-4">
+        
+        <div id="game-section" class="game-card yonunca max-w-2xl w-full p-8 text-center transition-all">
+            <h2 class="text-2xl font-bold mb-2 text-gray-800" id="mode-title">Yo Nunca</h2>
+            <div class="h-1 w-20 bg-gray-300 mx-auto rounded mb-6"></div>
+            
+            <textarea id="names-input" class="w-full p-3 border border-gray-300 rounded mb-4 hidden bg-gray-50 focus:outline-none focus:ring-2 focus:ring-red-400" placeholder="Introduce los nombres, uno por línea"></textarea>
+            
+            <div class="min-h-[120px] flex items-center justify-center">
+                <p id="question" class="text-2xl font-medium text-gray-700">Presiona Siguiente para empezar</p>
+            </div>
+            
+            <button id="btn-next" class="btn-next yonunca mt-8 px-10 py-3 rounded-full text-lg font-bold shadow-lg transition-transform transform active:scale-95">
+                Siguiente 🔄
+            </button>
+        </div>
 
-<h1>Artistas y Álbumes</h1>
+        <div id="vinyl-section">
+            <div class="vinyl-controls text-center mb-6">
+                <h2 class="text-white text-2xl font-bold mb-4">Catálogo de Música</h2>
+                <input id="search" type="text" placeholder="Buscar artista o álbum..." />
+                <select id="tag-filter">
+                    <option value="">Filtrar por estilo...</option>
+                </select>
+                <button id="random-btn" class="btn-random">💿 Disco Random</button>
+            </div>
 
-<input id="search" type="text" placeholder="Buscar artista o álbum..." />
-<select id="tag-filter">
-  <option value="">Filtrar por estilo...</option>
-</select>
+            <div id="artists-wrapper" class="w-full flex justify-center">
+                <div id="artists"></div>
+            </div>
+        </div>
 
-<button id="random-btn">Disco Random</button>
+    </main>
 
-<div id="artists-wrapper">
-  <div id="artists"></div>
-</div>
+    <div id="random-modal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2 id="random-title" class="text-xl font-bold"></h2>
+            <p id="random-artist" class="text-lg"></p>
+            <a id="random-link" target="_blank">
+                <img id="random-image" src="" alt="Album cover">
+            </a>
+        </div>
+    </div>
 
-<!-- MODAL -->
-<div id="random-modal" class="modal">
-  <div class="modal-content">
-    <span class="close">&times;</span>
-    <h2 id="random-title"></h2>
-    <p id="random-artist"></p>
-    <a id="random-link" target="_blank">
-      <img id="random-image">
-    </a>
-  </div>
-</div>
+    <script>
+        // ==========================================
+        // 1. DATOS (YO NUNCA / ASK / VINILOS)
+        // ==========================================
+        
+        const dataYoNunca = [
+            "Yo nunca lo he hecho sin haber querido.", "Yo nunca lo he hecho con mas de una persona en un mismo dia.",
+            "Yo nunca he querido tirarme a la madre/padre de un amigo/a.", "Yo nunca he querido tirarme al hermano/a de un amigo/a.",
+            "Yo nunca me he querido liar con alguien presente.", "Yo nunca he tenido fantasias sexuales sobre alguien que no considerase atractivo/a.",
+            "Yo nunca lo he hecho a pelo.", "Yo nunca he acabado en la boca de alguien/ me han acabado en la boca.",
+            "Yo nunca he querido tirarme al novio/a de un amigo/a.", "A mi nunca me han pedido que fuese mas lento porque iba demasiado rapido.",
+            "Yo nunca he dejado con las ganas a alguien.", "A mi nunca me han dejado con las ganas.",
+            "Yo nunca he tenido la tipica discusion de 'luces encendidas/ apagadas'.", "Yo nunca me he encontrado un pelo en la boca tras hacer oral.",
+            "Yo nunca he puesto los cuernos.", "A mi nunca me han puesto los cuernos.",
+            "Yo nunca he dudado de mi orientacion sexual.", "Yo nunca me he liado con dos personas de distinto sexo en una noche.",
+            "Yo nunca he enviado nudes por error al grupo de la familia.", "Yo nunca he fingido un orgasmo."
+        ];
 
-<script>
-/* MENÚ */
-function toggleMenu() {
-  document.getElementById('sidebar').classList.toggle('active');
-}
+        const dataAsk = [
+            "La persona más bajita reparte 3", "La persona con el pelo más largo reparte 3",
+            "La persona que esté leyendo esto en voz alta reparte 3", "La persona más alta bebe",
+            "Decidid quien es la persona más graciosa. Esa persona bebe", "El que más liga reparte 3",
+            "{name} está funcionando", "Ronda de Yo Nunca. Una por cada participante del Ask",
+            "Prohibido coger el movil. El primero que lo coja chupito", "{name} Dale un trago de tu copa al que mejor te caiga",
+            "TODOS BEBEN", "Si has llegado tarde, bebes 1 por cada 10 minutos",
+            "{name} dale un beso donde quieras a {name}", "Los solteros beben",
+            "{name} y {name}: Piedra, papel o tijera. El que pierda bebe fondo"
+        ];
 
-//<script>
-const data = {
-      "Bad Bunny": [
-          { name: "DeBÍ TiRAR MáS FOToS", image: "img/fotos.jpg", tags: ["reguetón"], url: "https://open.spotify.com/album/5K79FLRUCSysQnVESLcTdb?si=s7bQEJFWTr61xfkm0wYzvw" }
-      ],
-      "C. Tangana": [
-        { name: "Avida Dollars", image: "img/dollars.jpg", tags: ["rap"], url: "https://open.spotify.com/album/7Dl3kd377FvNAEVHHOMSTM?si=cFDrlHX7TQ6fKeVtiIr-dg" },
-        { name: "El Madrileño", image: "img/mad.jpeg", tags: ["fusión", "flamenco"], url: "https://open.spotify.com/album/52QyC9nSbgtHFXyQRHsXJ9?si=NcbMIrJzTcWSAqImcDSruQ" }
-      ],
-      "CBS Power All Stars": [ 
-        { name: "All Stars (The Album)", image: "img/stars.jpg", tags: ["rock", "pop"], url: ""}
-      ],
-      "Cheap Trick": [
-        { name: "Standing on the Edge", image: "img/trick.jpg", tags: ["rock", "power pop"], url: "https://open.spotify.com/album/2rzIBsrappXePwoyFcBtI6?si=ciAFDWk2Q5SEu72grDhdQg" }
-      ],
-      "Choclock": [
-        { name: "Daltónico pero me siento Azul", image: "img/dalton.jpeg", tags: ["r&b"], url: "https://open.spotify.com/album/2GS4OCw6wd47mu7OFdzWFH?si=haHGo6mpSDGvoteUFQ63tQ" }
-      ],
-      "Cruz Cafuné": [
-        { name: "Blu€s", image: "img/azul.jpg", tags: ["trap"], url: "https://open.spotify.com/album/4cdd2jx9GScUzDETwJ6GEk?si=tZZmB9rETieP-sSn2EiECg" },
-        { name: "Me Muevo Con Dios", image: "img/MMCD.png", tags: ["rap", "r&b"], url: "https://open.spotify.com/album/7yvmtCjHcBe9DqIVl7AwQT?si=BAss2UN2TweO1nm94DlFlQ" },
-        { name: "Visión Túnel", image: "img/tunel.jpeg", tags: ["trap"], url: "https://open.spotify.com/album/4DM8p5oOEbrBM5xzoO6qYU?si=v_adN3JlRmOMUrwPiBmc4g" }
-      ],
-      "Dano": [
-        { name: "Nuevos Trapos", image: "img/trapos.jpeg", tags: ["rap"], url: "https://open.spotify.com/album/05QwR4mSOlpHbtYFAOcB4f?si=ioYz7V1mTcyOLSoKBAJqXg" }
-      ],
-      "Delaossa": [
-        { name: "La Tour Liffee", image: "img/tour.jpg", tags: ["rap"], url: "https://open.spotify.com/album/7ppEt8YdvnAWeNTKNPR4ca?si=YOqlzmiLQfqXup7gm69dMQ" }
-      ],
-      "Dellafuente": [
-        { name: "Ansia Viva", image: "img/ansia.jpg", tags: ["trap", "flamenco"], url: "https://open.spotify.com/album/03a68tDUXs4dX7nVcVfJAn?si=56CIT1zVR6et29JT82wtpQ" },
-        { name: "Azulejos de Corales", image: "img/corales.jpg", tags: ["flamenco", "experimental", "fusión"], url: "https://open.spotify.com/album/4q1iG9Jub9KRC25vZ0f6y4?si=8CzGPTqiRvK1UV_23MQmNA" },
-        { name: "Torii Yama", image: "img/yama.jpg", tags: ["trap"], url: "https://open.spotify.com/album/6zSKkBQfQs3B9YncN3SGyI?si=lvqw3dcXQD6YTAv6J0EAHQ" },
-        { name: "Lagrimas pa otro dia", image: "img/lagrimas.jpg", tags: ["flamenco"], url: "https://open.spotify.com/album/3cPRpK8yUQV5T6QTt7XGfp?si=Iccqtrc4QC6_YJE1aFPGyg" }
+        // DATOS DE VINILOS (Tu JSON original)
+        const dataVinilos = {
+            "Bad Bunny": [ { name: "DeBÍ TiRAR MáS FOToS", image: "img/fotos.jpg", tags: ["reguetón"], url: "https://open.spotify.com/album/5K79FLRUCSysQnVESLcTdb?si=s7bQEJFWTr61xfkm0wYzvw" } ],
+            "C. Tangana": [ { name: "Avida Dollars", image: "img/dollars.jpg", tags: ["rap"], url: "https://open.spotify.com/album/7Dl3kd377FvNAEVHHOMSTM?si=cFDrlHX7TQ6fKeVtiIr-dg" }, { name: "El Madrileño", image: "img/mad.jpeg", tags: ["fusión", "flamenco"], url: "https://open.spotify.com/album/52QyC9nSbgtHFXyQRHsXJ9?si=NcbMIrJzTcWSAqImcDSruQ" } ],
+            "CBS Power All Stars": [ { name: "All Stars (The Album)", image: "img/stars.jpg", tags: ["rock", "pop"], url: ""} ],
+            "Cheap Trick": [ { name: "Standing on the Edge", image: "img/trick.jpg", tags: ["rock", "power pop"], url: "https://open.spotify.com/album/2rzIBsrappXePwoyFcBtI6?si=ciAFDWk2Q5SEu72grDhdQg" } ],
+            "Choclock": [ { name: "Daltónico pero me siento Azul", image: "img/dalton.jpeg", tags: ["r&b"], url: "https://open.spotify.com/album/2GS4OCw6wd47mu7OFdzWFH?si=haHGo6mpSDGvoteUFQ63tQ" } ],
+            "Cruz Cafuné": [ { name: "Blu€s", image: "img/azul.jpg", tags: ["trap"], url: "https://open.spotify.com/album/4cdd2jx9GScUzDETwJ6GEk?si=tZZmB9rETieP-sSn2EiECg" }, { name: "Me Muevo Con Dios", image: "img/MMCD.png", tags: ["rap", "r&b"], url: "https://open.spotify.com/album/7yvmtCjHcBe9DqIVl7AwQT?si=BAss2UN2TweO1nm94DlFlQ" }, { name: "Visión Túnel", image: "img/tunel.jpeg", tags: ["trap"], url: "https://open.spotify.com/album/4DM8p5oOEbrBM5xzoO6qYU?si=v_adN3JlRmOMUrwPiBmc4g" } ],
+            "Dano": [ { name: "Nuevos Trapos", image: "img/trapos.jpeg", tags: ["rap"], url: "https://open.spotify.com/album/05QwR4mSOlpHbtYFAOcB4f?si=ioYz7V1mTcyOLSoKBAJqXg" } ],
+            "Delaossa": [ { name: "La Tour Liffee", image: "img/tour.jpg", tags: ["rap"], url: "https://open.spotify.com/album/7ppEt8YdvnAWeNTKNPR4ca?si=YOqlzmiLQfqXup7gm69dMQ" } ],
+            "Dellafuente": [ { name: "Ansia Viva", image: "img/ansia.jpg", tags: ["trap", "flamenco"], url: "https://open.spotify.com/album/03a68tDUXs4dX7nVcVfJAn?si=56CIT1zVR6et29JT82wtpQ" }, { name: "Azulejos de Corales", image: "img/corales.jpg", tags: ["flamenco", "experimental", "fusión"], url: "https://open.spotify.com/album/4q1iG9Jub9KRC25vZ0f6y4?si=8CzGPTqiRvK1UV_23MQmNA" }, { name: "Torii Yama", image: "img/yama.jpg", tags: ["trap"], url: "https://open.spotify.com/album/6zSKkBQfQs3B9YncN3SGyI?si=lvqw3dcXQD6YTAv6J0EAHQ" }, { name: "Lagrimas pa otro dia", image: "img/lagrimas.jpg", tags: ["flamenco"], url: "https://open.spotify.com/album/3cPRpK8yUQV5T6QTt7XGfp?si=Iccqtrc4QC6_YJE1aFPGyg" } ],
+            "Diego900": [ { name: "La Espalda Del Sol", image: "img/espalda.jpeg", tags: ["rap"], url: "https://open.spotify.com/album/0EMwFzMU6W8VlWVy6NKPUu?si=hCBaZcdGREGk2pUhbpJRmA" } ],
+            "Eladio Carrión": [ { name: "DON KBRON", image: "img/kbron.jpeg", tags: ["trap"], url: "https://open.spotify.com/album/77WXheyyYBkqqz6Q19l37a?si=LZGEvDmVTsuwGQeiY__IxA" } ],
+            "Elio Toffana": [ { name: "Shock Wave", image: "img/wave.jpg", tags: ["rap"], url: "https://open.spotify.com/album/17D4dmW8j9e7UD301XGz0m?si=v5BXpuOER7eIv0_cakd3gw" } ],
+            "Enry-K": [ { name: "DOT.", image: "img/dot.jpg", tags: ["trap"], url: "https://open.spotify.com/album/3jEhw84FzMpeLncX7cy6OF?si=1fJ6op5URSmorp3AiyI5mA" }, { name: "Luz Rosa", image: "img/rosa.jpeg", tags: ["pop", "trap"], url: "https://open.spotify.com/album/7LzrBmi5dTqST3lPfeKbDP?si=1-FlqUOoRbKVairV-v6f0g" } ],
+            "Extremoduro": [ { name: "Canciones Prohibidas", image: "img/canciones.jpeg", tags: ["rock"], url: "https://open.spotify.com/album/5QHJB2blBbAL8BjrD9hrhG?si=nx3hiW7KRPayQwYTRjxvyg" } ],
+            "Judelline": [ { name: "Bodhiria", image: "img/bodhiria.jpg", tags: ["r&b"], url: "https://open.spotify.com/album/3fVXh36WypsZR2JGathvkq?si=M44OjmVxQv27K-Qd7xa0KQ" } ],
+            "Juicy Bae": [ { name: "Antes De Conocerte", image: "img/antes.jpg", tags: ["trap", "r&b"], url: "https://open.spotify.com/album/3m6TsytKnxFmghjbFWLraO?si=8YomnAwGRcK0K0AskrzbZQ" }, { name: "El Secreto", image: "img/secreto.jpg", tags: ["r&b"], url: "https://open.spotify.com/album/4NJFWpVWPgPvrciytpxOvr?si=YSbugIWzRnSPbjfmU1zhJA" }, { name: "PTSD", image: "img/ptsd.jpg", tags: ["trap"], url: "https://open.spotify.com/album/3uCDoXLQZnDAck1R6Y0Tuk?si=_7vlINIhS4SQzPp7hYkWfQ" } ],
+            "La Casa Azul": [ { name: "La Gran Esfera", image: "img/esfera.jpg", tags: ["pop", "indie", "electrónica"], url: "https://open.spotify.com/album/5f1cJH6cg1uxKKkQDPOfvh?si=7cGnqWHrTZ6rntiWZ0boeQ" } ],
+            "Mahavishnu Orchestra": [ { name: "Birds of Fire", image: "img/birds.jpg", tags: ["jazz"], url: "https://open.spotify.com/album/6SLknspfGod3v3TyWawl8J?si=KGePL-eWQEWWOXS5r845XA" } ],
+            "Miles Davis": [ { name: "Sorcerer", image: "img/davis.jpg", tags: ["jazz"], url: "https://open.spotify.com/album/4ONkvBCQrd2A8qJ5Cw6FYo?si=GmRbKHt2TKqskTfhm9cAAw" } ],
+            "Quevedo": [ { name: "Buenas Noches", image: "img/noches.jpg", tags: ["reggaetón"], url: "https://open.spotify.com/album/3V2ApPxUSquOkjLQU3wmjh?si=3X4Knt8sQoW0twly0X0bRw" } ],
+            "Raul Clyde": [ { name: "Destino 2014", image: "img/destino.jpeg", tags: ["reggaetón"], url: "https://open.spotify.com/album/5KvIYKPV17rdUz4ZrTz7Qx?si=0bMFjSuJQHmJX4zgJIk2Jg" } ],
+            "Recycled J": [ { name: "Casanova", image: "img/casanova.jpg", tags: ["pop"], url: "https://open.spotify.com/album/4Vu2ERMwmGhJ3oOJrr9nfB?si=d7Tuy1_ETX2NHA7Tl5Yt9Q" }, { name: "Preludio", image: "img/pre.jpg", tags: ["rap"], url: "https://open.spotify.com/album/3bwtp40wXMy9dWWlNDgL4u?si=6Cp_ZPVpRLOgtf9RotJz8g" }, { name: "San Jorge", image: "img/jorge.jpeg", tags: ["rap", "trap", "pop"], url: "https://open.spotify.com/album/5SMgH661iAfJixb3gVRtH5?si=3iIY5wHdSKmxKRTdnpr7uQ" } ],
+            "Rels B": [ { name: "A New Star (1993)", image: "img/star.jpeg", tags: ["pop"], url: "https://open.spotify.com/album/6MxVqDR6nACRxGSePfK9y4?si=5QjqYzytQTm7PQAKBqOuHA" } ],
+            "Rosalia": [ { name: "El Mal Querer", image: "img/querer.jpg", tags: ["flamenco", "fusión"], url: "https://open.spotify.com/album/355bjCHzRJztCzaG5Za4gq?si=SzM_b0h0SY-htmVNgOHq5A" }, { name: "Motomami", image: "img/moto.jpg", tags: ["pop", "experimental"], url: "https://open.spotify.com/album/6jbtHi5R0jMXoliU2OS0lo?si=Bt0fzNnIR-i1JsGJtcDjuw" } ],
+            "Rusowsky": [ { name: "DAISY", image: "img/daisy.jpg", tags: ["pop", "electrónica", "experimental"], url: "https://open.spotify.com/album/0o1RGF3A02UN1aVAX1SLuQ?si=Z5plspPuRR6pesx71nep_w" } ],
+            "Youth Lagoon": [ { name: "Savage Hills Ballroom", image: "img/ballroom.jpg", tags: ["rock"], url: "https://open.spotify.com/album/2REi0vGs8rCaFms8lVwZzk?si=bkUqy2lKS_e2PuRxhpnOmg" } ],
+            "Sen Senra": [ { name: "Sensaciones", image: "img/sens.jpg", tags: ["pop"], url: "https://open.spotify.com/album/7Hr8FOf7NQIe7UhLcllXq9?si=UkE2zZRsQ9qP_4bSPV5lNg" } ],
+            "SZA": [ { name: "Ctrl", image: "img/ctrl.jpg", tags: ["r&b"], url: "https://open.spotify.com/album/76290XdXVF9rPzGdNRWdCh?si=kFfr8PbpSi6A9rxDhreTxw" }, { name: "SOS", image: "img/sos.png", tags: ["r&b"], url: "https://open.spotify.com/album/07w0rG5TETcyihsEIZR3qG?si=Q0xUpc6CSO2qRVGDpI45tg" } ],
+            "Taifa Yallah": [ { name: "Causa", image: "img/causa.jpg", tags: ["rap"], url: "https://open.spotify.com/album/5GyDhDfK24MhsOH1bX8gdW?si=dERDC1zRTMKnuStBj07X8A" } ],
+            "The Weeknd": [ { name: "Starboy", image: "img/starboy.jpg", tags: ["pop", "r&b"], url: "https://open.spotify.com/album/2ODvWsOgouMbaA5xf0RkJe?si=9Yge93NSQvC1MfDVAkb0kA" } ],
+            "Los Grandes del Jazz": [ { name: "Grandes del Jazz Vol. 6", image: "img/grandes.jpg", tags: ["jazz"], url: "" } ],
+            "Vetusta Morla": [ { name: "Un Día en el Mundo", image: "img/un_dia.jpg", tags: ["rock", "indie"], url: "https://open.spotify.com/album/7ozOQXEfKskKDTtDpmTnuh?si=TRk5pXaPS_e3offgX2go7g" }, { name: "Mapas", image: "img/mapas.jpg", tags: ["rock", "indie"], url: "https://open.spotify.com/album/1Oow7d8D859T5Xd2tsQUzG?si=m-FNlH2WQD6HQMWDMV0iYw" } ]
+        };
 
-      ],
-      "Diego900": [
-        { name: "La Espalda Del Sol", image: "img/espalda.jpeg", tags: ["rap"], url: "https://open.spotify.com/album/0EMwFzMU6W8VlWVy6NKPUu?si=hCBaZcdGREGk2pUhbpJRmA" }
-      ],
-      "Eladio Carrión": [
-        { name: "DON KBRON", image: "img/kbron.jpeg", tags: ["trap"], url: "https://open.spotify.com/album/77WXheyyYBkqqz6Q19l37a?si=LZGEvDmVTsuwGQeiY__IxA" }
-      ],
-      "Elio Toffana": [
-        { name: "Shock Wave", image: "img/wave.jpg", tags: ["rap"], url: "https://open.spotify.com/album/17D4dmW8j9e7UD301XGz0m?si=v5BXpuOER7eIv0_cakd3gw" }
-      ],
-      "Enry-K": [
-        { name: "DOT.", image: "img/dot.jpg", tags: ["trap"], url: "https://open.spotify.com/album/3jEhw84FzMpeLncX7cy6OF?si=1fJ6op5URSmorp3AiyI5mA" },
-        { name: "Luz Rosa", image: "img/rosa.jpeg", tags: ["pop", "trap"], url: "https://open.spotify.com/album/7LzrBmi5dTqST3lPfeKbDP?si=1-FlqUOoRbKVairV-v6f0g" }
-      ],
-      "Extremoduro": [
-        { name: "Canciones Prohibidas", image: "img/canciones.jpeg", tags: ["rock"], url: "https://open.spotify.com/album/5QHJB2blBbAL8BjrD9hrhG?si=nx3hiW7KRPayQwYTRjxvyg" }
-      ],
-      "Judelline": [
-        { name: "Bodhiria", image: "img/bodhiria.jpg", tags: ["r&b"], url: "https://open.spotify.com/album/3fVXh36WypsZR2JGathvkq?si=M44OjmVxQv27K-Qd7xa0KQ" }
-      ],
-      "Juicy Bae": [
-        { name: "Antes De Conocerte", image: "img/antes.jpg", tags: ["trap", "r&b"], url: "https://open.spotify.com/album/3m6TsytKnxFmghjbFWLraO?si=8YomnAwGRcK0K0AskrzbZQ" },
-        { name: "El Secreto", image: "img/secreto.jpg", tags: ["r&b"], url: "https://open.spotify.com/album/4NJFWpVWPgPvrciytpxOvr?si=YSbugIWzRnSPbjfmU1zhJA" },
-        { name: "PTSD", image: "img/ptsd.jpg", tags: ["trap"], url: "https://open.spotify.com/album/3uCDoXLQZnDAck1R6Y0Tuk?si=_7vlINIhS4SQzPp7hYkWfQ" }
-      ],
-      "La Casa Azul": [
-        { name: "La Gran Esfera", image: "img/esfera.jpg", tags: ["pop", "indie", "electrónica"], url: "https://open.spotify.com/album/5f1cJH6cg1uxKKkQDPOfvh?si=7cGnqWHrTZ6rntiWZ0boeQ" }
-      ],
-      "Mahavishnu Orchestra": [
-        { name: "Birds of Fire", image: "img/birds.jpg", tags: ["jazz"], url: "https://open.spotify.com/album/6SLknspfGod3v3TyWawl8J?si=KGePL-eWQEWWOXS5r845XA" }
-      ],
-      "Miles Davis": [
-        { name: "Sorcerer", image: "img/davis.jpg", tags: ["jazz"], url: "https://open.spotify.com/album/4ONkvBCQrd2A8qJ5Cw6FYo?si=GmRbKHt2TKqskTfhm9cAAw" }
-      ],
-      "Quevedo": [
-        { name: "Buenas Noches", image: "img/noches.jpg", tags: ["reggaetón"], url: "https://open.spotify.com/album/3V2ApPxUSquOkjLQU3wmjh?si=3X4Knt8sQoW0twly0X0bRw" }
-      ],
-      "Raul Clyde": [
-        { name: "Destino 2014", image: "img/destino.jpeg", tags: ["reggaetón"], url: "https://open.spotify.com/album/5KvIYKPV17rdUz4ZrTz7Qx?si=0bMFjSuJQHmJX4zgJIk2Jg" }
-      ],
-      "Recycled J": [
-        { name: "Casanova", image: "img/casanova.jpg", tags: ["pop"], url: "https://open.spotify.com/album/4Vu2ERMwmGhJ3oOJrr9nfB?si=d7Tuy1_ETX2NHA7Tl5Yt9Q" },
-        { name: "Preludio", image: "img/pre.jpg", tags: ["rap"], url: "https://open.spotify.com/album/3bwtp40wXMy9dWWlNDgL4u?si=6Cp_ZPVpRLOgtf9RotJz8g" },
-        { name: "San Jorge", image: "img/jorge.jpeg", tags: ["rap", "trap", "pop"], url: "https://open.spotify.com/album/5SMgH661iAfJixb3gVRtH5?si=3iIY5wHdSKmxKRTdnpr7uQ" }
-      ],
-      "Rels B": [
-        { name: "A New Star (1993)", image: "img/star.jpeg", tags: ["pop"], url: "https://open.spotify.com/album/6MxVqDR6nACRxGSePfK9y4?si=5QjqYzytQTm7PQAKBqOuHA" }
-      ],
-      "Rosalia": [
-        { name: "El Mal Querer", image: "img/querer.jpg", tags: ["flamenco", "fusión"], url: "https://open.spotify.com/album/355bjCHzRJztCzaG5Za4gq?si=SzM_b0h0SY-htmVNgOHq5A" },
-        { name: "Motomami", image: "img/moto.jpg", tags: ["pop", "experimental"], url: "https://open.spotify.com/album/6jbtHi5R0jMXoliU2OS0lo?si=Bt0fzNnIR-i1JsGJtcDjuw" }
-      ],
-      "Rusowsky": [
-        { name: "DAISY", image: "img/daisy.jpg", tags: ["pop", "electrónica", "experimental"], url: "https://open.spotify.com/album/0o1RGF3A02UN1aVAX1SLuQ?si=Z5plspPuRR6pesx71nep_w" }
-      ],
-      "Youth Lagoon": [
-        { name: "Savage Hills Ballroom", image: "img/ballroom.jpg", tags: ["rock"], url: "https://open.spotify.com/album/2REi0vGs8rCaFms8lVwZzk?si=bkUqy2lKS_e2PuRxhpnOmg" }
-      ],
-      "Sen Senra": [
-        { name: "Sensaciones", image: "img/sens.jpg", tags: ["pop"], url: "https://open.spotify.com/album/7Hr8FOf7NQIe7UhLcllXq9?si=UkE2zZRsQ9qP_4bSPV5lNg" }
-      ],
-      "SZA": [
-        { name: "Ctrl", image: "img/ctrl.jpg", tags: ["r&b"], url: "https://open.spotify.com/album/76290XdXVF9rPzGdNRWdCh?si=kFfr8PbpSi6A9rxDhreTxw" },
-        { name: "SOS", image: "img/sos.png", tags: ["r&b"], url: "https://open.spotify.com/album/07w0rG5TETcyihsEIZR3qG?si=Q0xUpc6CSO2qRVGDpI45tg" }
-      ],
-      "Taifa Yallah": [
-        { name: "Causa", image: "img/causa.jpg", tags: ["rap"], url: "https://open.spotify.com/album/5GyDhDfK24MhsOH1bX8gdW?si=dERDC1zRTMKnuStBj07X8A" }
-      ],
-      "The Weeknd": [
-        { name: "Starboy", image: "img/starboy.jpg", tags: ["pop", "r&b"], url: "https://open.spotify.com/album/2ODvWsOgouMbaA5xf0RkJe?si=9Yge93NSQvC1MfDVAkb0kA" }
-      ],
-      "Los Grandes del Jazz": [
-        { name: "Grandes del Jazz Vol. 6", image: "img/grandes.jpg", tags: ["jazz"], url: "" }
-      ],"Vetusta Morla": [
-        { name: "Un Día en el Mundo", image: "img/un_dia.jpg", tags: ["rock", "indie"], url: "https://open.spotify.com/album/7ozOQXEfKskKDTtDpmTnuh?si=TRk5pXaPS_e3offgX2go7g" },
-        { name: "Mapas", image: "img/mapas.jpg", tags: ["rock", "indie"], url: "https://open.spotify.com/album/1Oow7d8D859T5Xd2tsQUzG?si=m-FNlH2WQD6HQMWDMV0iYw" }
-      ],
-    };  
-</script>
+        // ==========================================
+        // 2. LÓGICA GENERAL (SWITCH MODOS)
+        // ==========================================
+        
+        let currentMode = 'yonunca';
+        let names = [];
+        let masonry;
 
-<script>
-const searchInput = document.getElementById('search');
-const tagFilter = document.getElementById('tag-filter');
-const artistsDiv = document.getElementById('artists');
-let masonry;
+        // Elementos DOM
+        const btnYoNunca = document.getElementById('btn-yonunca');
+        const btnAsk = document.getElementById('btn-ask');
+        const btnVinilos = document.getElementById('btn-vinilos');
+        
+        const mainContainer = document.getElementById('main-container');
+        const gameSection = document.getElementById('game-section');
+        const vinylSection = document.getElementById('vinyl-section');
+        
+        const questionElement = document.getElementById('question');
+        const modeTitle = document.getElementById('mode-title');
+        const namesInput = document.getElementById('names-input');
+        const btnNext = document.getElementById('btn-next');
 
-function initMasonry() {
-  if (masonry) masonry.destroy();
-  masonry = new Masonry('#artists', {
-    itemSelector: '.artist',
-    columnWidth: 300,
-    gutter: 20,
-    fitWidth: true
-  });
-}
+        function switchMode(newMode) {
+            currentMode = newMode;
 
-function getAllTags() {
-  const tags = new Set();
-  Object.values(data).forEach(albums =>
-    albums.forEach(a => a.tags.forEach(t => tags.add(t)))
-  );
-  return [...tags].sort();
-}
+            // 1. Resetear botones
+            [btnYoNunca, btnAsk, btnVinilos].forEach(btn => btn.classList.remove('active'));
+            
+            // 2. Gestionar visibilidad de secciones
+            if (newMode === 'vinilos') {
+                btnVinilos.classList.add('active');
+                
+                // Ocultar juego, mostrar vinilos
+                gameSection.style.display = 'none';
+                vinylSection.style.display = 'block';
+                
+                // Ajustar contenedor principal para que quepa la grid
+                mainContainer.classList.remove('items-center', 'justify-center');
+                document.body.style.backgroundColor = 'gray'; // Fondo gris de vinilos
+                
+                // Inicializar Masonry
+                setTimeout(initMasonry, 100);
+            } 
+            else {
+                // Modos de Juego
+                btnVinilos.classList.remove('active');
+                gameSection.style.display = 'block';
+                vinylSection.style.display = 'none';
+                
+                // Restaurar contenedor centrado
+                mainContainer.classList.add('items-center', 'justify-center');
+                document.body.style.backgroundColor = '#f3f4f6'; // Fondo claro original
+                
+                // Configurar tarjeta de juego
+                gameSection.className = `game-card ${newMode} max-w-2xl w-full p-8 text-center transition-all`;
+                btnNext.className = `btn-next ${newMode} mt-8 px-10 py-3 rounded-full text-lg font-bold shadow-lg transition-transform transform active:scale-95`;
+                
+                if (newMode === 'yonunca') {
+                    btnYoNunca.classList.add('active');
+                    modeTitle.textContent = 'Yo Nunca';
+                    namesInput.style.display = 'none';
+                } else if (newMode === 'ask') {
+                    btnAsk.classList.add('active');
+                    modeTitle.textContent = 'Ask';
+                    namesInput.style.display = 'block';
+                }
+                
+                showRandomQuestion();
+            }
+        }
 
-function populateTagFilter() {
-  getAllTags().forEach(tag => {
-    const option = document.createElement('option');
-    option.value = tag;
-    option.textContent = tag;
-    tagFilter.appendChild(option);
-  });
-}
+        // ==========================================
+        // 3. LÓGICA DE JUEGOS (YO NUNCA / ASK)
+        // ==========================================
+        function updateNames() {
+            const input = namesInput.value.trim();
+            names = input ? input.split('\n').map(name => name.trim()).filter(name => name) : [];
+        }
 
-function displayArtists(artists) {
-  artistsDiv.innerHTML = '';
+        function showRandomQuestion() {
+            let questions = currentMode === 'yonunca' ? dataYoNunca : dataAsk;
 
-  for (const artist in artists) {
-    const artistDiv = document.createElement('div');
-    artistDiv.className = 'artist';
-    artistDiv.innerHTML = `<div class="artist-name">${artist}</div>`;
+            questionElement.classList.remove('fade-in');
+            
+            setTimeout(() => {
+                let randomIndex = Math.floor(Math.random() * questions.length);
+                let selectedQuestion = questions[randomIndex];
 
-    artists[artist].forEach(album => {
-      artistDiv.innerHTML += `
-        <div class="album">
-          <a href="${album.url}" target="_blank">
-            <img src="${album.image}">
-          </a>
-          <span>${album.name}</span>
-        </div>`;
-    });
+                if (currentMode === 'ask' && names.length > 0 && selectedQuestion.includes('{name}')) {
+                    const nameCount = (selectedQuestion.match(/{name}/g) || []).length;
+                    if (names.length < nameCount) {
+                        questionElement.textContent = `⚠️ Faltan nombres (Min: ${nameCount})`;
+                    } else {
+                        const shuffledNames = [...names].sort(() => Math.random() - 0.5);
+                        let i = 0;
+                        selectedQuestion = selectedQuestion.replace(/{name}/g, () => shuffledNames[i++]);
+                        questionElement.textContent = selectedQuestion;
+                    }
+                } else {
+                    questionElement.textContent = selectedQuestion;
+                }
+                questionElement.classList.add('fade-in');
+            }, 200);
+        }
 
-    artistsDiv.appendChild(artistDiv);
-  }
+        // ==========================================
+        // 4. LÓGICA DE VINILOS (Masonry & Filtros)
+        // ==========================================
+        const searchInput = document.getElementById('search');
+        const tagFilter = document.getElementById('tag-filter');
+        const artistsDiv = document.getElementById('artists');
 
-  setTimeout(initMasonry, 100);
-}
+        function initMasonry() {
+            if (masonry) masonry.destroy();
+            masonry = new Masonry('#artists', {
+                itemSelector: '.artist',
+                columnWidth: 300,
+                gutter: 20,
+                fitWidth: true
+            });
+        }
 
-function searchAndFilterArtists() {
-  const q = searchInput.value.toLowerCase();
-  const tag = tagFilter.value;
-  const result = {};
+        function displayArtists(artists) {
+            artistsDiv.innerHTML = '';
+            for (const artist in artists) {
+                const artistDiv = document.createElement('div');
+                artistDiv.className = 'artist';
+                artistDiv.innerHTML = `<div class="artist-name">${artist}</div>`;
 
-  for (const artist in data) {
-    const albums = data[artist].filter(a =>
-      (artist.toLowerCase().includes(q) || a.name.toLowerCase().includes(q)) &&
-      (!tag || a.tags.includes(tag))
-    );
-    if (albums.length) result[artist] = albums;
-  }
+                artists[artist].forEach(album => {
+                    artistDiv.innerHTML += `
+                        <div class="album">
+                            <a href="${album.url}" target="_blank">
+                                <img src="${album.image}" onerror="this.src='https://via.placeholder.com/80?text=No+Img'">
+                            </a>
+                            <span>${album.name}</span>
+                        </div>`;
+                });
+                artistsDiv.appendChild(artistDiv);
+            }
+            setTimeout(initMasonry, 100);
+        }
 
-  displayArtists(result);
-}
+        function searchAndFilterArtists() {
+            const q = searchInput.value.toLowerCase();
+            const tag = tagFilter.value;
+            const result = {};
 
-searchInput.addEventListener('input', searchAndFilterArtists);
-tagFilter.addEventListener('change', searchAndFilterArtists);
+            for (const artist in dataVinilos) {
+                const albums = dataVinilos[artist].filter(a =>
+                    (artist.toLowerCase().includes(q) || a.name.toLowerCase().includes(q)) &&
+                    (!tag || a.tags.includes(tag))
+                );
+                if (albums.length) result[artist] = albums;
+            }
+            displayArtists(result);
+        }
 
-/* RANDOM */
-const modal = document.getElementById('random-modal');
-const closeBtn = document.querySelector('.close');
+        function populateTagFilter() {
+            const tags = new Set();
+            Object.values(dataVinilos).forEach(albums =>
+                albums.forEach(a => a.tags.forEach(t => tags.add(t)))
+            );
+            [...tags].sort().forEach(tag => {
+                const option = document.createElement('option');
+                option.value = tag;
+                option.textContent = tag;
+                tagFilter.appendChild(option);
+            });
+        }
 
-document.getElementById('random-btn').onclick = () => {
-  const allAlbums = [];
-  for (const artist in data) {
-    data[artist].forEach(album => allAlbums.push({ ...album, artist }));
-  }
-  const random = allAlbums[Math.floor(Math.random() * allAlbums.length)];
-  document.getElementById('random-title').textContent = random.name;
-  document.getElementById('random-artist').textContent = random.artist;
-  document.getElementById('random-image').src = random.image;
-  document.getElementById('random-link').href = random.url || "#";
-  modal.style.display = 'flex';
-};
+        // Random Vinilo Modal
+        const modal = document.getElementById('random-modal');
+        const closeBtn = document.querySelector('.close');
 
-closeBtn.onclick = () => modal.style.display = 'none';
-window.onclick = e => { if (e.target === modal) modal.style.display = 'none'; };
+        document.getElementById('random-btn').onclick = () => {
+            const allAlbums = [];
+            for (const artist in dataVinilos) {
+                dataVinilos[artist].forEach(album => allAlbums.push({ ...album, artist }));
+            }
+            const random = allAlbums[Math.floor(Math.random() * allAlbums.length)];
+            document.getElementById('random-title').textContent = random.name;
+            document.getElementById('random-artist').textContent = random.artist;
+            document.getElementById('random-image').src = random.image;
+            document.getElementById('random-link').href = random.url || "#";
+            modal.style.display = 'flex';
+        };
 
-populateTagFilter();
-displayArtists(data);
-</script>
+        closeBtn.onclick = () => modal.style.display = 'none';
+        window.onclick = e => { if (e.target === modal) modal.style.display = 'none'; };
 
+        // ==========================================
+        // 5. LISTENERS GLOBALES
+        // ==========================================
+        btnYoNunca.addEventListener('click', () => switchMode('yonunca'));
+        btnAsk.addEventListener('click', () => switchMode('ask'));
+        btnVinilos.addEventListener('click', () => switchMode('vinilos'));
+        
+        btnNext.addEventListener('click', showRandomQuestion);
+        namesInput.addEventListener('input', updateNames);
+        
+        searchInput.addEventListener('input', searchAndFilterArtists);
+        tagFilter.addEventListener('change', searchAndFilterArtists);
+
+        // INICIO
+        populateTagFilter();
+        displayArtists(dataVinilos);
+        switchMode('yonunca'); // Empezar en Yo Nunca
+
+    </script>
 </body>
 </html>
