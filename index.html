@@ -9,9 +9,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
 
 <style>
-/* ========================= */
-/* ESTILOS GENERALES         */
-/* ========================= */
+
 body {
   font-family: Arial, sans-serif;
   background-color: gray;
@@ -22,14 +20,13 @@ body {
 h1 {
   text-align: center;
   color: white;
-  margin-top: 50px; /* Espacio para no chocar con el menú */
+  margin-top: 50px; 
 }
 
 /* ========================= */
 /* MENÚ LATERAL (SIDEBAR)    */
 /* ========================= */
 
-/* Botón Hamburguesa */
 .menu-btn {
   position: fixed;
   top: 15px;
@@ -45,7 +42,6 @@ h1 {
   transition: opacity 0.3s ease, visibility 0.3s;
 }
 
-/* Clase para ocultar la hamburguesa */
 .menu-btn.hidden {
   opacity: 0;
   visibility: hidden;
@@ -64,7 +60,7 @@ h1 {
   padding: 20px;
   transform: translateX(-100%);
   transition: transform 0.3s ease;
-  z-index: 3500; /* Por encima de todo */
+  z-index: 3500;
   box-shadow: 2px 0 5px rgba(0,0,0,0.5);
 }
 
@@ -72,7 +68,6 @@ h1 {
   transform: translateX(0);
 }
 
-/* La Cruz (X) dentro del menú */
 .close-sidebar {
   position: absolute;
   top: 15px;
@@ -88,7 +83,6 @@ h1 {
   color: #ccc;
 }
 
-/* Enlaces del menú */
 .sidebar h2 {
   margin-top: 0;
   margin-bottom: 20px;
@@ -114,6 +108,7 @@ h1 {
 /* ========================= */
 /* INPUTS Y FILTROS          */
 /* ========================= */
+
 #search, #tag-filter {
   margin: 10px auto 20px;
   padding: 10px;
@@ -183,7 +178,6 @@ h1 {
   line-height: 1.2;
 }
 
-/* WRAPPER MASONRY */
 #artists-wrapper {
   display: flex;
   justify-content: center;
@@ -196,6 +190,7 @@ h1 {
 /* ========================= */
 /* MODAL (POPUP)             */
 /* ========================= */
+
 .modal {
   display: none;
   position: fixed;
@@ -278,7 +273,8 @@ h1 {
 </div>
 
 <script>
-// --- VARIABLES GLOBALES ---
+
+
 let data = {}; 
 const searchInput = document.getElementById('search');
 const tagFilter = document.getElementById('tag-filter');
@@ -310,12 +306,10 @@ function processCSVData(csvData) {
   data = {};
 
   csvData.forEach(row => {
-    // Lectura de columnas (asegurando que no den error si faltan)
     const artist = row.Artist ? row.Artist.trim() : "Desconocido";
     const name = row.Name || "Sin título";
     const image = row.Image || "";
     const url = row.Url || "#";
-    // Las tags vienen separadas por |
     const tags = row.Tags ? row.Tags.split('|').map(t => t.trim().toLowerCase()) : [];
 
     if (!data[artist]) {
@@ -376,7 +370,6 @@ function displayArtists(artistsData) {
     
     let albumsHTML = '';
     artistsData[artist].forEach(album => {
-      // Si falla la imagen, pone una gris
       albumsHTML += `
         <div class="album">
           <a href="${album.url}" target="_blank">
@@ -390,7 +383,6 @@ function displayArtists(artistsData) {
     artistsDiv.appendChild(artistDiv);
   });
 
-  // Retraso para asegurar que el DOM esté listo antes de Masonry
   setTimeout(initMasonry, 150);
 }
 
@@ -401,7 +393,6 @@ function searchAndFilterArtists() {
   const result = {};
 
   for (const artist in data) {
-    // Filtramos álbumes dentro del artista
     const albums = data[artist].filter(a => {
       const matchText = artist.toLowerCase().includes(q) || a.name.toLowerCase().includes(q);
       const matchTag = !tag || a.tags.includes(tag);

@@ -7,9 +7,9 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         :root {
-            --mode-yonunca: 209, 213%, 56%; /* Azulado */
-            --mode-ask: 0, 79%, 72%;      /* Rosado */
-            --mode-musica: 142, 71%, 45%; /* Verde (para futuro uso) */
+            --mode-yonunca: 209, 213%, 56%;
+            --mode-ask: 0, 79%, 72%;      
+            --mode-musica: 142, 71%, 45%;
         }
         
         body {
@@ -34,7 +34,6 @@
             font-weight: bold;
         }
         
-        /* Estilos Activos */
         .btn-mode.yonunca.active {
             background-color: hsla(var(--mode-yonunca), 0.2);
             border-bottom: 4px solid hsl(var(--mode-yonunca));
@@ -65,7 +64,6 @@
         .btn-next.yonunca:hover { background-color: hsl(var(--mode-yonunca)); color: white; }
         .btn-next.ask:hover { background-color: hsl(var(--mode-ask)); color: white; }
         
-        /* Animaciones */
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(10px); }
             to { opacity: 1; transform: translateY(0); }
@@ -116,14 +114,12 @@
     </main>
 
     <script>
-        // Variables globales
         let currentMode = 'yonunca';
         let yonuncaQuestions = [];
         let askQuestions = [];
-        let musicaData = []; // Variable para almacenar la data de música
+        let musicaData = []; 
         let names = [];
         
-        // Elementos del DOM
         const btnYoNunca = document.getElementById('btn-yonunca');
         const btnAsk = document.getElementById('btn-ask');
         const btnNext = document.getElementById('btn-next');
@@ -132,27 +128,23 @@
         const modeTitle = document.getElementById('mode-title');
         const namesInput = document.getElementById('names-input');
         
-        // Función auxiliar para leer CSV
         async function fetchCSV(url) {
             try {
                 const response = await fetch(url);
                 if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
                 const text = await response.text();
-                // Divide por saltos de línea y limpia espacios vacíos
                 return text.split('\n')
-                           .map(line => line.trim())
-                           .filter(line => line.length > 0 && !line.startsWith('//')); // Ignora líneas vacías o comentarios
+                    .map(line => line.trim())
+                    .filter(line => line.length > 0 && !line.startsWith('//')); 
             } catch (error) {
                 console.error(`Error cargando ${url}:`, error);
                 return ["Error al cargar el archivo: " + url];
             }
         }
 
-        // Cargar preguntas desde archivos CSV
         async function loadQuestions() {
             questionElement.textContent = "Leyendo archivos CSV...";
             
-            // Cargamos los 3 archivos en paralelo
             const [dataYoNunca, dataAsk, dataMusica] = await Promise.all([
                 fetchCSV('yonunca.csv'),
                 fetchCSV('ask.csv'),
@@ -169,18 +161,15 @@
                 musica: musicaData.length
             });
 
-            // Una vez cargado, mostramos la primera pregunta
             showRandomQuestion();
         }   
         
-        // Cambiar entre modos
         function switchMode(newMode) {
             currentMode = newMode;
 
             btnYoNunca.classList.remove('active');
             btnAsk.classList.remove('active');
 
-            // Resetear clases base
             cardContainer.className = 'card max-w-2xl w-full p-8 rounded-lg text-center transition-all fade-in';
             btnNext.className = 'btn-next mt-4 px-8 py-3 rounded-lg font-medium transition-all shadow-md';
 
@@ -202,34 +191,29 @@
             showRandomQuestion();
         }
 
-        // Actualizar la lista de nombres desde el textarea
         function updateNames() {
             const input = namesInput.value.trim();
             names = input ? input.split('\n').map(name => name.trim()).filter(name => name) : [];
         }
         
-        // Mostrar pregunta aleatoria
         function showRandomQuestion() {
             let questions = [];
 
             if (currentMode === 'yonunca') questions = yonuncaQuestions;
             else if (currentMode === 'ask') questions = askQuestions;
             
-            // Si quisieras usar la data de música en el futuro, podrías añadir un 'else if' aquí.
 
             if (!questions || questions.length === 0 || questions[0].startsWith("Error")) {
                 questionElement.textContent = questions[0] || 'No hay preguntas disponibles. Revisa los archivos CSV.';
                 return;
             }
 
-            // Quitar animación previa
             questionElement.classList.remove('fade-in');
 
             setTimeout(() => {
                 let randomIndex = Math.floor(Math.random() * questions.length);
                 let selectedQuestion = questions[randomIndex];
 
-                // Lógica especial para ASK con múltiples {name}
                 if (currentMode === 'ask' && names.length > 0 && selectedQuestion.includes('{name}')) {
                     const nameCount = (selectedQuestion.match(/{name}/g) || []).length;
 
@@ -239,7 +223,6 @@
                         return;
                     }
 
-                    // Copia y baraja los nombres
                     const shuffledNames = [...names].sort(() => Math.random() - 0.5);
                     let i = 0;
                     selectedQuestion = selectedQuestion.replace(/{name}/g, () => shuffledNames[i++]);
@@ -251,13 +234,11 @@
             }, 200);
         }
 
-        // Event listeners
         btnYoNunca.addEventListener('click', () => switchMode('yonunca'));
         btnAsk.addEventListener('click', () => switchMode('ask'));
         btnNext.addEventListener('click', showRandomQuestion);
         namesInput.addEventListener('input', updateNames);
         
-        // Inicialización
         document.addEventListener('DOMContentLoaded', () => {
             loadQuestions();
         });
