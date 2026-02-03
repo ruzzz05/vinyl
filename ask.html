@@ -8,12 +8,12 @@
     <style>
         :root {
             /* PALETA DE COLORES */
-            --bg-body: #121212;       /* Casi negro */
-            --bg-card: #1e1e1e;       /* Gris oscuro para tarjetas */
-            --bg-input: #2d2d2d;      /* Gris para inputs */
-            --accent-yellow: #FFD700; /* Amarillo fuerte */
-            --text-main: #e5e5e5;     /* Blanco suave */
-            --text-on-yellow: #000000;/* Negro para leer sobre amarillo */
+            --bg-body: #121212;
+            --bg-card: #1e1e1e;
+            --bg-input: #2d2d2d;
+            --accent-yellow: #FFD700;
+            --text-main: #e5e5e5;
+            --text-on-yellow: #000000;
             
             --mode-yonunca: 209, 213%, 56%;
             --mode-ask: 0, 79%, 72%;      
@@ -28,102 +28,92 @@
             flex-direction: column;
         }
 
-        /* BARRA DE NAVEGACIÓN */
-        nav {
-            background-color: #000000;
-            border-bottom: 1px solid #333;
-        }
+        /* --- ESTILOS GENERALES --- */
+        nav { background-color: #000000; border-bottom: 1px solid #333; }
+        .mode-selector { background-color: var(--bg-card); border-bottom: 1px solid #333; }
         
-        .nav-link:hover {
-            color: var(--accent-yellow);
-        }
+        .btn-mode { background: transparent; color: #888; font-weight: 600; border: 2px solid transparent; }
+        .btn-mode.active { color: var(--accent-yellow); border-bottom: 2px solid var(--accent-yellow); background: rgba(255, 215, 0, 0.05); }
+        
+        .card { background-color: var(--bg-card); box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5); border: 1px solid #333; }
+        .card.yonunca, .card.ask { border-top: 4px solid var(--accent-yellow); }
 
-        /* SELECTOR DE MODO */
-        .mode-selector {
-            background-color: var(--bg-card);
-            border-bottom: 1px solid #333;
-        }
-        
-        .btn-mode {
-            background-color: transparent;
-            color: #888;
-            font-weight: 600;
-            border: 2px solid transparent;
-        }
-        
-        .btn-mode.active {
-            color: var(--accent-yellow);
-            border-bottom: 2px solid var(--accent-yellow);
-            background-color: rgba(255, 215, 0, 0.05);
-        }
-        
-        /* TARJETA PRINCIPAL */
-        .card {
-            background-color: var(--bg-card);
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
-            border: 1px solid #333;
-        }
-        
-        .card.yonunca { border-top: 4px solid var(--accent-yellow); }
-        .card.ask { border-top: 4px solid var(--accent-yellow); }
-
-        /* INPUT */
-        textarea {
-            background-color: var(--bg-input) !important;
-            color: white !important;
-            border: 1px solid #444 !important;
-        }
-        textarea:focus {
-            border-color: var(--accent-yellow) !important;
-            outline: none;
-        }
-
-        /* BOTÓN */
-        .btn-next {
-            background-color: var(--accent-yellow);
-            color: var(--text-on-yellow);
-            font-weight: 800;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            box-shadow: 0 4px 0 #b39700;
-            transition: all 0.1s;
-        }
-        
-        .btn-next:hover { 
-            transform: translateY(2px); 
-            box-shadow: 0 2px 0 #b39700;
-            filter: brightness(1.1);
-        }
-        
-        .btn-next:active {
-            transform: translateY(4px);
-            box-shadow: none;
-        }
-        
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        
-        .fade-in { animation: fadeIn 0.3s ease-out forwards; }
-
-        #names-input { display: none; }
-        
         h2 { color: var(--accent-yellow); }
         .divider { background-color: #333; }
 
+        /* --- BOTÓN SIGUIENTE --- */
+        .btn-next {
+            background-color: var(--accent-yellow); color: var(--text-on-yellow);
+            font-weight: 800; text-transform: uppercase; letter-spacing: 1px;
+            box-shadow: 0 4px 0 #b39700; transition: all 0.1s;
+        }
+        .btn-next:hover { transform: translateY(2px); box-shadow: 0 2px 0 #b39700; filter: brightness(1.1); }
+        .btn-next:active { transform: translateY(4px); box-shadow: none; }
+
+        /* --- INPUT DE NOMBRES --- */
+        .name-input-group input {
+            background-color: var(--bg-input); color: white; border: 1px solid #444;
+        }
+        .name-input-group input:focus { border-color: var(--accent-yellow); outline: none; }
+        
+        .btn-add {
+            background-color: #333; color: var(--accent-yellow); border: 1px solid #444;
+        }
+        .btn-add:hover { background-color: #444; }
+
+        /* --- ETIQUETAS DE JUGADORES --- */
+        .player-tag {
+            background-color: #333; color: white; border: 1px solid var(--accent-yellow);
+            animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        .player-tag:hover { background-color: #444; cursor: pointer; }
+        .player-tag span.x-mark { color: #ff4444; margin-left: 6px; font-weight: bold; }
+
+        /* --- SELECTOR DE INTENSIDAD --- */
+        #intensity-wrapper {
+            display: flex; align-items: center; gap: 8px;
+            background: #1a1a1a; padding: 4px 12px; border-radius: 20px; border: 1px solid #333;
+        }
+        select#intensity-select {
+            background: transparent; color: var(--accent-yellow); border: none; font-weight: bold; cursor: pointer;
+        }
+        select#intensity-select:focus { outline: none; }
+        select#intensity-select option { background-color: #1a1a1a; color: white; }
+
+        /* ANIMACIONES */
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .fade-in { animation: fadeIn 0.3s ease-out forwards; }
+        
+        @keyframes popIn { from { transform: scale(0.5); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+
+        .hidden { display: none !important; }
     </style>
 </head>
 <body>
 
     <nav class="p-4">
-        <div class="container mx-auto flex justify-center space-x-6">
-            <a href="index.html" class="nav-link px-4 py-2 rounded transition-colors">
+        <div class="container mx-auto flex justify-between items-center">
+            <a href="index.html" class="text-gray-400 hover:text-yellow-400 transition-colors font-medium">
                 🎵 Música
             </a>
-            <a href="#" class="nav-link px-4 py-2 rounded font-bold text-yellow-400">
+
+            <div class="font-bold text-yellow-400 text-lg hidden sm:block">
                 ❓ Juego de Preguntas
-            </a>
+            </div>
+
+            <div id="intensity-wrapper" class="hidden">
+                <span class="text-xl">🍹</span>
+                <div class="flex flex-col">
+                    <span class="text-[10px] text-gray-500 uppercase font-bold tracking-wider">Intensidad</span>
+                    <select id="intensity-select" class="text-lg">
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3" selected>3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                    </select>
+                </div>
+            </div>
         </div>
     </nav>
 
@@ -143,7 +133,16 @@
             <h2 class="text-2xl font-bold mb-2 uppercase tracking-wider" id="mode-title">Yo Nunca</h2>
             <div class="divider h-px w-20 mx-auto my-4"></div>
             
-            <textarea id="names-input" class="w-full p-3 rounded mb-4" placeholder="Introduce los nombres, uno por línea..."></textarea>
+            <div id="names-section" class="hidden mb-6">
+                <div class="name-input-group flex gap-2 mb-4">
+                    <input type="text" id="new-name-input" class="flex-grow p-3 rounded" placeholder="Añadir jugador..." autocomplete="off">
+                    <button id="btn-add-name" class="btn-add px-4 rounded text-xl font-bold transition-colors">+</button>
+                </div>
+                
+                <div id="players-list" class="flex flex-wrap justify-center gap-2 min-h-[30px]">
+                    </div>
+                <p class="text-xs text-gray-500 mt-2">Haz clic en un nombre para eliminarlo</p>
+            </div>
             
             <div class="min-h-[100px] flex items-center justify-center">
                 <p id="question" class="text-2xl font-medium my-4 leading-relaxed">Cargando preguntas...</p>
@@ -156,32 +155,78 @@
     </main>
 
     <script>
+        // --- ESTADO ---
         let currentMode = 'yonunca';
         let yonuncaQuestions = [];
         let askQuestions = [];
-        let names = [];
-        
+        let players = []; // Array para los nombres
+        let intensity = 3; // Valor por defecto
+
+        // --- DOM ELEMENTS ---
         const btnYoNunca = document.getElementById('btn-yonunca');
         const btnAsk = document.getElementById('btn-ask');
         const btnNext = document.getElementById('btn-next');
         const cardContainer = document.getElementById('card-container');
         const questionElement = document.getElementById('question');
         const modeTitle = document.getElementById('mode-title');
-        const namesInput = document.getElementById('names-input');
         
-        // --- FUNCIÓN DE LECTURA DE CSV MODIFICADA ---
+        // Elementos de Nombres
+        const namesSection = document.getElementById('names-section');
+        const newNameInput = document.getElementById('new-name-input');
+        const btnAddName = document.getElementById('btn-add-name');
+        const playersList = document.getElementById('players-list');
+
+        // Elementos de Intensidad
+        const intensityWrapper = document.getElementById('intensity-wrapper');
+        const intensitySelect = document.getElementById('intensity-select');
+
+        // --- LOGICA DE INTENSIDAD ---
+        intensitySelect.addEventListener('change', (e) => {
+            intensity = e.target.value;
+            console.log("Intensidad cambiada a:", intensity);
+        });
+
+        // --- LÓGICA DE NOMBRES ---
+        function renderPlayers() {
+            playersList.innerHTML = '';
+            players.forEach((player, index) => {
+                const tag = document.createElement('div');
+                tag.className = 'player-tag px-3 py-1 rounded-full text-sm font-medium flex items-center';
+                tag.innerHTML = `${player} <span class="x-mark">×</span>`;
+                tag.onclick = () => removePlayer(index);
+                playersList.appendChild(tag);
+            });
+        }
+
+        function addPlayer() {
+            const name = newNameInput.value.trim();
+            if (name) {
+                players.push(name);
+                newNameInput.value = '';
+                renderPlayers();
+                newNameInput.focus();
+            }
+        }
+
+        function removePlayer(index) {
+            players.splice(index, 1);
+            renderPlayers();
+        }
+
+        btnAddName.addEventListener('click', addPlayer);
+        newNameInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') addPlayer();
+        });
+
+        // --- LECTURA CSV ---
         async function fetchCSV(url) {
             try {
                 const response = await fetch(url);
                 if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
                 const text = await response.text();
-                
                 return text.split('\n')
-                    .map(line => line.trim()) // Quita espacios al principio y final
-                    .filter(line => 
-                        line.length > 0 &&      // Ignora líneas vacías
-                        !line.startsWith('//')  // IGNORA COMENTARIOS QUE EMPIECEN POR //
-                    ); 
+                    .map(line => line.trim())
+                    .filter(line => line.length > 0 && !line.startsWith('//')); 
             } catch (error) {
                 console.error(`Error cargando ${url}:`, error);
                 return ["⚠️ No se encontró el archivo " + url];
@@ -190,21 +235,18 @@
 
         async function loadQuestions() {
             questionElement.textContent = "Leyendo base de datos...";
-            
             const [dataYoNunca, dataAsk] = await Promise.all([
                 fetchCSV('yonunca.csv'),
                 fetchCSV('ask.csv')
             ]);
-
             yonuncaQuestions = dataYoNunca;
             askQuestions = dataAsk;
-
             showRandomQuestion();
         }   
         
+        // --- CAMBIO DE MODO ---
         function switchMode(newMode) {
             currentMode = newMode;
-
             btnYoNunca.classList.remove('active');
             btnAsk.classList.remove('active');
             cardContainer.className = 'card max-w-2xl w-full p-8 rounded-lg text-center transition-all fade-in';
@@ -213,23 +255,26 @@
                 btnYoNunca.classList.add('active');
                 cardContainer.classList.add('yonunca');
                 modeTitle.textContent = 'YO NUNCA';
-                namesInput.style.display = 'none';
+                
+                // Ocultar controles específicos de ASK
+                namesSection.classList.add('hidden');
+                intensityWrapper.classList.add('hidden');
+
             } else if (newMode === 'ask') {
                 btnAsk.classList.add('active');
                 cardContainer.classList.add('ask');
                 modeTitle.textContent = 'ASK';
-                namesInput.style.display = 'block';
-                updateNames();
+                
+                // Mostrar controles específicos de ASK
+                namesSection.classList.remove('hidden');
+                intensityWrapper.classList.remove('hidden');
+                renderPlayers();
             }
 
             showRandomQuestion();
         }
 
-        function updateNames() {
-            const input = namesInput.value.trim();
-            names = input ? input.split('\n').map(name => name.trim()).filter(name => name) : [];
-        }
-        
+        // --- MOSTRAR PREGUNTA ---
         function showRandomQuestion() {
             let questions = currentMode === 'yonunca' ? yonuncaQuestions : askQuestions;
             
@@ -245,20 +290,23 @@
                 let selectedQuestion = questions[randomIndex];
 
                 // 1. REEMPLAZO DE NOMBRES {name}
-                if (currentMode === 'ask' && names.length > 0 && selectedQuestion.includes('{name}')) {
+                if (currentMode === 'ask' && players.length > 0 && selectedQuestion.includes('{name}')) {
                     const nameCount = (selectedQuestion.match(/{name}/g) || []).length;
-                    if (names.length < nameCount) {
+                    if (players.length < nameCount) {
                         questionElement.textContent = `⚠️ Faltan nombres. Necesito ${nameCount} personas.`;
                         questionElement.classList.add('fade-in');
                         return;
                     }
-                    const shuffledNames = [...names].sort(() => Math.random() - 0.5);
+                    const shuffledNames = [...players].sort(() => Math.random() - 0.5);
                     let i = 0;
                     selectedQuestion = selectedQuestion.replace(/{name}/g, () => `<span style="color:var(--accent-yellow)">${shuffledNames[i++]}</span>`);
                 }
 
-                // 2. REEMPLAZO DE ASTERISCOS *texto* POR AMARILLO
-                // Esta expresión busca texto entre asteriscos y le aplica el color
+                // 2. REEMPLAZO DE INTENSIDAD {int}
+                // Busca {int} y pone el número seleccionado en amarillo
+                selectedQuestion = selectedQuestion.replace(/{int}/g, `<span style="color:var(--accent-yellow); font-size: 1.2em; font-weight:bold;">${intensity}</span>`);
+
+                // 3. REEMPLAZO DE ASTERISCOS *texto*
                 selectedQuestion = selectedQuestion.replace(/\*(.*?)\*/g, '<span style="color:var(--accent-yellow)">$1</span>');
 
                 questionElement.innerHTML = selectedQuestion;
@@ -267,14 +315,12 @@
             }, 200);
         }
 
+        // --- LISTENERS ---
         btnYoNunca.addEventListener('click', () => switchMode('yonunca'));
         btnAsk.addEventListener('click', () => switchMode('ask'));
         btnNext.addEventListener('click', showRandomQuestion);
-        namesInput.addEventListener('input', updateNames);
         
-        document.addEventListener('DOMContentLoaded', () => {
-            loadQuestions();
-        });
+        document.addEventListener('DOMContentLoaded', loadQuestions);
     </script>
 </body>
 </html>
