@@ -7,8 +7,9 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         :root {
-            --mode-yonunca: 209, 213%, 56%;
-            --mode-ask: 0, 79%, 72%;
+            --mode-yonunca: 209, 213%, 56%; /* Azulado */
+            --mode-ask: 0, 79%, 72%;      /* Rosado */
+            --mode-musica: 142, 71%, 45%; /* Verde (para futuro uso) */
         }
         
         body {
@@ -33,6 +34,7 @@
             font-weight: bold;
         }
         
+        /* Estilos Activos */
         .btn-mode.yonunca.active {
             background-color: hsla(var(--mode-yonunca), 0.2);
             border-bottom: 4px solid hsl(var(--mode-yonunca));
@@ -50,32 +52,18 @@
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
         }
         
-        .card.yonunca {
-            border-top: 8px solid hsl(var(--mode-yonunca));
-        }
-        
-        .card.ask {
-            border-top: 8px solid hsl(var(--mode-ask));
-        }
+        .card.yonunca { border-top: 8px solid hsl(var(--mode-yonunca)); }
+        .card.ask { border-top: 8px solid hsl(var(--mode-ask)); }
 
         .btn-next {
             background-color: #e5e7eb;
             color: #4b5563;
         }
         
-        .btn-next:hover {
-            transform: translateY(-2px);
-        }
+        .btn-next:hover { transform: translateY(-2px); }
         
-        .btn-next.yonunca:hover {
-            background-color: hsl(var(--mode-yonunca));
-            color: white;
-        }
-        
-        .btn-next.ask:hover {
-            background-color: hsl(var(--mode-ask));
-            color: white;
-        }
+        .btn-next.yonunca:hover { background-color: hsl(var(--mode-yonunca)); color: white; }
+        .btn-next.ask:hover { background-color: hsl(var(--mode-ask)); color: white; }
         
         /* Animaciones */
         @keyframes fadeIn {
@@ -83,13 +71,9 @@
             to { opacity: 1; transform: translateY(0); }
         }
         
-        .fade-in {
-            animation: fadeIn 0.3s ease-out forwards;
-        }
+        .fade-in { animation: fadeIn 0.3s ease-out forwards; }
 
-        #names-input {
-            display: none;
-        }
+        #names-input { display: none; }
     </style>
 </head>
 <body class="bg-gray-100">
@@ -99,7 +83,7 @@
             <a href="index.html" class="px-4 py-2 rounded hover:bg-gray-700">
                 🎵 Música
             </a>
-            <a href="ask.html" class="px-4 py-2 rounded bg-gray-700 font-bold">
+            <a href="#" class="px-4 py-2 rounded bg-gray-700 font-bold">
                 ❓ Juego de Preguntas
             </a>
         </div>
@@ -120,8 +104,11 @@
         <div id="card-container" class="card yonunca max-w-2xl w-full p-8 rounded-lg text-center transition-all">
             <h2 class="text-xl font-semibold mb-2" id="mode-title">Yo Nunca</h2>
             <div class="h-px bg-gray-200 my-4"></div>
+            
             <textarea id="names-input" class="w-full p-2 border rounded mb-4" placeholder="Introduce los nombres, uno por línea"></textarea>
-            <p id="question" class="text-2xl font-medium my-8">Presiona "Siguiente" para comenzar</p>
+            
+            <p id="question" class="text-2xl font-medium my-8">Cargando preguntas...</p>
+            
             <button id="btn-next" class="btn-next yonunca mt-4 px-8 py-3 rounded-lg font-medium transition-all shadow-md">
                 Siguiente 🔄
             </button>
@@ -133,6 +120,7 @@
         let currentMode = 'yonunca';
         let yonuncaQuestions = [];
         let askQuestions = [];
+        let musicaData = []; // Variable para almacenar la data de música
         let names = [];
         
         // Elementos del DOM
@@ -144,265 +132,46 @@
         const modeTitle = document.getElementById('mode-title');
         const namesInput = document.getElementById('names-input');
         
+        // Función auxiliar para leer CSV
+        async function fetchCSV(url) {
+            try {
+                const response = await fetch(url);
+                if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+                const text = await response.text();
+                // Divide por saltos de línea y limpia espacios vacíos
+                return text.split('\n')
+                           .map(line => line.trim())
+                           .filter(line => line.length > 0 && !line.startsWith('//')); // Ignora líneas vacías o comentarios
+            } catch (error) {
+                console.error(`Error cargando ${url}:`, error);
+                return ["Error al cargar el archivo: " + url];
+            }
+        }
+
         // Cargar preguntas desde archivos CSV
         async function loadQuestions() {
-            try {
-                // Simulamos la carga de archivos CSV
-                // En un entorno real, usarías fetch o FileReader para cargar archivos locales
-                yonuncaQuestions = [
-                    "Yo nunca lo he hecho sin haber querido.",
-                    "Yo nunca lo he hecho con mas de una persona en un mismo dia.",
-                    "Yo nunca he querido tirarme a la madre/padre de un amigo/a.",
-                    "Yo nunca he querido tirarme al hermano/a de un amigo/a.",
-                    "Yo nunca me he querido liar con alguien presente.",
-                    "Yo nunca he tenido fantasias sexuales sobre alguien que no considerase atractivo/a.",
-                    "Yo nunca lo he hecho a pelo.",
-                    "Yo nunca he acabado en la boca de alguien/ me han acabado en la boca.",
-                    "Yo nunca he querido tirarme al novio/a de un amigo/a.",
-                    "A mi nunca me han pedido que fuese mas lento porque iba demasiado rapido.",
-                    "Yo nunca he dejado con las ganas a alguien.",
-                    "A mi nunca me han dejado con las ganas.",
-                    "Yo nunca he tenido la tipica discusion de \"luces encendidas/ apagadas\".",
-                    "Yo nunca me he encontrado un pelo en la boca tras hacer oral.",
-                    "Yo nunca he puesto los cuernos.",
-                    "A mi nunca me han puesto los cuernos.",
-                    "Yo nunca he dudado de mi orientacion sexual.",
-                    "Yo nunca me he liado con dos personas de distinto sexo en una noche.",
-                    "Yo nunca me he liado con alguien y me he arrepentido inmediatamente despues.",
-                    "Yo nunca he tenido sexo por pena.",
-                    "Yo nunca me he tirado a mi ex.",
-                    "A mi nunca me han pillado en el acto.",
-                    "Yo nunca lo he hecho en un lugar publico.",
-                    "Yo nunca lo he hecho en la cama de una tercera persona.",
-                    "Yo nunca lo he hecho con mas gente al rededor.",
-                    "Yo nunca he hecho un trio.",
-                    "Yo nunca he tenido fantasias sexuales sobre hacer un trio con mi novio/a y otra persona.",
-                    "Yo nunca me he masturbado con un objeto inanimado.",
-                    "Yo nunca me he hecho daño a mi mismo al masturbarme.",
-                    "Yo nunca me he decepcionado al liarme/tirarme a alguien con quien tenia muchas ganas.",
-                    "Yo nunca he practicado sadomasoquismo o usado objetos relacionados.",
-                    "Yo nunca he intentado anal pero no salio bien.",
-                    "Yo nunca he practicado anal por placer.",
-                    "Yo nunca me he liado/tirado a alguien que tenia minimo 5 años mas que yo.",
-                    "Yo nunca he hecho algo sexual en el colegio/universidad.",
-                    "A mi nunca me han hecho un chupeton en un lugar poco comun.",
-                    "Yo nunca he intentado emborrachar a alguien para liarme con esa persona.",
-                    "Yo nunca he visto porno con otra persona.",
-                    "Yo nunca me he grabado con alguien en la cama.",
-                    "Yo nunca me he masturbado con una pelicula que no fuese pornografica.",
-                    "Yo nunca he tenido un gatillazo.",
-                    "Yo nunca lo he hecho con la regla.",
-                    "A mi nunca me han meado encima.",
-                    "Yo nunca lo he hecho disfrazado para satisfacer algun morbo.",
-                    "Yo nunca me he liado con el chico/a con quien estaba intentando ligar un amigo/a.",
-                    "Yo nunca me lo he tragado.",
-                    "Yo nunca me he excitado en un momento muy poco apropiado.",
-                    "A mi nunca se me ha roto el condon.",
-                    "Yo nunca he estado un año sin sexo tras haberlo hecho previamente.",
-                    "Yo nunca me he limpiado el culo tan fuerte, que el papel se rompe y mi dedo indice acaba tocando mi ano.",
-                    "Yo nunca he involucrado comida en el sexo.",
-                    "Yo nunca lo he hecho en una fiesta.",
-                    "Yo nunca me he tomado la pastilla del dia despues.",
-                    "Yo nunca he tenido sexo por telefono.",
-                    "Yo nunca he tenido que correr a buscar mi ropa porque acababan de tocar el timbre de la casa.",
-                    "Yo nunca he parado de liarme/tirarme a alguien para preguntarle a la persona como se  llamaba.",
-                    "Yo nunca me he liado/tirado a el/la ex de un amigo/a.",
-                    "Yo nunca le he mentido sobre mis experiencias sexuales a mi nueva pareja.",
-                    "Yo nunca he tenido que enseñar/a mi nunca me han tenido que enseñar como desabrochar un sujetador.",
-                    "Yo nunca he tenido una fantasia sexual sobre un profesor/profesora.",
-                    "Yo nunca he pillado a mis padres haciendolo.",
-                    "Yo nunca me he sacado fotos desnudo/a.",
-                    "Yo nunca he llamado a alguien por un nombre equivocado mientras lo estabamos haciendo.",
-                    "Yo nunca he/a mi nunca me han lamido el culo.",
-                    "Yo nunca lo he hecho en la ducha.",
-                    "Yo nunca he usado el kamasutra para aprender o involucrar nuevas posiciones en la cama.",
-                    "Yo nunca lo he hecho con alguien que era virgen.",
-                    "Yo nunca he mentido sobre ser virgen.",
-                    "Yo nunca me he medido el pene.",
-                    "Yo nunca he borrado conversaciones subidas de tono para que mi pareja no me pillase.",
-                    "Yo nunca me he liado/ tirado a alguien que no me parecia atractivo/a solo porque estaba desesperado/a.",
-                    "Yo nunca he creido haber contraido una enfermedad de transmision sexual.",
-                    "Yo nunca he fingidobg/exagerado un orgasmo.",
-                    "Yo nunca he tenido un follamigo/a.",
-                    "Yo nunca he salido de casa sin ropa interior.",
-                    "Yo nunca me he liado/tirado a un extranjero/a.",
-                    "Yo nunca he sentido envidia al ver los genitales de un amigo/a.",
-                    "Yo nunca me he masturbado en casa de un amigo/a.",
-                    "Yo nunca he hecho/a mi nunca me han hecho una mamada con condon.",
-                    "Yo nunca he usado hielo en la cama.",
-                    "Yo nunca he pedido que satisfacieran un fetiche mio pero sin exito.",
-                    "Yo nunca he intentado esconder una ereccion en publico sin exito.",
-                    "A mi nunca me ha puesto la violencia en la cama.",
-                    "Yo nunca me he tirado/se han tirado un pedo en el acto.",
-                    "Yo nunca le he roto la ropa a mi pareja al quitarsela.",
-                    "Yo nunca he intentado/querido que una pareja rompiese.",
-                    "Yo nunca he hecho/me han hecho una cubana.",
-                    "Yo nunca me he masturbado viendo hentai.",
-                    "Yo nunca he aceptado hacer algo por dinero.",
-                    "Yo nunca he metido/me han metido mas de 3 dedos.",
-                    "Yo nunca lo he hecho en un coche y sono la bocina.",
-                    "A mi nunca me han tenido que enseñar una foto de con quien me habia liado porque no me acordaba.",
-                    "Yo nunca me he depilado los genitales pensando que iba a pinchar y acabe comiendome los mocos.",
-                    "Yo nunca he querido unirme a dos amigos que estuviesen haciendolo.",
-                    "Yo nunca he hecho una lista de todas los tios/tias con las que me he liado.",
-                    "Yo nunca he conseguido liarme/tirarme a un amor platonico.",
-                    "Yo nunca he tenido que usar mas de 2 condones en una misma ronda.",
-                    "Yo nunca lo he hecho en todos los cuartos de mi/su casa.",
-                    "Yo nunca he pedido por Chatroulette/Omegle que me enseñen el pene/las tetas.",
-                    "Yo nunca he tenido que usar paginas online o aplicaciones para ligar.",
-                    "Yo nunca me he dado cuenta de que me estaban mirando mientras lo estaba haciendo.",
-                    "Yo nunca me he liado con alguien presente.",
-                    "Yo nunca me he liado/tirado a alguien que me cayera mal.",
-                    "A mi nunca se me han acabado encima del cuerpo.",
-                    "A mi nunca me han dado una hostia por estar tirando la caña.",
-                    "Yo nunca me he arrepentido de con quien habia perdido la virginidad.",
-                    "Yo nunca me he liado con alguien que acababa de vomitar.",
-                    "A mi nunca me ha puesto alguien sin saber en su momento que esa persona tenia minimo 4 años menos que yo.",
-                    "Yo nunca he salido con alguien con quien sabia que no iba a estar mucho tiempo.",
-                    "Yo nunca he hecho un 69.",
-                    "Yo nunca lo he hecho con mis padres cerca.",
-                    "Yo nunca he ligado con alguien para poner celoso/a a una persona.",
-                    "Yo nunca me he resbalado mientras lo hacia en la ducha.",
-                    "Yo nunca le he dicho a alguien \"te quiero\" solo para follar.",
-                    "Yo nunca he hecho/a mi nunca me han hecho sangrar al meter dedos.",
-                    "Yo nunca he echado un polvo malisimo.",
-                    "Yo nunca me he masturbado al menos 5 veces en un dia.",
-                    "Yo nunca he tenido un sueño mojado.",
-                    "Yo nunca he pensado que el sexo oral era asqueroso.",
-                    "Yo nunca he pensado que el sexo oral es mejor que la penetracion.",
-                    "Yo nunca he pensado en otra persona mientras estaba haciendolo con alguien.",
-                    "Yo nunca lo he hecho con alguien que en mi opinion tenia el pene pequeño.",
-                    "Yo nunca he usado condones con sabores.",
-                    "Yo nunca he/a mi nunca se me han acabado dentro sin condon.",
-                    "Yo nunca me he guardado las fotos de mi ex desnudo/a despues de haber cortado con el/ella.",
-                    "Yo nunca he usado/nunca han usado conmigo la marcha atras como metodo anticonceptivo.",
-                    "Yo nunca he sido complice de cuernos.",
-                    "A mi nunca me ha tirado la caña un familiar de mi novio/a.",
-                    "Yo nunca he mandado a la friendzone a alguien tras haberme liado con esa persona.",
-                    "Yo nunca me he alegrado por algo malo que le haya pasado a mi ex.",
-                    "Yo nunca lo he hecho mas de 5 veces en un dia.",
-                    "Yo nunca me he liado con alguien de mi actual clase.",
-                    "A mi nunca me han hecho una cobra de verdad.",
-                    "Yo nunca me he arrepentido de un tatuaje.",
-                    "A mi nunca me ha dado mas morbo hacerlo fuera de casa que dentro.",
-                    "Yo nunca me he quedado dormido/a durante el sexo.",
-                    "Yo nunca me he pillado por alguien mientras tenia novio/a.",
-                    "Yo nunca he cortado con un novio/a porque el sexo no me satisfacia.",
-                    "Yo nunca he roto la cama al hacerlo.",
-                    "A mi nunca me han llamado la atencion los vecinos por hacer demasiado ruido durante el sexo.",
-                    "Yo nunca he/a mi nunca me han agarrado del pelo con fuerza en el sexo.",
-                    "Yo nunca he aguantado menos de 10 minutos en la cama.",
-                    "Nunca han aguantado menos de 10 minutos en la cama conmigo.",
-                    "Yo nunca lo he hecho 3 o mas veces seguidas.",
-                    "Yo nunca me he/a mi nunca me han despertado con una mamada/polvo.",
-                    "Yo nunca me he masturbado mientras hacia una videollamada con alguien.",
-                    "Yo nunca me he creado una cuenta falsa en alguna red social para ver lo que hacia un/a ex sin que se diese cuenta.",
-                    "Yo nunca he conseguido liarme o salir con alguien con quien estaba previamente en la friendzone.",
-                    "A mi nunca me han pillado un chupeton mis padres.",
-                    "Yo nunca tendria una relacion con alguien presente si se diese el caso.",
-                    "Yo nunca he visto porno de hermanastros/padrastros/madrastas.",
-                    "Yo nunca he/a mi nunca me han hecho garganta profunda.",
-                    "Yo nunca me he sentido mal conmigo mismo tras tocarme.",
-                    "Yo nunca le he seguido el rollo a un profesora/a que me estuviese tirando.",
-                    "Yo nunca he pedido hacer un video porno pero sin exito.",
-                    "Yo nunca he fingido ser de otra nacionalidad para ligar.",
-                    "Yo nunca he tenido sexo interracial.",
-                    "Yo nunca he estado frustrado porque no me satisfacia el sexo con una persona a quien queria.",
-                    "Yo nunca me he masturbado en grupo.",
-                    "Yo nunca me he obsesionado entera o parcialmente con alguien tras liarme con esa persona una vez.",
-                    "Yo nunca he lamido unos pezones.",
-                    "A mi nunca me han lamido los pezones.",
-                    "Yo nunca he estado en la friendzone con alguien presente.",
-                    "Yo nunca he cortado con alguien para salir con otra persona.",
-                    "Nunca han cortado conmigo para salir con otra persona.",
-                    "Yo nunca lo he hecho estando enfermo.",
-                    "Yo nunca me he querido tirar/tirado a mi mejor amigo/a.",
-                    "Yo nunca he preferido los culos a las tetas.",
-                    "Yo nunca he tenido pique con el novio/a de mi ex.",
-                    "Yo nunca he pensado que me casaria con un ex o actual pareja.",
-                    "Yo nunca he soñado que me liaba/tiraba a alguien y me he decepcionado al despertarme.",
-                    "Yo nunca me he liado con alguien que tenia muy mal aliento.",
-                    "A mi nunca me han hecho daño al practicar sexo oral.",
-                    "Yo nunca he tenia la paranoia de estar embarazada porque se me habia retrasado la regla.",
-                    "Yo nunca he/a mi nunca me han hecho una mamada conduciendo.",
-                    "Yo nunca le he seguido el rollo a alguien que me estaba tirando solo para conseguir alcohol.",
-                    "Yo nunca he visto un juguete sexual y he sentido intriga.",
-                    "Yo nunca he tenido un sueño sexual sobre alguien presente/de la clase.",
-                    "Yo nunca he sentido intriga por practicar sexo oral con alguien de mi mismo sexo.",
-                    "Yo nunca he pensado que el sexo entre mismo sexo es o seria mejor que el sexo entre distintos sexos.",
-                    "Yo nunca he sentido atraccion por algun familiar.",
-                    "Yo nunca he chupado un pene/coño que supiera muy mal.",
-                    "A mi nunca me ha interrumpido mi mascota mientras estaba haciendolo.",
-                    "Yo nunca me he/nunca se han equivocado de agujero.",
-                    "Yo nunca me he masturbado justo antes de hacerlo para durar mas.",
-                    "Yo nunca he usado un video porno como modelo a seguir.",
-                    "Yo nunca me he vestido de cierta forma para atraer la atencion de alguien y paso de mi.",
-                    "Yo nunca he alquilado una habitacion de hotel o motel solo para follar.",
-                    "Yo nunca haria un trio con gente aqui presente.",
-                    "Yo nunca he jugado a algun juego con el castigo de hacer un striptease.",
-                    "Yo nunca me he liado con alguien que besase realmente mal.",
-                    "Yo nunca he usado el movil mientras lo estaba haciendo.",
-                    "Yo nunca lo he hecho manteniendo 0 contacto visual con la otra persona.",
-                    "A mi nunca me ha tirado para atras ver cuanto pelo pubico tenia la persona con la que lo iba a hacer.",
-                    "Yo nunca me he reido mientras lo estaba haciendo.",
-                    "Yo nunca he tirado la caña de broma y acabo saliendo mejor de lo que esperaba.",
-                    "Yo nunca me he liado/tirado al mejor amigo/a de mi ex.",
-                    "Yo nunca he me hecho fotos sensuales desnudo/a para enviarselas a alguien.",
-                    "Yo nunca he puesto/a mi nunca me han puesto un condon con la boca.",
-                    "Yo nunca he mentido en este Yo Nunca.",
-                    "Yo nunca me he tirado/liado a alguien que no he vuelto a ver en mi vida.",
-                    "Yo nunca me he imaginado como serian las tetas/el pene de alguien presente.",
-                    "Yo nunca me habria tirado a alguien de clase a principio de curso pero ahora me da asco.",
-                    "Yo nunca he estado pillado por alguien presente sin haberselo dicho nunca.",
-                    "Yo nunca he creido que X e Y (presentes) se podrian liar. (Muchas combinaciones)"
-                ];
+            questionElement.textContent = "Leyendo archivos CSV...";
+            
+            // Cargamos los 3 archivos en paralelo
+            const [dataYoNunca, dataAsk, dataMusica] = await Promise.all([
+                fetchCSV('yonunca.csv'),
+                fetchCSV('ask.csv'),
+                fetchCSV('musica.csv')
+            ]);
 
-                
-                askQuestions = [    
-                    "La persona más bajita reparte 3",
-                    "La persona con el pelo más largo reparte 3",
-                    "La persona que esté leyendo esto en voz alta reparte 3",
-                    "La persona que esté más cerca de una ventana reparte 3",
-                    "La persona más alta bebe ",
-                    "Decidid quien es la persona más graciosa. Esa persona bebe ",
-                    "Decidid quien es la persona más seria. Esa persona bebe ",
-                    "El que más liga reparte 3",
-                    "El que menos liga bebe ",
-                    "El que lleve un condón encima bebe",
-                    "El que haya tenido más parejas sexuales reparte 3",
-                    "El que haya tenido menos parejas sexuales reparte 5 ",
-                    "{name} está funcionando",
-                    "Ronda de Yo Nunca. Una por cada participante del Ask",
-                    "Prohibido coger el movil. El primero que lo coja chupito",
-                    "{name} Dale un trago de tu copa al que mejor te caiga y al que peor, no digas quien es quien",
-                    "TODOS BEBEN",
-                    "Al siguiente que le toque beber, bebe doble x2",
-                    "El último que haya cumplido años reparte su edad entre 10, ( 20 años = 2 tragos )",
-                    "Si has llegado tarde, bebes 1 por cada 10 minutos que hayas llegado tarde",
-                    "Si has venido en transporte público, bebes 2",
-                    "Si has venido en coche, bebes 3",
-                    "Si has venido andando, bebes 1",
-                    "{name} dale un beso donde quieras a {name} ",
-                    "Los solteros beben ",
-                    "Los que tengan pareja beben 3",
-                    "El que haya vuelto con su ex alguna vez bebe 3",
-                    "El que lleve más tiempo sin sexo bebe 2 (para ahogar las penas)",
-                    "El que haya enviado 'nudes' alguna vez reparte 3",
-                    "{name}, dale un masaje en los hombros a {name} o bebe 5",
-                    "Si te has liado con alguien de esta habitación, bebe",
-                    "{name} y {name}: Piedra, papel o tijera. El que pierda bebe fondo",
-                    "Guerra de miradas: {name} contra {name}. El primero que parpadee bebe 3",
-                    "{name}, haz una rima. El que no rime o repita bebe. (Sentido horario)",
-                    "Intercambio de ropa: {name} y {name} deben intercambiarse una prenda o beber fondo",
-                    "{name}, cuéntanos un chiste. Si nadie se ríe, bebes 3. Si se ríen, repartes 3",
-                    
-                ];
-                
-                console.log('Preguntas cargadas correctamente');
-            } catch (error) {
-                console.error('Error al cargar preguntas:', error);
-            }
-        }	
+            yonuncaQuestions = dataYoNunca;
+            askQuestions = dataAsk;
+            musicaData = dataMusica;
+
+            console.log('Datos cargados:', {
+                yoNunca: yonuncaQuestions.length,
+                ask: askQuestions.length,
+                musica: musicaData.length
+            });
+
+            // Una vez cargado, mostramos la primera pregunta
+            showRandomQuestion();
+        }   
         
         // Cambiar entre modos
         function switchMode(newMode) {
@@ -411,19 +180,22 @@
             btnYoNunca.classList.remove('active');
             btnAsk.classList.remove('active');
 
+            // Resetear clases base
+            cardContainer.className = 'card max-w-2xl w-full p-8 rounded-lg text-center transition-all fade-in';
+            btnNext.className = 'btn-next mt-4 px-8 py-3 rounded-lg font-medium transition-all shadow-md';
+
             if (newMode === 'yonunca') {
                 btnYoNunca.classList.add('active');
-                cardContainer.className = 'card yonunca max-w-2xl w-full p-8 rounded-lg text-center transition-all fade-in';
+                cardContainer.classList.add('yonunca');
+                btnNext.classList.add('yonunca');
                 modeTitle.textContent = 'Yo Nunca';
-                btnNext.className = 'btn-next yonunca mt-4 px-8 py-3 rounded-lg font-medium transition-all shadow-md';
                 namesInput.style.display = 'none';
             } else if (newMode === 'ask') {
                 btnAsk.classList.add('active');
-                cardContainer.className = 'card ask max-w-2xl w-full p-8 rounded-lg text-center transition-all fade-in';
+                cardContainer.classList.add('ask');
+                btnNext.classList.add('ask');
                 modeTitle.textContent = 'Ask';
-                btnNext.className = 'btn-next ask mt-4 px-8 py-3 rounded-lg font-medium transition-all shadow-md';
                 namesInput.style.display = 'block';
-                // Actualizar lista de nombres al cambiar a ASK
                 updateNames();
             }
 
@@ -438,12 +210,15 @@
         
         // Mostrar pregunta aleatoria
         function showRandomQuestion() {
-            const questions = currentMode === 'yonunca'
-                ? yonuncaQuestions
-                : askQuestions;
+            let questions = [];
 
-            if (questions.length === 0) {
-                questionElement.textContent = 'No hay preguntas disponibles';
+            if (currentMode === 'yonunca') questions = yonuncaQuestions;
+            else if (currentMode === 'ask') questions = askQuestions;
+            
+            // Si quisieras usar la data de música en el futuro, podrías añadir un 'else if' aquí.
+
+            if (!questions || questions.length === 0 || questions[0].startsWith("Error")) {
+                questionElement.textContent = questions[0] || 'No hay preguntas disponibles. Revisa los archivos CSV.';
                 return;
             }
 
@@ -456,17 +231,16 @@
 
                 // Lógica especial para ASK con múltiples {name}
                 if (currentMode === 'ask' && names.length > 0 && selectedQuestion.includes('{name}')) {
-
                     const nameCount = (selectedQuestion.match(/{name}/g) || []).length;
 
                     if (names.length < nameCount) {
-                        questionElement.textContent = 'No hay suficientes nombres para esta pregunta';
+                        questionElement.textContent = `Faltan nombres. Esta pregunta requiere ${nameCount} personas.`;
+                        questionElement.classList.add('fade-in');
                         return;
                     }
 
                     // Copia y baraja los nombres
                     const shuffledNames = [...names].sort(() => Math.random() - 0.5);
-
                     let i = 0;
                     selectedQuestion = selectedQuestion.replace(/{name}/g, () => shuffledNames[i++]);
                 }
@@ -477,19 +251,15 @@
             }, 200);
         }
 
-        
         // Event listeners
         btnYoNunca.addEventListener('click', () => switchMode('yonunca'));
         btnAsk.addEventListener('click', () => switchMode('ask'));
         btnNext.addEventListener('click', showRandomQuestion);
-        namesInput.addEventListener('input', updateNames); // Actualizar nombres en tiempo real
+        namesInput.addEventListener('input', updateNames);
         
         // Inicialización
         document.addEventListener('DOMContentLoaded', () => {
-            loadQuestions().then(() => {
-                // Mostrar primera pregunta al cargar
-                showRandomQuestion();
-            });
+            loadQuestions();
         });
     </script>
 </body>
