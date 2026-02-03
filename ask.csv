@@ -1,44 +1,43 @@
-
 // ----- EL TAL
-La persona más bajita *reparte 3*
-La persona con el pelo más largo *reparte 3*
-La persona que esté leyendo esto en voz alta *reparte 3*
-La persona que esté más cerca de una ventana *reparte 3*
+La persona más bajita *reparte {int}*
+La persona con el pelo más largo *reparte {int}*
+La persona que esté leyendo esto en voz alta *reparte {int}*
+La persona que esté más cerca de una ventana *reparte {int}*
 La persona *más alta* bebe
-El que más liga *reparte 3*
+El que más liga *reparte {int}*
 El que *menos liga* bebe
 El último que haya cumplido años *reparte su edad entre 10* ( 20 años = 2 tragos )
-Si has llegado tarde, *bebes 1 por cada 10 minutos* que hayas llegado tarde
-Si has venido en transporte público *bebes 2*
-Si has venido en coche *bebes 3*
-Si has venido andando *bebes 1*
+Si has llegado tarde, *bebes {int - 2} por cada 10 minutos* que hayas llegado tarde
+Si has venido en transporte público *bebes {int - 1}*
+Si has venido en coche *bebes {int}*
+Si has venido andando *bebes {int - 2}*
 Los *solteros* beben
-Los que tengan pareja *beben 3*
-El que haya *vuelto con su ex* alguna vez *bebe 3*
-El que lleve más tiempo sin sexo *bebe 2* (para ahogar las penas)
-El que haya enviado *'nudes'* alguna vez *reparte 3*
+Los que tengan pareja *beben {int}*
+El que haya *vuelto con su ex* alguna vez *bebe {int}*
+El que lleve más tiempo sin sexo *bebe {int - 1}* (para ahogar las penas)
+El que haya enviado *'nudes'* alguna vez *reparte {int}*
+
 
 
 // ------ DECIDID
 Decidid quien es la persona *más graciosa*. Esa persona bebe
 Decidid quien es la persona *más seria*. Esa persona bebe
-Decidid quién es el más *"red flag"* del grupo. Esa persona *bebe 2*.
+Decidid quién es el más *"red flag"* del grupo. Esa persona *bebe {int - 1}*.
 Decidid quién es el que *antes se emborracha*. Esa persona bebe para calentar.
-Decidid quién es *el más tacaño*. Esa persona *bebe 3*.
-Decidid quién es el que *mejor viste*. Esa persona *reparte 3*.
-
+Decidid quién es *el más tacaño*. Esa persona *bebe {int}*.
+Decidid quién es el que *mejor viste*. Esa persona *reparte {int}*.
 
 
 
 // ------ PASADO OSCURO
 El que lleve un *condón* encima bebe
-El que haya tenido más parejas sexuales *reparte 3*
-El que haya tenido menos parejas sexuales *reparte 5*
+El que haya tenido más parejas sexuales *reparte {int}*
+El que haya tenido menos parejas sexuales *reparte {int + 1}*
 Si te has liado con alguien *de esta habitación*, bebe
-El que haya *mentido para ligar* alguna vez *bebe 3*.
+El que haya *mentido para ligar* alguna vez *bebe {int}*.
 El que haya sido *infiel* alguna vez se *termina la copa*, y una colleja del de su izquierda
-El que se haya liado con *un amigo/a de un ex bebe 3*.
-El que haya *llorado de fiesta* alguna vez *bebe 3*.
+El que se haya liado con *un amigo/a de un ex bebe {int}*.
+El que haya *llorado de fiesta* alguna vez *bebe {int}*.
 
 
 
@@ -48,14 +47,15 @@ Ronda de *Yo Nunca*. Una por cada participante del Ask
 *TODOS BEBEN*
 {name} dale un *beso* donde quieras a {name}
 {name} y {name}: *Piedra, papel o tijera*. El que pierda bebe fondo
-*Guerra de miradas:* {name} contra {name}. El primero que parpadee bebe 3
+*Guerra de miradas:* {name} contra {name}. El primero que parpadee bebe {int}
 {name}, haz una rima. *El que no rime o repita bebe.* (Sentido horario)
 *Intercambio de ropa:* {name} y {name} deben intercambiarse una prenda o beber fondo
-{name}, *cuéntanos un chiste*. Si nadie se ríe, bebes 3. Si se ríen, repartes 3
+{name}, *cuéntanos un chiste*. Si nadie se ríe, bebes {int}. Si se ríen, repartes {int}
 {name} *Prueba o Verdad*
-{name}, dale un *masaje* en los hombros a {name} o *bebe 5*
-{name} tienes el poder de *pedir un deseo* que debe cumplir {name} 
+{name}, dale un *masaje* en los hombros a {name} o *bebe {int + 1}*
+{name} tienes el poder de *pedir un deseo* que debe cumplir {name}
 {name} cuenta 2 historias una *verdadera* y otra *falsa*, si adivinan bebes, sino beben ellos. *Solo podeis votar 1* entre todos, elegid bien
+
 
 
 
@@ -63,14 +63,3 @@ Ronda de *Yo Nunca*. Una por cada participante del Ask
 Al siguiente que le toque beber, *bebe doble x2*
 A partir de ahora {name}, no puede *hablar* hasta que se diga *3 veces su nombre*, si hablas bebes
 *Prohibido coger el movil.* El primero que lo coja chupito
-
-
-
-
-
-
-
-
-
-
-

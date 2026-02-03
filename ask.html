@@ -96,11 +96,9 @@
             <a href="index.html" class="text-gray-400 hover:text-yellow-400 transition-colors font-medium">
                 🎵 Música
             </a>
-
             <div class="font-bold text-yellow-400 text-lg hidden sm:block">
                 ❓ Juego de Preguntas
             </div>
-
             <div id="intensity-wrapper" class="hidden">
                 <span class="text-xl">🍹</span>
                 <div class="flex flex-col">
@@ -139,8 +137,7 @@
                     <button id="btn-add-name" class="btn-add px-4 rounded text-xl font-bold transition-colors">+</button>
                 </div>
                 
-                <div id="players-list" class="flex flex-wrap justify-center gap-2 min-h-[30px]">
-                    </div>
+                <div id="players-list" class="flex flex-wrap justify-center gap-2 min-h-[30px]"></div>
                 <p class="text-xs text-gray-500 mt-2">Haz clic en un nombre para eliminarlo</p>
             </div>
             
@@ -155,38 +152,30 @@
     </main>
 
     <script>
-        // --- ESTADO ---
         let currentMode = 'yonunca';
         let yonuncaQuestions = [];
         let askQuestions = [];
-        let players = []; // Array para los nombres
-        let intensity = 3; // Valor por defecto
+        let players = []; 
+        let intensity = 3; 
 
-        // --- DOM ELEMENTS ---
         const btnYoNunca = document.getElementById('btn-yonunca');
         const btnAsk = document.getElementById('btn-ask');
         const btnNext = document.getElementById('btn-next');
         const cardContainer = document.getElementById('card-container');
         const questionElement = document.getElementById('question');
         const modeTitle = document.getElementById('mode-title');
-        
-        // Elementos de Nombres
         const namesSection = document.getElementById('names-section');
         const newNameInput = document.getElementById('new-name-input');
         const btnAddName = document.getElementById('btn-add-name');
         const playersList = document.getElementById('players-list');
-
-        // Elementos de Intensidad
         const intensityWrapper = document.getElementById('intensity-wrapper');
         const intensitySelect = document.getElementById('intensity-select');
 
-        // --- LOGICA DE INTENSIDAD ---
         intensitySelect.addEventListener('change', (e) => {
-            intensity = e.target.value;
+            intensity = parseInt(e.target.value);
             console.log("Intensidad cambiada a:", intensity);
         });
 
-        // --- LÓGICA DE NOMBRES ---
         function renderPlayers() {
             playersList.innerHTML = '';
             players.forEach((player, index) => {
@@ -218,7 +207,6 @@
             if (e.key === 'Enter') addPlayer();
         });
 
-        // --- LECTURA CSV ---
         async function fetchCSV(url) {
             try {
                 const response = await fetch(url);
@@ -244,7 +232,6 @@
             showRandomQuestion();
         }   
         
-        // --- CAMBIO DE MODO ---
         function switchMode(newMode) {
             currentMode = newMode;
             btnYoNunca.classList.remove('active');
@@ -255,17 +242,12 @@
                 btnYoNunca.classList.add('active');
                 cardContainer.classList.add('yonunca');
                 modeTitle.textContent = 'YO NUNCA';
-                
-                // Ocultar controles específicos de ASK
                 namesSection.classList.add('hidden');
                 intensityWrapper.classList.add('hidden');
-
             } else if (newMode === 'ask') {
                 btnAsk.classList.add('active');
                 cardContainer.classList.add('ask');
                 modeTitle.textContent = 'ASK';
-                
-                // Mostrar controles específicos de ASK
                 namesSection.classList.remove('hidden');
                 intensityWrapper.classList.remove('hidden');
                 renderPlayers();
@@ -274,7 +256,6 @@
             showRandomQuestion();
         }
 
-        // --- MOSTRAR PREGUNTA ---
         function showRandomQuestion() {
             let questions = currentMode === 'yonunca' ? yonuncaQuestions : askQuestions;
             
@@ -302,9 +283,26 @@
                     selectedQuestion = selectedQuestion.replace(/{name}/g, () => `<span style="color:var(--accent-yellow)">${shuffledNames[i++]}</span>`);
                 }
 
-                // 2. REEMPLAZO DE INTENSIDAD {int}
-                // Busca {int} y pone el número seleccionado en amarillo
-                selectedQuestion = selectedQuestion.replace(/{int}/g, `<span style="color:var(--accent-yellow); font-size: 1.2em; font-weight:bold;">${intensity}</span>`);
+                // 2. REEMPLAZO DE INTENSIDAD INTELIGENTE {int + 1}, {int - 2}, {int}
+                // Esta expresión busca: {int} seguido opcionalmente de + o - y un número
+                selectedQuestion = selectedQuestion.replace(/{int(\s*[+\-]\s*\d+)?}/g, (match, operation) => {
+                    let result = parseInt(intensity); // Valor base
+
+                    if (operation) {
+                        // Quitamos espacios y analizamos
+                        const opClean = operation.replace(/\s/g, ''); 
+                        const operator = opClean[0];
+                        const number = parseInt(opClean.substring(1));
+
+                        if (operator === '+') result += number;
+                        if (operator === '-') result -= number;
+                    }
+
+                    // PROTECCIÓN: Que nunca baje de 1
+                    if (result < 1) result = 1;
+
+                    return `<span style="color:var(--accent-yellow); font-size: 1.2em; font-weight:bold;">${result}</span>`;
+                });
 
                 // 3. REEMPLAZO DE ASTERISCOS *texto*
                 selectedQuestion = selectedQuestion.replace(/\*(.*?)\*/g, '<span style="color:var(--accent-yellow)">$1</span>');
@@ -315,7 +313,6 @@
             }, 200);
         }
 
-        // --- LISTENERS ---
         btnYoNunca.addEventListener('click', () => switchMode('yonunca'));
         btnAsk.addEventListener('click', () => switchMode('ask'));
         btnNext.addEventListener('click', showRandomQuestion);
