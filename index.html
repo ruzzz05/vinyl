@@ -281,7 +281,7 @@ h1 {
 // --- 0. VALIDACIÓN DE CONTRASEÑA ---
 (function checkPassword() {
   const password = prompt("Por favor, introduce la contraseña para acceder:");
-  if (password === "0000") {
+  if (password === "") {
     // Si es correcta, mostramos el contenido
     document.getElementById('main-content').style.display = 'block';
   } else {
