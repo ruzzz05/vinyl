@@ -9,6 +9,10 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
 
 <style>
+/* Estilo para ocultar el contenido inicialmente */
+#main-content {
+  display: none;
+}
 
 body {
   font-family: Arial, sans-serif;
@@ -48,7 +52,6 @@ h1 {
   pointer-events: none;
 }
 
-/* El menú lateral */
 .sidebar {
   position: fixed;
   top: 0;
@@ -236,44 +239,57 @@ h1 {
 
 <body>
 
-<button id="hamburger-btn" class="menu-btn" onclick="toggleMenu()">☰</button>
+<div id="main-content">
 
-<div class="sidebar" id="sidebar">
-  <span class="close-sidebar" onclick="toggleMenu()">×</span>
-  
-  <h2>Menú</h2>
-  <a href="index.html">🎵 Vinilos</a>
-  <a href="ask.html">❓ Juego de Preguntas</a>
-</div>
+    <button id="hamburger-btn" class="menu-btn" onclick="toggleMenu()">☰</button>
 
-<h1>Artistas y Álbumes</h1>
+    <div class="sidebar" id="sidebar">
+      <span class="close-sidebar" onclick="toggleMenu()">×</span>
+      
+      <h2>Menú</h2>
+      <a href="index.html">🎵 Vinilos</a>
+      <a href="ask.html">❓ Juego de Preguntas</a>
+    </div>
 
-<input id="search" type="text" placeholder="Buscar artista o álbum..." />
-<select id="tag-filter">
-  <option value="">Filtrar por estilo...</option>
-</select>
+    <h1>Artistas y Álbumes</h1>
 
-<button id="random-btn"> Disco Random</button>
+    <input id="search" type="text" placeholder="Buscar artista o álbum..." />
+    <select id="tag-filter">
+      <option value="">Filtrar por estilo...</option>
+    </select>
 
-<div id="artists-wrapper">
-  <div id="artists">
-    <p style="color:white; text-align:center;">Cargando biblioteca...</p>
-  </div>
-</div>
+    <button id="random-btn"> Disco Random</button>
 
-<div id="random-modal" class="modal">
-  <div class="modal-content">
-    <span class="close-modal">×</span>
-    <h2 id="random-title"></h2>
-    <p id="random-artist" style="font-weight:bold;"></p>
-    <a id="random-link" target="_blank">
-      <img id="random-image">
-    </a>
-  </div>
-</div>
+    <div id="artists-wrapper">
+      <div id="artists">
+        <p style="color:white; text-align:center;">Cargando biblioteca...</p>
+      </div>
+    </div>
 
-<script>
+    <div id="random-modal" class="modal">
+      <div class="modal-content">
+        <span class="close-modal">×</span>
+        <h2 id="random-title"></h2>
+        <p id="random-artist" style="font-weight:bold;"></p>
+        <a id="random-link" target="_blank">
+          <img id="random-image">
+        </a>
+      </div>
+    </div>
 
+</div> <script>
+// --- 0. VALIDACIÓN DE CONTRASEÑA ---
+(function checkPassword() {
+  const password = prompt("Por favor, introduce la contraseña para acceder:");
+  if (password === "0000") {
+    // Si es correcta, mostramos el contenido
+    document.getElementById('main-content').style.display = 'block';
+  } else {
+    // Si falla o cancela, redirigimos a ask.html
+    alert("Contraseña incorrecta. Redirigiendo...");
+    window.location.href = "ask.html";
+  }
+})();
 
 let data = {}; 
 const searchInput = document.getElementById('search');
