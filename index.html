@@ -9,9 +9,9 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
 
 <style>
-/* Estilo para ocultar el contenido inicialmente */
+/* El contenido se oculta mediante JS solo si la protección está activa */
 #main-content {
-  display: none;
+  display: block; 
 }
 
 body {
@@ -240,56 +240,58 @@ h1 {
 <body>
 
 <div id="main-content">
+  <button id="hamburger-btn" class="menu-btn" onclick="toggleMenu()">☰</button>
 
-    <button id="hamburger-btn" class="menu-btn" onclick="toggleMenu()">☰</button>
+  <div class="sidebar" id="sidebar">
+    <span class="close-sidebar" onclick="toggleMenu()">×</span>
+    <h2>Menú</h2>
+    <a href="index.html">🎵 Vinilos</a>
+    <a href="ask.html">❓ Juego de Preguntas</a>
+  </div>
 
-    <div class="sidebar" id="sidebar">
-      <span class="close-sidebar" onclick="toggleMenu()">×</span>
-      
-      <h2>Menú</h2>
-      <a href="index.html">🎵 Vinilos</a>
-      <a href="ask.html">❓ Juego de Preguntas</a>
+  <h1>Artistas y Álbumes</h1>
+
+  <input id="search" type="text" placeholder="Buscar artista o álbum..." />
+  <select id="tag-filter">
+    <option value="">Filtrar por estilo...</option>
+  </select>
+
+  <button id="random-btn"> Disco Random</button>
+
+  <div id="artists-wrapper">
+    <div id="artists">
+      <p style="color:white; text-align:center;">Cargando biblioteca...</p>
     </div>
+  </div>
 
-    <h1>Artistas y Álbumes</h1>
-
-    <input id="search" type="text" placeholder="Buscar artista o álbum..." />
-    <select id="tag-filter">
-      <option value="">Filtrar por estilo...</option>
-    </select>
-
-    <button id="random-btn"> Disco Random</button>
-
-    <div id="artists-wrapper">
-      <div id="artists">
-        <p style="color:white; text-align:center;">Cargando biblioteca...</p>
-      </div>
+  <div id="random-modal" class="modal">
+    <div class="modal-content">
+      <span class="close-modal">×</span>
+      <h2 id="random-title"></h2>
+      <p id="random-artist" style="font-weight:bold;"></p>
+      <a id="random-link" target="_blank">
+        <img id="random-image">
+      </a>
     </div>
+  </div>
+</div>
 
-    <div id="random-modal" class="modal">
-      <div class="modal-content">
-        <span class="close-modal">×</span>
-        <h2 id="random-title"></h2>
-        <p id="random-artist" style="font-weight:bold;"></p>
-        <a id="random-link" target="_blank">
-          <img id="random-image">
-        </a>
-      </div>
-    </div>
+<script>
+// =========================================================
+// CONTROL DE ACCESO
+// =========================================================
+const proteccionActiva = false; // CAMBIA A false O COMENTA ESTA LÍNEA PARA DESACTIVAR
 
-</div> <script>
-// --- 0. VALIDACIÓN DE CONTRASEÑA ---
-(function checkPassword() {
-  const password = prompt("Por favor, introduce la contraseña para acceder:");
-  if (password === "") {
-    // Si es correcta, mostramos el contenido
+if (typeof proteccionActiva !== 'undefined' && proteccionActiva === true) {
+  document.getElementById('main-content').style.display = 'none';
+  const password = prompt("Introduce la contraseña (0000):");
+  if (password === "0000") {
     document.getElementById('main-content').style.display = 'block';
   } else {
-    // Si falla o cancela, redirigimos a ask.html
-    alert("Contraseña incorrecta. Redirigiendo...");
     window.location.href = "ask.html";
   }
-})();
+}
+// =========================================================
 
 let data = {}; 
 const searchInput = document.getElementById('search');
@@ -297,7 +299,6 @@ const tagFilter = document.getElementById('tag-filter');
 const artistsDiv = document.getElementById('artists');
 let masonry;
 
-// --- 1. CARGAR CSV ---
 function loadCSV() {
   Papa.parse("musica.csv", {
     download: true,
@@ -312,34 +313,26 @@ function loadCSV() {
     },
     error: function(err) {
       console.error("Error leyendo CSV:", err);
-      artistsDiv.innerHTML = '<p style="color:white;">Error cargando "musica.csv".<br>Recuerda abrir esto con un Servidor Local (Live Server) y no con doble clic.</p>';
+      artistsDiv.innerHTML = '<p style="color:white;">Error cargando "musica.csv".</p>';
     }
   });
 }
 
-// --- 2. PROCESAR DATOS ---
 function processCSVData(csvData) {
   data = {};
-
   csvData.forEach(row => {
     const artist = row.Artist ? row.Artist.trim() : "Desconocido";
     const name = row.Name || "Sin título";
     const image = row.Image || "";
     const url = row.Url || "#";
     const tags = row.Tags ? row.Tags.split('|').map(t => t.trim().toLowerCase()) : [];
-
-    if (!data[artist]) {
-      data[artist] = [];
-    }
-
+    if (!data[artist]) data[artist] = [];
     data[artist].push({ name, image, tags, url });
   });
-
   populateTagFilter();
   displayArtists(data);
 }
 
-// --- 3. MASONRY (Diseño) ---
 function initMasonry() {
   if (masonry) masonry.destroy();
   masonry = new Masonry('#artists', {
@@ -350,7 +343,6 @@ function initMasonry() {
   });
 }
 
-// --- 4. FILTROS Y TAGS ---
 function getAllTags() {
   const tags = new Set();
   Object.values(data).forEach(albums =>
@@ -369,21 +361,16 @@ function populateTagFilter() {
   });
 }
 
-// --- 5. MOSTRAR EN PANTALLA ---
 function displayArtists(artistsData) {
   artistsDiv.innerHTML = '';
-
   const artistNames = Object.keys(artistsData).sort();
-
   if (artistNames.length === 0) {
     artistsDiv.innerHTML = '<p style="color:white;">No hay coincidencias.</p>';
     return;
   }
-
   artistNames.forEach(artist => {
     const artistDiv = document.createElement('div');
     artistDiv.className = 'artist';
-    
     let albumsHTML = '';
     artistsData[artist].forEach(album => {
       albumsHTML += `
@@ -394,39 +381,30 @@ function displayArtists(artistsData) {
           <span>${album.name}</span>
         </div>`;
     });
-
     artistDiv.innerHTML = `<div class="artist-name">${artist}</div>` + albumsHTML;
     artistsDiv.appendChild(artistDiv);
   });
-
   setTimeout(initMasonry, 150);
 }
 
-// --- 6. BUSCADOR ---
 function searchAndFilterArtists() {
   const q = searchInput.value.toLowerCase();
   const tag = tagFilter.value;
   const result = {};
-
   for (const artist in data) {
     const albums = data[artist].filter(a => {
       const matchText = artist.toLowerCase().includes(q) || a.name.toLowerCase().includes(q);
       const matchTag = !tag || a.tags.includes(tag);
       return matchText && matchTag;
     });
-
-    if (albums.length > 0) {
-      result[artist] = albums;
-    }
+    if (albums.length > 0) result[artist] = albums;
   }
-
   displayArtists(result);
 }
 
 searchInput.addEventListener('input', searchAndFilterArtists);
 tagFilter.addEventListener('change', searchAndFilterArtists);
 
-// --- 7. MODAL RANDOM ---
 const modal = document.getElementById('random-modal');
 const closeModalBtn = document.querySelector('.close-modal');
 
@@ -435,34 +413,26 @@ document.getElementById('random-btn').onclick = () => {
   for (const artist in data) {
     data[artist].forEach(album => allAlbums.push({ ...album, artist }));
   }
-  
   if (allAlbums.length === 0) return;
-
   const random = allAlbums[Math.floor(Math.random() * allAlbums.length)];
-  
   document.getElementById('random-title').textContent = random.name;
   document.getElementById('random-artist').textContent = random.artist;
   document.getElementById('random-image').src = random.image;
   document.getElementById('random-link').href = random.url || "#";
-  
   modal.style.display = 'flex';
 };
 
 closeModalBtn.onclick = () => modal.style.display = 'none';
 window.onclick = e => { if (e.target === modal) modal.style.display = 'none'; };
 
-// --- 8. FUNCION MENÚ ---
 function toggleMenu() {
   const sidebar = document.getElementById('sidebar');
   const btn = document.getElementById('hamburger-btn');
-
   sidebar.classList.toggle('active');
   btn.classList.toggle('hidden');
 }
 
-// --- INICIALIZAR ---
 loadCSV();
-
 </script>
 </body>
 </html>
