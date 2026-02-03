@@ -16,6 +16,9 @@ Los que tengan pareja *beben {int}*
 El que haya *vuelto con su ex* alguna vez *bebe {int}*
 El que lleve más tiempo sin sexo *bebe {int - 1}* (para ahogar las penas)
 El que haya enviado *'nudes'* alguna vez *reparte {int}*
+El que sea *más mayor* de la habitación *bebe {int}* (por la experiencia)
+El que sea *más joven* de la habitación *bebe {int}* (por el carné)
+Si alguna vez has enviado un audio de *más de 3 minutos*, *bebe {int}* por pesado.
 
 
 
@@ -26,10 +29,11 @@ Decidid quién es el más *"red flag"* del grupo. Esa persona *bebe {int - 1}*.
 Decidid quién es el que *antes se emborracha*. Esa persona bebe para calentar.
 Decidid quién es *el más tacaño*. Esa persona *bebe {int}*.
 Decidid quién es el que *mejor viste*. Esa persona *reparte {int}*.
+Decidid quién tiene *la risa más escandalosa.* Esa persona *bebe {int}*
 
 
 
-// ------ PASADO OSCURO
+// ------ LADO OSCURO
 El que lleve un *condón* encima bebe
 El que haya tenido más parejas sexuales *reparte {int}*
 El que haya tenido menos parejas sexuales *reparte {int + 1}*
@@ -38,6 +42,10 @@ El que haya *mentido para ligar* alguna vez *bebe {int}*.
 El que haya sido *infiel* alguna vez se *termina la copa*, y una colleja del de su izquierda
 El que se haya liado con *un amigo/a de un ex bebe {int}*.
 El que haya *llorado de fiesta* alguna vez *bebe {int}*.
+{name}, dinos quién te parece *el más guapo/a* de aquí o bebe {int + 2}. Tiene que ser alguien del sexo que te atraiga
+{name}, dinos con quien *tendrías más que un beso* de aquí o bebe {int + 2}. Tiene que ser alguien del sexo que te atraiga
+{name}, dinos con quien *desaparecerías de una fiesta* de aquí o bebe {int + 2}. Tiene que ser alguien del sexo que te atraiga
+El que se haya *olvidado del nombre* de alguien mientras se liaban bebe {int + 1}
 
 
 
@@ -55,11 +63,16 @@ Ronda de *Yo Nunca*. Una por cada participante del Ask
 {name}, dale un *masaje* en los hombros a {name} o *bebe {int + 1}*
 {name} tienes el poder de *pedir un deseo* que debe cumplir {name}
 {name} cuenta 2 historias una *verdadera* y otra *falsa*, si adivinan bebes, sino beben ellos. *Solo podeis votar 1* entre todos, elegid bien
-
-
-
+*El Maestro de las Preguntas:* {name} es el maestro. Si alguien le responde a una pregunta, ese alguien bebe. *Dura 6* preguntas date prisa.
+*Bomba: * Tenemos un terrorista, {name} por un *cronometro de 15 min*, si alguien *te responde a una pregunta* tiene la bomba, al que le explote *se termina el vaso*
+*El Camaleón:* {name} debe imitar a alguien de la mesa. El primero que lo adivine *reparte 3/, si nadie lo adivina, {name} bebe {int}.
+{name} tienes que decir *2 palabras* para describir a {name} y {name} no puedes decir a cual corresponde
+*Salto de la moneda: * coged una moneda y un vaso vacio, {name} hazle una pregunta al oido a {name}, si lanza la moneda y falla tiene que *decirla en alto*, si acierta es vuestro secreto.
 
 // ----- MODIFICADORES
 Al siguiente que le toque beber, *bebe doble x2*
 A partir de ahora {name}, no puede *hablar* hasta que se diga *3 veces su nombre*, si hablas bebes
 *Prohibido coger el movil.* El primero que lo coja chupito
+*Mano prohibida:* No se puede beber con la mano dominante. Si te pillan, bebes de nuevo.
+*Sin nombres:* Prohibido decir el nombre de nadie de la mesa.
+*El Guardaespaldas:* {name} tiene que beber siempre que {name} beba, dura 5 asks.
