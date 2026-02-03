@@ -5,8 +5,13 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>VINILOS</title>
 
+<script src="https://unpkg.com/masonry-layout@4/dist/masonry.pkgd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
+
 <style>
-/* ... (TUS ESTILOS SE MANTIENEN EXACTAMENTE IGUAL) ... */
+/* ========================= */
+/* ESTILOS GENERALES         */
+/* ========================= */
 body {
   font-family: Arial, sans-serif;
   background-color: gray;
@@ -17,9 +22,98 @@ body {
 h1 {
   text-align: center;
   color: white;
+  margin-top: 50px; /* Espacio para no chocar con el menú */
 }
 
-/* INPUTS */
+/* ========================= */
+/* MENÚ LATERAL (SIDEBAR)    */
+/* ========================= */
+
+/* Botón Hamburguesa */
+.menu-btn {
+  position: fixed;
+  top: 15px;
+  left: 15px;
+  z-index: 3000;
+  background: #222;
+  color: white;
+  border: none;
+  padding: 10px 14px;
+  font-size: 20px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: opacity 0.3s ease, visibility 0.3s;
+}
+
+/* Clase para ocultar la hamburguesa */
+.menu-btn.hidden {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+/* El menú lateral */
+.sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 240px;
+  height: 100%;
+  background: #222;
+  color: white;
+  padding: 20px;
+  transform: translateX(-100%);
+  transition: transform 0.3s ease;
+  z-index: 3500; /* Por encima de todo */
+  box-shadow: 2px 0 5px rgba(0,0,0,0.5);
+}
+
+.sidebar.active {
+  transform: translateX(0);
+}
+
+/* La Cruz (X) dentro del menú */
+.close-sidebar {
+  position: absolute;
+  top: 15px;
+  right: 20px;
+  font-size: 28px;
+  color: white;
+  cursor: pointer;
+  font-weight: bold;
+  line-height: 1;
+}
+
+.close-sidebar:hover {
+  color: #ccc;
+}
+
+/* Enlaces del menú */
+.sidebar h2 {
+  margin-top: 0;
+  margin-bottom: 20px;
+  font-size: 24px;
+  border-bottom: 1px solid #444;
+  padding-bottom: 10px;
+}
+
+.sidebar a {
+  display: block;
+  color: white;
+  text-decoration: none;
+  padding: 12px;
+  border-radius: 5px;
+  margin-bottom: 5px;
+  font-size: 18px;
+}
+
+.sidebar a:hover {
+  background: #444;
+}
+
+/* ========================= */
+/* INPUTS Y FILTROS          */
+/* ========================= */
 #search, #tag-filter {
   margin: 10px auto 20px;
   padding: 10px;
@@ -47,7 +141,9 @@ h1 {
   background: #444;
 }
 
-/* VINILOS */
+/* ========================= */
+/* GRID DE ARTISTAS          */
+/* ========================= */
 .artist {
   width: 300px;
   background: #9b9796;
@@ -60,6 +156,7 @@ h1 {
 .artist-name {
   font-weight: bold;
   margin-bottom: 10px;
+  font-size: 18px;
 }
 
 .album {
@@ -67,17 +164,26 @@ h1 {
   align-items: center;
   gap: 10px;
   margin-bottom: 8px;
+  background: rgba(255,255,255,0.1);
+  padding: 5px;
+  border-radius: 5px;
 }
 
 .album img {
-  width: 100px;
-  height: 100px;
+  width: 80px;
+  height: 80px;
   object-fit: cover;
-  border-radius: 5px;
+  border-radius: 4px;
   cursor: pointer;
+  display: block;
 }
 
-/* WRAPPER MASONRY (NO TOCAR) */
+.album span {
+  font-size: 14px;
+  line-height: 1.2;
+}
+
+/* WRAPPER MASONRY */
 #artists-wrapper {
   display: flex;
   justify-content: center;
@@ -87,96 +193,61 @@ h1 {
   width: auto;
 }
 
-/* MODAL */
+/* ========================= */
+/* MODAL (POPUP)             */
+/* ========================= */
 .modal {
   display: none;
   position: fixed;
   inset: 0;
-  background: rgba(0,0,0,0.7);
-  z-index: 2000;
+  background: rgba(0,0,0,0.8);
+  z-index: 4000;
   align-items: center;
   justify-content: center;
 }
 
 .modal-content {
   background: #9b9796;
-  padding: 20px;
+  padding: 30px;
   border-radius: 8px;
   text-align: center;
-  max-width: 300px;
+  max-width: 90%;
+  width: 320px;
+  position: relative;
 }
 
 .modal-content img {
-  width: 200px;
+  width: 100%;
+  max-width: 250px;
   border-radius: 8px;
-  margin-top: 10px;
+  margin-top: 15px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.3);
 }
 
-.close {
-  float: right;
-  font-size: 22px;
+.close-modal {
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  font-size: 28px;
   cursor: pointer;
+  color: #333;
 }
 
-/* MENÚ LATERAL */
-.menu-btn {
-  position: fixed;
-  top: 15px;
-  left: 15px;
-  z-index: 3000;
-  background: #222;
-  color: white;
-  border: none;
-  padding: 10px 14px;
-  font-size: 20px;
-  border-radius: 6px;
-  cursor: pointer;
-}
-
-.sidebar {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 240px;
-  height: 100%;
-  background: #222;
-  color: white;
-  padding: 20px;
-  transform: translateX(-100%);
-  transition: transform 0.3s ease;
-  z-index: 2500;
-}
-
-.sidebar.active {
-  transform: translateX(0);
-}
-
-.sidebar a {
-  display: block;
-  color: white;
-  text-decoration: none;
-  padding: 10px;
-  border-radius: 5px;
-  margin-bottom: 10px;
-}
-
-.sidebar a:hover {
-  background: #444;
+.close-modal:hover {
+  color: black;
 }
 </style>
-
-<script src="https://unpkg.com/masonry-layout@4/dist/masonry.pkgd.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
-
 </head>
 
 <body>
 
-<button class="menu-btn" onclick="toggleMenu()">☰</button>
+<button id="hamburger-btn" class="menu-btn" onclick="toggleMenu()">☰</button>
 
 <div class="sidebar" id="sidebar">
+  <span class="close-sidebar" onclick="toggleMenu()">×</span>
+  
   <h2>Menú</h2>
-  <a href="index.html">🎵 Música</a>
+  <a href="index.html">🎵 Vinilos</a>
   <a href="ask.html">❓ Juego de Preguntas</a>
 </div>
 
@@ -187,17 +258,19 @@ h1 {
   <option value="">Filtrar por estilo...</option>
 </select>
 
-<button id="random-btn">Disco Random</button>
+<button id="random-btn"> Disco Random</button>
 
 <div id="artists-wrapper">
-  <div id="artists">Cargando datos...</div>
+  <div id="artists">
+    <p style="color:white; text-align:center;">Cargando biblioteca...</p>
+  </div>
 </div>
 
 <div id="random-modal" class="modal">
   <div class="modal-content">
-    <span class="close">×</span>
+    <span class="close-modal">×</span>
     <h2 id="random-title"></h2>
-    <p id="random-artist"></p>
+    <p id="random-artist" style="font-weight:bold;"></p>
     <a id="random-link" target="_blank">
       <img id="random-image">
     </a>
@@ -205,69 +278,58 @@ h1 {
 </div>
 
 <script>
-/* MENÚ */
-function toggleMenu() {
-  document.getElementById('sidebar').classList.toggle('active');
-}
-
-// Variable global donde guardaremos los datos transformados
+// --- VARIABLES GLOBALES ---
 let data = {}; 
-
 const searchInput = document.getElementById('search');
 const tagFilter = document.getElementById('tag-filter');
 const artistsDiv = document.getElementById('artists');
 let masonry;
 
-// --- FUNCIÓN PARA CARGAR EL CSV ---
+// --- 1. CARGAR CSV ---
 function loadCSV() {
   Papa.parse("musica.csv", {
     download: true,
     header: true,
     skipEmptyLines: true,
     complete: function(results) {
-      processCSVData(results.data);
+      if (results.data && results.data.length > 0) {
+        processCSVData(results.data);
+      } else {
+        artistsDiv.innerHTML = '<p style="color:white;">El archivo CSV está vacío o no se pudo leer.</p>';
+      }
     },
     error: function(err) {
       console.error("Error leyendo CSV:", err);
-      artistsDiv.innerHTML = "Error cargando el archivo musica.csv (Asegúrate de usar un servidor local).";
+      artistsDiv.innerHTML = '<p style="color:white;">Error cargando "musica.csv".<br>Recuerda abrir esto con un Servidor Local (Live Server) y no con doble clic.</p>';
     }
   });
 }
 
-// --- TRANSFORMAR CSV PLANO A ESTRUCTURA DE ARTISTAS ---
+// --- 2. PROCESAR DATOS ---
 function processCSVData(csvData) {
-  // Reiniciamos data
   data = {};
 
   csvData.forEach(row => {
-    // Aseguramos que existan las columnas mínimas
+    // Lectura de columnas (asegurando que no den error si faltan)
     const artist = row.Artist ? row.Artist.trim() : "Desconocido";
     const name = row.Name || "Sin título";
     const image = row.Image || "";
     const url = row.Url || "#";
-    // Las tags en el CSV deben ir separadas por | (ej: rap|trap)
+    // Las tags vienen separadas por |
     const tags = row.Tags ? row.Tags.split('|').map(t => t.trim().toLowerCase()) : [];
 
-    // Si el artista no existe en el objeto data, creamos su array
     if (!data[artist]) {
       data[artist] = [];
     }
 
-    // Añadimos el álbum
-    data[artist].push({
-      name: name,
-      image: image,
-      tags: tags,
-      url: url
-    });
+    data[artist].push({ name, image, tags, url });
   });
 
-  // Una vez procesado, inicializamos la web
   populateTagFilter();
   displayArtists(data);
 }
 
-// --- MASONRY ---
+// --- 3. MASONRY (Diseño) ---
 function initMasonry() {
   if (masonry) masonry.destroy();
   masonry = new Masonry('#artists', {
@@ -278,7 +340,7 @@ function initMasonry() {
   });
 }
 
-// --- FILTROS Y TAGS ---
+// --- 4. FILTROS Y TAGS ---
 function getAllTags() {
   const tags = new Set();
   Object.values(data).forEach(albums =>
@@ -297,52 +359,58 @@ function populateTagFilter() {
   });
 }
 
+// --- 5. MOSTRAR EN PANTALLA ---
 function displayArtists(artistsData) {
   artistsDiv.innerHTML = '';
 
-  // Si no hay datos, mostrar mensaje
-  if (Object.keys(artistsData).length === 0) {
-    artistsDiv.innerHTML = '<p style="color:white;">No se encontraron resultados.</p>';
+  const artistNames = Object.keys(artistsData).sort();
+
+  if (artistNames.length === 0) {
+    artistsDiv.innerHTML = '<p style="color:white;">No hay coincidencias.</p>';
     return;
   }
 
-  for (const artist in artistsData) {
+  artistNames.forEach(artist => {
     const artistDiv = document.createElement('div');
     artistDiv.className = 'artist';
-    artistDiv.innerHTML = `<div class="artist-name">${artist}</div>`;
-
+    
+    let albumsHTML = '';
     artistsData[artist].forEach(album => {
-      artistDiv.innerHTML += `
+      // Si falla la imagen, pone una gris
+      albumsHTML += `
         <div class="album">
           <a href="${album.url}" target="_blank">
-            <img src="${album.image}" onerror="this.src='https://via.placeholder.com/100?text=No+Img'">
+            <img src="${album.image}" onerror="this.src='https://via.placeholder.com/80?text=No+Img'">
           </a>
           <span>${album.name}</span>
         </div>`;
     });
 
+    artistDiv.innerHTML = `<div class="artist-name">${artist}</div>` + albumsHTML;
     artistsDiv.appendChild(artistDiv);
-  }
+  });
 
-  // Esperar un poco para que cargue el DOM antes de Masonry
-  setTimeout(initMasonry, 100);
+  // Retraso para asegurar que el DOM esté listo antes de Masonry
+  setTimeout(initMasonry, 150);
 }
 
-// --- BUSQUEDA ---
+// --- 6. BUSCADOR ---
 function searchAndFilterArtists() {
   const q = searchInput.value.toLowerCase();
   const tag = tagFilter.value;
   const result = {};
 
   for (const artist in data) {
-    // Filtramos los álbumes que cumplan la condición
+    // Filtramos álbumes dentro del artista
     const albums = data[artist].filter(a => {
       const matchText = artist.toLowerCase().includes(q) || a.name.toLowerCase().includes(q);
       const matchTag = !tag || a.tags.includes(tag);
       return matchText && matchTag;
     });
 
-    if (albums.length) result[artist] = albums;
+    if (albums.length > 0) {
+      result[artist] = albums;
+    }
   }
 
   displayArtists(result);
@@ -351,35 +419,43 @@ function searchAndFilterArtists() {
 searchInput.addEventListener('input', searchAndFilterArtists);
 tagFilter.addEventListener('change', searchAndFilterArtists);
 
-/* RANDOM MODAL */
+// --- 7. MODAL RANDOM ---
 const modal = document.getElementById('random-modal');
-const closeBtn = document.querySelector('.close');
+const closeModalBtn = document.querySelector('.close-modal');
 
 document.getElementById('random-btn').onclick = () => {
   const allAlbums = [];
-  // Aplanamos la data para elegir uno al azar
   for (const artist in data) {
     data[artist].forEach(album => allAlbums.push({ ...album, artist }));
   }
   
-  if(allAlbums.length === 0) return;
+  if (allAlbums.length === 0) return;
 
   const random = allAlbums[Math.floor(Math.random() * allAlbums.length)];
+  
   document.getElementById('random-title').textContent = random.name;
   document.getElementById('random-artist').textContent = random.artist;
   document.getElementById('random-image').src = random.image;
   document.getElementById('random-link').href = random.url || "#";
+  
   modal.style.display = 'flex';
 };
 
-closeBtn.onclick = () => modal.style.display = 'none';
+closeModalBtn.onclick = () => modal.style.display = 'none';
 window.onclick = e => { if (e.target === modal) modal.style.display = 'none'; };
 
-// --- INICIAR ---
-// Llamamos a cargar el CSV al arrancar
+// --- 8. FUNCION MENÚ ---
+function toggleMenu() {
+  const sidebar = document.getElementById('sidebar');
+  const btn = document.getElementById('hamburger-btn');
+
+  sidebar.classList.toggle('active');
+  btn.classList.toggle('hidden');
+}
+
+// --- INICIALIZAR ---
 loadCSV();
 
 </script>
-
 </body>
 </html>
