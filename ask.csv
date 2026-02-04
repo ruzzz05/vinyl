@@ -79,7 +79,7 @@ Ronda de *Yo Nunca*. Una por cada participante del Ask
 *Bomba: * Tenemos un terrorista, {name} por un *cronometro de 15 min*, si alguien *te responde a una pregunta* tiene la bomba, al que le explote *se termina el vaso*
 *El Camaleón:* {name} debe imitar a alguien de la mesa. El primero que lo adivine *reparte 3/, si nadie lo adivina, {name} bebe {int}.
 {name} tienes que decir *2 palabras* para describir a {name} y {name} no puedes decir a cual corresponde
-*Salto de la moneda: * coged una moneda y un vaso vacio, {name} hazle una pregunta al oido a {name}, si lanza la moneda y falla tiene que *decirla en alto*, si acierta es vuestro secreto.
+*Salto de la moneda: * coged una moneda y un vaso vacio, {name} hazle una pregunta al oido a {name}, la respuesta tiene que ser un nombre. Si lanza la moneda y falla tiene que *decirla en alto*, si acierta es vuestro secreto.
 
 
 // ----- MODIFICADORES
