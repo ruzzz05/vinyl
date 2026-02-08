@@ -234,6 +234,20 @@ h1 {
 .close-modal:hover {
   color: black;
 }
+
+/* ========================= */
+/* CONTADOR FINAL (NUEVO)    */
+/* ========================= */
+#vinyl-counter {
+  text-align: center;
+  color: #e0e0e0;
+  margin-top: 60px;
+  padding-top: 20px;
+  padding-bottom: 20px;
+  border-top: 1px solid #444;
+  font-size: 1.2rem;
+  font-weight: bold;
+}
 </style>
 </head>
 
@@ -274,6 +288,11 @@ h1 {
       </a>
     </div>
   </div>
+
+  <div id="vinyl-counter">
+    Calculando colección...
+  </div>
+
 </div>
 
 <script>
@@ -320,15 +339,28 @@ function loadCSV() {
 
 function processCSVData(csvData) {
   data = {};
+  let totalAlbums = 0; // Variable para contar discos
+
   csvData.forEach(row => {
     const artist = row.Artist ? row.Artist.trim() : "Desconocido";
     const name = row.Name || "Sin título";
     const image = row.Image || "";
     const url = row.Url || "#";
     const tags = row.Tags ? row.Tags.split('|').map(t => t.trim().toLowerCase()) : [];
+    
     if (!data[artist]) data[artist] = [];
     data[artist].push({ name, image, tags, url });
+    
+    // Incrementamos el contador por cada fila procesada
+    totalAlbums++;
   });
+
+  // Actualizamos el HTML con el número total
+  const counterEl = document.getElementById('vinyl-counter');
+  if (counterEl) {
+    counterEl.textContent = `Total de Vinilos: ${totalAlbums}`;
+  }
+
   populateTagFilter();
   displayArtists(data);
 }
