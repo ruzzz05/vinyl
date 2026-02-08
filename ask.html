@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Juego de Preguntas</title>
+    <title>Ask</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         :root {
@@ -28,9 +28,112 @@
             flex-direction: column;
         }
 
-        /* --- ESTILOS GENERALES --- */
-        nav { background-color: #000000; border-bottom: 1px solid #333; }
-        .mode-selector { background-color: var(--bg-card); border-bottom: 1px solid #333; }
+        /* ========================= */
+        /* BOTÓN MENÚ (ARRIBA IZQ)   */
+        /* ========================= */
+        .menu-btn {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 50;
+            background: var(--bg-card);
+            color: var(--accent-yellow);
+            border: 1px solid #333;
+            padding: 8px 12px;
+            font-size: 24px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            line-height: 1;
+        }
+
+        .menu-btn:hover { background: #333; }
+
+        /* ========================= */
+        /* SELECTOR INTENSIDAD (ARRIBA DER) */
+        /* ========================= */
+        #intensity-wrapper {
+            position: fixed; /* Flotante fijo */
+            top: 20px;
+            right: 20px;
+            z-index: 40;
+            
+            display: flex; 
+            align-items: center; 
+            gap: 8px;
+            background: var(--bg-card); 
+            padding: 4px 12px; 
+            border-radius: 20px; 
+            border: 1px solid #333;
+            transition: opacity 0.3s;
+        }
+
+        select#intensity-select {
+            background: transparent; color: var(--accent-yellow); border: none; font-weight: bold; cursor: pointer;
+        }
+        select#intensity-select:focus { outline: none; }
+        select#intensity-select option { background-color: #1a1a1a; color: white; }
+
+        /* ========================= */
+        /* SIDEBAR (MENÚ LATERAL)    */
+        /* ========================= */
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 260px;
+            height: 100%;
+            background: var(--bg-card);
+            color: white;
+            padding: 20px;
+            transform: translateX(-100%);
+            transition: transform 0.3s ease;
+            z-index: 60; /* Por encima de todo */
+            box-shadow: 4px 0 15px rgba(0,0,0,0.7);
+            border-right: 1px solid #333;
+        }
+
+        .sidebar.active { transform: translateX(0); }
+
+        .close-sidebar {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            font-size: 28px;
+            color: var(--accent-yellow);
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .sidebar h2 {
+            margin-top: 10px;
+            margin-bottom: 30px;
+            font-size: 24px;
+            border-bottom: 2px solid var(--accent-yellow);
+            padding-bottom: 10px;
+            color: var(--accent-yellow);
+        }
+
+        .sidebar a {
+            display: block;
+            color: var(--text-main);
+            text-decoration: none;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 10px;
+            font-size: 18px;
+            transition: background 0.2s;
+        }
+        .sidebar a:hover { background: #333; color: var(--accent-yellow); }
+
+
+        /* ========================= */
+        /* ESTILOS JUEGO             */
+        /* ========================= */
+        .mode-selector { 
+            background-color: transparent; /* Transparente ahora */
+            margin-top: 60px; /* Espacio para los botones flotantes */
+        }
         
         .btn-mode { background: transparent; color: #888; font-weight: 600; border: 2px solid transparent; }
         .btn-mode.active { color: var(--accent-yellow); border-bottom: 2px solid var(--accent-yellow); background: rgba(255, 215, 0, 0.05); }
@@ -38,10 +141,10 @@
         .card { background-color: var(--bg-card); box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5); border: 1px solid #333; }
         .card.yonunca, .card.ask { border-top: 4px solid var(--accent-yellow); }
 
-        h2 { color: var(--accent-yellow); }
+        h2.mode-title { color: var(--accent-yellow); }
         .divider { background-color: #333; }
 
-        /* --- BOTÓN SIGUIENTE --- */
+        /* Botón Siguiente */
         .btn-next {
             background-color: var(--accent-yellow); color: var(--text-on-yellow);
             font-weight: 800; text-transform: uppercase; letter-spacing: 1px;
@@ -50,18 +153,13 @@
         .btn-next:hover { transform: translateY(2px); box-shadow: 0 2px 0 #b39700; filter: brightness(1.1); }
         .btn-next:active { transform: translateY(4px); box-shadow: none; }
 
-        /* --- INPUT DE NOMBRES --- */
-        .name-input-group input {
-            background-color: var(--bg-input); color: white; border: 1px solid #444;
-        }
+        /* Input nombres */
+        .name-input-group input { background-color: var(--bg-input); color: white; border: 1px solid #444; }
         .name-input-group input:focus { border-color: var(--accent-yellow); outline: none; }
-        
-        .btn-add {
-            background-color: #333; color: var(--accent-yellow); border: 1px solid #444;
-        }
+        .btn-add { background-color: #333; color: var(--accent-yellow); border: 1px solid #444; }
         .btn-add:hover { background-color: #444; }
 
-        /* --- ETIQUETAS DE JUGADORES --- */
+        /* Etiquetas Jugadores */
         .player-tag {
             background-color: #333; color: white; border: 1px solid var(--accent-yellow);
             animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
@@ -69,21 +167,9 @@
         .player-tag:hover { background-color: #444; cursor: pointer; }
         .player-tag span.x-mark { color: #ff4444; margin-left: 6px; font-weight: bold; }
 
-        /* --- SELECTOR DE INTENSIDAD --- */
-        #intensity-wrapper {
-            display: flex; align-items: center; gap: 8px;
-            background: #1a1a1a; padding: 4px 12px; border-radius: 20px; border: 1px solid #333;
-        }
-        select#intensity-select {
-            background: transparent; color: var(--accent-yellow); border: none; font-weight: bold; cursor: pointer;
-        }
-        select#intensity-select:focus { outline: none; }
-        select#intensity-select option { background-color: #1a1a1a; color: white; }
-
-        /* ANIMACIONES */
+        /* Animaciones */
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
         .fade-in { animation: fadeIn 0.3s ease-out forwards; }
-        
         @keyframes popIn { from { transform: scale(0.5); opacity: 0; } to { transform: scale(1); opacity: 1; } }
 
         .hidden { display: none !important; }
@@ -91,31 +177,30 @@
 </head>
 <body>
 
-    <nav class="p-4">
-        <div class="container mx-auto flex justify-between items-center">
-            <a href="index.html" class="text-gray-400 hover:text-yellow-400 transition-colors font-medium">
-                🎵 Música
-            </a>
-            <div class="font-bold text-yellow-400 text-lg hidden sm:block">
-                ❓ Juego de Preguntas
-            </div>
-            <div id="intensity-wrapper" class="hidden">
-                <span class="text-xl">🍹</span>
-                <div class="flex flex-col">
-                    <span class="text-[10px] text-gray-500 uppercase font-bold tracking-wider">Intensidad</span>
-                    <select id="intensity-select" class="text-lg">
-                        <option value="1">1</option>
-                        <option value="2">2</option>
-                        <option value="3" selected>3</option>
-                        <option value="4">4</option>
-                        <option value="5">5</option>
-                    </select>
-                </div>
-            </div>
-        </div>
-    </nav>
+    <button id="hamburger-btn" class="menu-btn" onclick="toggleMenu()">☰</button>
 
-    <header class="mode-selector p-4 shadow-md">
+    <div class="sidebar" id="sidebar">
+        <span class="close-sidebar" onclick="toggleMenu()">×</span>
+        <h2>Menú</h2>
+        <a href="index.html">🎵 Vinilos</a>
+        <a href="ask.html"> Ask</a>
+    </div>
+
+    <div id="intensity-wrapper" class="hidden">
+        <span class="text-xl">🍹</span>
+        <div class="flex flex-col">
+            <span class="text-[10px] text-gray-500 uppercase font-bold tracking-wider">Intensidad</span>
+            <select id="intensity-select" class="text-lg">
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3" selected>3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+            </select>
+        </div>
+    </div>
+
+    <header class="mode-selector p-4">
         <div class="container mx-auto flex justify-center space-x-4">
             <button id="btn-yonunca" class="btn-mode yonunca active px-6 py-2 rounded-t-lg transition-colors">
                 YO NUNCA
@@ -128,7 +213,7 @@
 
     <main class="flex-grow flex items-center justify-center p-4">
         <div id="card-container" class="card yonunca max-w-2xl w-full p-8 rounded-lg text-center transition-all">
-            <h2 class="text-2xl font-bold mb-2 uppercase tracking-wider" id="mode-title">Yo Nunca</h2>
+            <h2 class="text-2xl font-bold mb-2 uppercase tracking-wider mode-title" id="mode-title">Yo Nunca</h2>
             <div class="divider h-px w-20 mx-auto my-4"></div>
             
             <div id="names-section" class="hidden mb-6">
@@ -152,6 +237,17 @@
     </main>
 
     <script>
+        // =========================
+        // LÓGICA DEL MENÚ LATERAL
+        // =========================
+        function toggleMenu() {
+            const sidebar = document.getElementById('sidebar');
+            sidebar.classList.toggle('active');
+        }
+
+        // =========================
+        // LÓGICA DEL JUEGO
+        // =========================
         let currentMode = 'yonunca';
         let yonuncaQuestions = [];
         let askQuestions = [];
@@ -270,7 +366,6 @@
                 let randomIndex = Math.floor(Math.random() * questions.length);
                 let selectedQuestion = questions[randomIndex];
 
-                // 1. REEMPLAZO DE NOMBRES {name}
                 if (currentMode === 'ask' && players.length > 0 && selectedQuestion.includes('{name}')) {
                     const nameCount = (selectedQuestion.match(/{name}/g) || []).length;
                     if (players.length < nameCount) {
@@ -283,28 +378,19 @@
                     selectedQuestion = selectedQuestion.replace(/{name}/g, () => `<span style="color:var(--accent-yellow)">${shuffledNames[i++]}</span>`);
                 }
 
-                // 2. REEMPLAZO DE INTENSIDAD INTELIGENTE {int + 1}, {int - 2}, {int}
-                // Esta expresión busca: {int} seguido opcionalmente de + o - y un número
                 selectedQuestion = selectedQuestion.replace(/{int(\s*[+\-]\s*\d+)?}/g, (match, operation) => {
-                    let result = parseInt(intensity); // Valor base
-
+                    let result = parseInt(intensity); 
                     if (operation) {
-                        // Quitamos espacios y analizamos
                         const opClean = operation.replace(/\s/g, ''); 
                         const operator = opClean[0];
                         const number = parseInt(opClean.substring(1));
-
                         if (operator === '+') result += number;
                         if (operator === '-') result -= number;
                     }
-
-                    // PROTECCIÓN: Que nunca baje de 1
                     if (result < 1) result = 1;
-
                     return `<span style="color:var(--accent-yellow); font-size: 1.2em; font-weight:bold;">${result}</span>`;
                 });
 
-                // 3. REEMPLAZO DE ASTERISCOS *texto*
                 selectedQuestion = selectedQuestion.replace(/\*(.*?)\*/g, '<span style="color:var(--accent-yellow)">$1</span>');
 
                 questionElement.innerHTML = selectedQuestion;
