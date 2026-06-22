@@ -339,7 +339,7 @@ function loadCSV() {
 
 function processCSVData(csvData) {
   data = {};
-  let totalAlbums = 0; // Variable para contar discos
+  let totalAlbums = 0;
 
   csvData.forEach(row => {
     const artist = row.Artist ? row.Artist.trim() : "Desconocido";
@@ -351,11 +351,9 @@ function processCSVData(csvData) {
     if (!data[artist]) data[artist] = [];
     data[artist].push({ name, image, tags, url });
     
-    // Incrementamos el contador por cada fila procesada
     totalAlbums++;
   });
 
-  // Actualizamos el HTML con el número total
   const counterEl = document.getElementById('vinyl-counter');
   if (counterEl) {
     counterEl.textContent = `Total de Vinilos: ${totalAlbums}`;
@@ -408,7 +406,7 @@ function displayArtists(artistsData) {
       albumsHTML += `
         <div class="album">
           <a href="${album.url}" target="_blank">
-            <img src="${album.image}" onerror="this.src='https://via.placeholder.com/80?text=No+Img'">
+            <img src="${album.image}" onerror="this.src='https://placehold.co/80x80?text=No+Img'">
           </a>
           <span>${album.name}</span>
         </div>`;
