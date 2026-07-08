@@ -1,4 +1,4 @@
-// ----- EL TAL
+// ----- EL TAL----------------------------------------------------------------------------------------------------------------------------------------------------------------------
 La persona más bajita *reparte {int}*
 La persona con el pelo más largo *reparte {int}*
 La persona que esté leyendo esto en voz alta *reparte {int}*
@@ -19,9 +19,13 @@ El que haya enviado *'nudes'* alguna vez *reparte {int}*
 El que sea *más mayor* de la habitación *bebe {int}* (por la experiencia)
 El que sea *más joven* de la habitación *bebe {int}* (por el carné)
 Si alguna vez has enviado un audio de *más de 3 minutos*, *bebe {int}* por pesado.
+El que tenga el móvil con *menos* batería *bebe {int}*
+La persona más tatuada de la sala *reparte {int}*
+El que *no* lleve reloj puesto *bebe {int - 1}*
+Si vives solo, *repartes {int}*
 
 
-// ------ DECIDID
+// ------ DECIDID----------------------------------------------------------------------------------------------------------------------------------------------------------------------
 Decidid quien es la persona *más graciosa*. Esa persona bebe
 Decidid quien es la persona *más seria*. Esa persona bebe
 Decidid quién es el más *"red flag"* del grupo. Esa persona *bebe {int - 1}*.
@@ -31,9 +35,21 @@ Decidid quién es el que *mejor viste*. Esa persona *reparte {int}*.
 Decidid quién tiene *la risa más escandalosa.* Esa persona *bebe {int}*
 Decidid quién es el más *"postureo"* del grupo. Esa persona *bebe {int}*
 Decidid quién se *va a acabar peor* esta noche. Esa persona *bebe {int}*
+Decidid quién sería el *mejor compañero de piso*. Esa persona *reparte {int}*
+Decidid quién sería el *peor compañero de piso*. Esa persona *bebe {int}*
+Decidid quién sería el *primero en acabar en comisaría*. Esa persona *bebe {int}*
+Decidid quién sería el *primero en hacerse millonario*. Esa persona *reparte {int}*
+Decidid quién tiene *más ego*. Esa persona *bebe {int}*
+Decidid quién sería el *primero en casarse*. Esa persona *reparte {int}*
+Decidid quién sería el *primero en escribirle a su ex* esta noche. Esa persona *bebe {int}*
+Decidid quién sería el *primero en irse de la fiesta*. Esa persona *bebe {int}*
+Decidid quién tiene *más labia*. Esa persona *reparte {int}*
+Decidid quién sería el *peor DJ*. Esa persona *bebe {int}*
+Decidid quién sería el *más probable en desaparecer sin avisar*. Esa persona *bebe {int}*
+Decidid quién sería el *más probable en quedarse dormido en el transporte público*. Esa persona *bebe {int}*
 
 
-// ------ LADO OSCURO
+// ------ LADO OSCURO----------------------------------------------------------------------------------------------------------------------------------------------------------------------
 El que lleve un *condón* encima bebe
 El que haya tenido más parejas sexuales *reparte {int}*
 El que haya tenido menos parejas sexuales *reparte {int + 1}*
@@ -49,9 +65,21 @@ El que se haya *olvidado del nombre* de alguien mientras se liaban bebe {int + 1
 El que se haya arrepentido de su último beso bebe {int}
 {name}, intenta adivinar el *color de la ropa interior* de {name}. Si aciertas, bebe él; si fallas, bebes tú.
 Atrevete a *quitarte* una prenda {name}, si te cagas bebes {int + 1}
+El que haya besado a *dos personas el mismo día* *bebe {int}*
+El que haya revisado *el móvil de su pareja* *bebe {int + 1}*
+El que haya bloqueado y desbloqueado *a la misma persona* *bebe {int}*
+{name}, ¿a quién *besarías* de esta mesa? Si no respondes *bebe {int + 2}*
+{name}, señala con quién *cometerías un crimen* o *bebe {int}*
+El que haya tenido una *aventura de una noche* *bebe {int}*
+El que haya *entrado al perfil de un ex esta semana* *bebe {int}*
+El que haya *escrito un mensaje y no lo haya enviado* *bebe {int}*
+El que haya *fingido estar ocupado para no quedar* *bebe {int}*
+El que haya *coqueteado para conseguir algo* *bebe {int}*
+{name}, señala quién crees que *liga mejor* o *bebe {int + 2}*
+El que haya *besado a alguien en una discoteca sin hablar antes* *bebe {int}*
 
 
-// ------ CONFESIÓN O TRAGO
+// ------ CONFESIÓN O TRAGO----------------------------------------------------------------------------------------------------------------------------------------------------------------------
 {name}, ¿quién de esta mesa te parece la persona *más sexy*? Sino respondes *bebes {int + 2} *
 {name}, ¿cuál es el lugar *más público o raro* donde lo has hecho? Sino respondes *bebes {int + 2} *
 {name}, ¿quién crees que es la persona *menos de fiar* de los aquí presentes? Sino respondes *bebes {int + 2}*
@@ -59,9 +87,15 @@ Atrevete a *quitarte* una prenda {name}, si te cagas bebes {int + 1}
 {name}, ¿a quién de esta mesa *no* invitarías a tu boda? Sino respondes *bebes {int + 2}*
 {name}, ¿cuántas personas de esta mesa *te han gustado* en algún momento? Sino respondes *bebes {int + 2}*
 {name}, si te dieran 1.000€ ahora mismo, ¿a quién de la mesa le darías un bofetón? Sino respondes *bebes {int + 2}*
+{name}, ¿quién crees que sería *tu peor cita* de esta mesa? Si no respondes *bebes {int + 2}*
+{name}, ¿quién te cayó *peor* al conocerle? Si no respondes *bebes {int + 2}*
+{name}, ¿quién sería *la última persona* de esta mesa con la que tendrías una cita? Si no respondes *bebes {int + 2}*
+{name}, ¿qué persona de esta mesa crees que *esconde más secretos*? Si no respondes *bebes {int + 2}*
+{name}, ¿qué persona de esta mesa crees que *te conoce mejor*? Si no respondes *bebes {int + 2}*
 
 
-// ------ MINIJUEGOS
+// ------ MINIJUEGOS----------------------------------------------------------------------------------------------------------------------------------------------------------------------
+{name} y {name}: *Pulso*. El perdedor *bebe {int}*
 Ronda de *Yo Nunca*. Una por cada participante del Ask
 {name} dale un trago de tu copa al que *mejor* te caiga y al que *peor*, no digas quien es quien
 *TODOS BEBEN*
@@ -80,12 +114,36 @@ Ronda de *Yo Nunca*. Una por cada participante del Ask
 *El Camaleón:* {name} debe imitar a alguien de la mesa. El primero que lo adivine *reparte 3/, si nadie lo adivina, {name} bebe {int}.
 {name} tienes que decir *2 palabras* para describir a {name} y {name} no puedes decir a cual corresponde
 *Salto de la moneda: * coged una moneda y un vaso vacio, {name} hazle una pregunta al oido a {name}, la respuesta tiene que ser un nombre. Si lanza la moneda y falla tiene que *decirla en alto*, si acierta es vuestro secreto.
+*Cadena de películas:* cada uno dice una película. El que repita o tarde más de 5 segundos *bebe*
+{name}, imita a *un famoso*. El primero que lo adivine *reparte {int}*
+{name}, reta a {name} a un *duelo de piedra, papel o tijera* al mejor de 3. El perdedor *bebe fondo*
 
 
-// ----- MODIFICADORES
+// ----- MODIFICADORES----------------------------------------------------------------------------------------------------------------------------------------------------------------------
 Al siguiente que le toque beber, *bebe doble x2*
 A partir de ahora {name}, no puede *hablar* hasta que se diga *3 veces su nombre*, si hablas bebes
 *Prohibido coger el movil.* El primero que lo coja chupito
 *Mano prohibida:* No se puede beber con la mano dominante. Si te pillan, bebes de nuevo.
 *Sin nombres:* Prohibido decir el nombre de nadie de la mesa.
 *El Guardaespaldas:* {name} tiene que beber siempre que {name} beba, dura 5 asks.
+*A partir de ahora hay que brindar antes de cada trago.* Si no lo haces *bebes otra vez*
+{name}, *No puedes señalar con el dedo.* Si lo haces *bebes*
+*El primero que mire su móvil* *bebe fondo*
+
+
+//-------QUIEN ME CONOCE MEJOR----------------------------------------------------------------------------------------------------------------------------------------------------------------------
+{name}, ¿cuál es la *comida favorita* de {name}? Si fallas *bebes {int}*. Si aciertas, *repartís {int}* cada uno.
+{name}, ¿cuál es el *color favorito* de {name}? Si fallas *bebes {int}*. Si aciertas, *repartís {int}* cada uno.
+{name}, ¿cuál es la *serie favorita* de {name}? Si fallas *bebes {int}*. Si aciertas, *repartís {int}* cada uno.
+{name}, ¿cuál es la *película favorita* de {name}? Si fallas *bebes {int}*. Si aciertas, *repartís {int}* cada uno.
+{name}, ¿cuál es el *animal favorito* de {name}? Si fallas *bebes {int}*. Si aciertas, *repartís {int}* cada uno.
+{name}, ¿cuál es el *cumpleaños* de {name}? Si fallas *bebes {int}*. Si aciertas, *repartís {int}* cada uno.
+{name}, ¿cuál es la *red social* que más usa {name}? Si fallas *bebes {int}*. Si aciertas, *repartís {int}* cada uno.
+{name}, ¿qué *comida no soporta* {name}? Si fallas *bebes {int}*. Si aciertas, *repartís {int}* cada uno.
+{name}, ¿qué *hobby* practica o ha practicado {name}? Si fallas *bebes {int}*. Si aciertas, *repartís {int}* cada uno.
+{name}, ¿qué *persona famosa* elegiría {name} para cenar? Si fallas *bebes {int}*. Si aciertas, *repartís {int}* cada uno.
+{name}, ¿cuál fue el *último país* que visitó {name}? Si fallas *bebes {int}*. Si aciertas, *repartís {int}* cada uno.
+{name}, ¿qué *aplicación* usa más {name}? Si fallas *bebes {int}*. Si aciertas, *repartís {int}* cada uno.
+{name}, ¿cuál es la *copa de confianza* de {name}? Si fallas *bebes {int}*. Si aciertas, *repartís {int}* cada uno.
+{name}, ¿qué *cantante o grupo* escucha más {name}? Si fallas *bebes {int}*. Si aciertas, *repartís {int}* cada uno.
+{name}, ¿qué *helado* elegiría {name}? Si fallas *bebes {int}*. Si aciertas, *repartís {int}* cada uno.
