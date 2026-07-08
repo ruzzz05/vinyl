@@ -26,13 +26,21 @@ Si vives solo, *repartes {int}*
 El que lleve *reloj* bebe {int}
 El que está *leyendo* bebe {int - 1}
 {name} todos los jugadores que *no tengas agregados*, beben {int - 1}
-
+El que haya *vomitado en un taxi* *bebe {int}*
+*Bebe {int}* el que alguna vez le haya *escrito a un famoso*
+Si alguien *está comiendo* ahora mismo, *se termina la copa*
+El que haya usado alguna vez una *app de citas*, *bebe {int}*
+La persona que lleve *más anillos* puestos *reparte {int}*
+El que tenga el pelo *más corto* *bebe {int}*
+El que haya llegado *el primero*  *reparte {int + 1}*
+El que *no* lleve calcetines *bebe {int}*
+El que lleve *gafas* (de ver o de sol) *bebe {int - 1}*
 
 // ------ DECIDID----------------------------------------------------------------------------------------------------------------------------------------------------------------------
-Decidid quien es la persona *más graciosa*. Esa persona bebe
-Decidid quien es la persona *más seria*. Esa persona bebe
+Decidid quien es la persona *más graciosa*. Esa persona *bebe {int}*
+Decidid quien es la persona *más seria*. Esa persona *bebe {int}*
 Decidid quién es el más *"red flag"* del grupo. Esa persona *bebe {int - 1}*.
-Decidid quién es el que *antes se emborracha*. Esa persona bebe para calentar.
+Decidid quién es el que *antes se emborracha*. Esa persona *bebe {int + 1}* para calentar.
 Decidid quién es *el más tacaño*. Esa persona *bebe {int}*.
 Decidid quién es el que *mejor viste*. Esa persona *reparte {int}*.
 Decidid quién tiene *la risa más escandalosa.* Esa persona *bebe {int}*
@@ -50,9 +58,11 @@ Decidid quién tiene *más labia*. Esa persona *reparte {int}*
 Decidid quién sería el *peor DJ*. Esa persona *bebe {int}*
 Decidid quién sería el *más probable en desaparecer sin avisar*. Esa persona *bebe {int}*
 Decidid quién sería el *más probable en quedarse dormido en el transporte público*. Esa persona *bebe {int}*
-Decidid si {name} va a ligar hoy, si la respuesta es *SI* bebeis todos 1, si la respuesta es *NO* esa persona bebe {int}
-{name}, tienes que decidir, bebes {int} o dejas que {name} reparta {int + 2}
-A quien del grupo le queda mejor la frase *"No se entera ni del clima"* , el elegido bebe {int}
+Decidid si {name} va a ligar hoy, si la respuesta es *SI* bebeis todos 1, si la respuesta es *NO* esa persona *bebe {int}*
+{name}, tienes que decidir, bebes {int} o dejas que {name} *reparta {int + 2}* te la puede devolver (no quiero dar ideas)
+A quien del grupo le queda mejor la frase *"No se entera ni del clima"* , el elegido *bebe {int}*
+Entre todos teneis que decidir quien va *menos borracho*, y cuantos tragos debería beber. La victima tiene que estar *en silencio*
+Entre todos teneis que decidir quien es el que tiene *menos ganas de fiesta*, y cuantos tragos debería beber.
 
 
 // ------ LADO OSCURO----------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -103,16 +113,16 @@ El que haya *besado a alguien en una discoteca sin hablar antes* *bebe {int}*
 {name}, ¿qué persona de esta mesa crees que *te conoce mejor*? Si no respondes *bebes {int + 2}*
 
 
-// ------ MINIJUEGOS----------------------------------------------------------------------------------------------------------------------------------------------------------------------
+// ------ MINIJUEGOS Y RETOS----------------------------------------------------------------------------------------------------------------------------------------------------------------------
 {name} y {name}: *Pulso*. El perdedor *bebe {int}*
 Ronda de *Yo Nunca*. Una por cada participante del Ask
 {name} dale un trago de tu copa al que *mejor* te caiga y al que *peor*, no digas quien es quien
 *TODOS BEBEN*
 {name} dale un *beso* donde quieras a {name}
-{name} y {name}: *Piedra, papel o tijera*. El que pierda bebe fondo
+{name} y {name}: *Piedra, papel o tijera*. El que pierda se *termina la copa*
 *Guerra de miradas:* {name} contra {name}. El primero que parpadee bebe {int}
 {name}, haz una rima. *El que no rime o repita bebe.* (Sentido horario)
-*Intercambio de ropa:* {name} y {name} deben intercambiarse una prenda o beber fondo
+*Intercambio de ropa:* {name} y {name} deben intercambiarse una prenda o *terminarse la copa*
 {name}, *cuéntanos un chiste*. Si nadie se ríe, bebes {int}. Si se ríen, repartes {int}
 {name} *Prueba o Verdad*
 {name}, dale un *masaje* en los hombros a {name} o *bebe {int + 1}*
@@ -125,7 +135,7 @@ Ronda de *Yo Nunca*. Una por cada participante del Ask
 *Salto de la moneda: * coged una moneda y un vaso vacio, {name} hazle una pregunta al oido a {name}, la respuesta tiene que ser un nombre. Si lanza la moneda y falla tiene que *decirla en alto*, si acierta es vuestro secreto.
 *Cadena de películas:* cada uno dice una película. El que repita o tarde más de 5 segundos *bebe*
 {name}, imita a *un famoso*. El primero que lo adivine *reparte {int}*
-{name}, reta a {name} a un *duelo de piedra, papel o tijera* al mejor de 3. El perdedor *bebe fondo*
+{name}, reta a {name} a un *duelo de piedra, papel o tijera* al mejor de 3. El perdedor *se termina la copa*
 {name}, empieza la *CASCADA* hacia tu derecha, hasta que no dejes de beber el siguiente tampoco podrá
 {name} y {name}, toca jugar un *serio*, el primero que se ria beberá {int + 1}
 {name} el de tu derecha bebe {int}
@@ -133,6 +143,15 @@ Ronda de *Yo Nunca*. Una por cada participante del Ask
 {name}. vamos a jugar a la *ruleta del like*, dejale el movil al de tu derecha y de forma aleatoria le dará like a una historia, si toca alguien famoso te libraste, sino...
 En orden, empezando por {name} ir diciendo *palabras para decir que vas borracho*
 {name}, deja que te *preparen un chupito*, debes poder bebertelo de un trago. Si te niegas bebes {int + 2} 
+Toca la *PALABRA PROHIBIDA*, {name} elige una palabra, cada vez que esa palabra sea dicha esa persona bebe 1
+Prohibido beber con la *mano derecha*, quien lo haga bebe 1
+{name}, tiene que decir 2 nombres un que consideres *listo* y otro *tonto*, no digas quien es quien, si no quieres bebe {int}
+{name}, tiene que decir 2 nombres un que consideres *feo* y otro *guapo*, no digas quien es quien, si no quieres bebe {int}
+{name}, tiene que decir 2 nombres un que consideres *que vista mal* y otro *que vista bien*, no digas quien es quien, si no quieres bebe {int}
+{name}, bebe tantos tragos como personas atractivas haya en la mesa
+{name}, bebe tantos tragos como personas feas haya en la mesa
+{name}, di una persona que todos o casi todos conozcais, y {name} tendrá que darle like a una foto o historia antigua, si se niega bebe {int + 2}
+{name}, *bebe 1*, el de tu derecha *bebe 2*, y el siguiente *3*, hasta que hayais bebido *todos*
 
 
 // ----- MODIFICADORES----------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -144,7 +163,7 @@ A partir de ahora {name}, no puede *hablar* hasta que se diga *3 veces su nombre
 *El Guardaespaldas:* {name} tiene que beber siempre que {name} beba, dura 5 asks.
 *A partir de ahora hay que brindar antes de cada trago.* Si no lo haces *bebes otra vez*
 {name}, *No puedes señalar con el dedo.* Si lo haces *bebes*
-*El primero que mire su móvil* *bebe fondo*
+El primero que mire su móvil *se termina la copa*
 
 
 //-------QUIEN ME CONOCE MEJOR----------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -165,7 +184,7 @@ A partir de ahora {name}, no puede *hablar* hasta que se diga *3 veces su nombre
 {name}, ¿qué *helado* elegiría {name}? Si fallas *bebes {int}*. Si aciertas, *repartís {int}* cada uno.
 
 
-//-------EN ALTO----------------------------------------------------------------------------------------------------------------------------------------------------------------------
+//-------A LA DE 3----------------------------------------------------------------------------------------------------------------------------------------------------------------------
 A la de 3, {name} y {name} teneis que decir una *marca de ropa*, si fallais bebeis {int} cada uno, si acertais repartis {int + 1} 
 A la de 3, {name} y {name} tenéis que decir una *marca de coches*. Si falláis *bebéis {int}* cada uno, si acertáis *repartís {int + 1}*.
 A la de 3, {name} y {name} tenéis que decir un *animal*. Si falláis *bebéis {int}* cada uno, si acertáis *repartís {int + 1}*.
