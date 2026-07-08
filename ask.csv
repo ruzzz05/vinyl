@@ -23,6 +23,9 @@ El que tenga el móvil con *menos* batería *bebe {int}*
 La persona más tatuada de la sala *reparte {int}*
 El que *no* lleve reloj puesto *bebe {int - 1}*
 Si vives solo, *repartes {int}*
+El que lleve *reloj* bebe {int}
+El que está *leyendo* bebe {int - 1}
+{name} todos los jugadores que *no tengas agregados*, beben {int - 1}
 
 
 // ------ DECIDID----------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -47,6 +50,9 @@ Decidid quién tiene *más labia*. Esa persona *reparte {int}*
 Decidid quién sería el *peor DJ*. Esa persona *bebe {int}*
 Decidid quién sería el *más probable en desaparecer sin avisar*. Esa persona *bebe {int}*
 Decidid quién sería el *más probable en quedarse dormido en el transporte público*. Esa persona *bebe {int}*
+Decidid si {name} va a ligar hoy, si la respuesta es *SI* bebeis todos 1, si la respuesta es *NO* esa persona bebe {int}
+{name}, tienes que decidir, bebes {int} o dejas que {name} reparta {int + 2}
+A quien del grupo le queda mejor la frase *"No se entera ni del clima"* , el elegido bebe {int}
 
 
 // ------ LADO OSCURO----------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -77,6 +83,9 @@ El que haya *fingido estar ocupado para no quedar* *bebe {int}*
 El que haya *coqueteado para conseguir algo* *bebe {int}*
 {name}, señala quién crees que *liga mejor* o *bebe {int + 2}*
 El que haya *besado a alguien en una discoteca sin hablar antes* *bebe {int}*
+{name} te notamos un poco aburrido, *terminate la copa*
+{name}, bebes tanto como vasos en la mesa
+{name}, bebes tanto como botellas haya en la mesa
 
 
 // ------ CONFESIÓN O TRAGO----------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -117,6 +126,13 @@ Ronda de *Yo Nunca*. Una por cada participante del Ask
 *Cadena de películas:* cada uno dice una película. El que repita o tarde más de 5 segundos *bebe*
 {name}, imita a *un famoso*. El primero que lo adivine *reparte {int}*
 {name}, reta a {name} a un *duelo de piedra, papel o tijera* al mejor de 3. El perdedor *bebe fondo*
+{name}, empieza la *CASCADA* hacia tu derecha, hasta que no dejes de beber el siguiente tampoco podrá
+{name} y {name}, toca jugar un *serio*, el primero que se ria beberá {int + 1}
+{name} el de tu derecha bebe {int}
+{name} y {name} cogeos de la mano, pero sin moveros del sitio, si uno bebe también bebe el otro, hasta que se os nombre a alguno de los dos
+{name}. vamos a jugar a la *ruleta del like*, dejale el movil al de tu derecha y de forma aleatoria le dará like a una historia, si toca alguien famoso te libraste, sino...
+En orden, empezando por {name} ir diciendo *palabras para decir que vas borracho*
+{name}, deja que te *preparen un chupito*, debes poder bebertelo de un trago. Si te niegas bebes {int + 2} 
 
 
 // ----- MODIFICADORES----------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -147,3 +163,28 @@ A partir de ahora {name}, no puede *hablar* hasta que se diga *3 veces su nombre
 {name}, ¿cuál es la *copa de confianza* de {name}? Si fallas *bebes {int}*. Si aciertas, *repartís {int}* cada uno.
 {name}, ¿qué *cantante o grupo* escucha más {name}? Si fallas *bebes {int}*. Si aciertas, *repartís {int}* cada uno.
 {name}, ¿qué *helado* elegiría {name}? Si fallas *bebes {int}*. Si aciertas, *repartís {int}* cada uno.
+
+
+//-------EN ALTO----------------------------------------------------------------------------------------------------------------------------------------------------------------------
+A la de 3, {name} y {name} teneis que decir una *marca de ropa*, si fallais bebeis {int} cada uno, si acertais repartis {int + 1} 
+A la de 3, {name} y {name} tenéis que decir una *marca de coches*. Si falláis *bebéis {int}* cada uno, si acertáis *repartís {int + 1}*.
+A la de 3, {name} y {name} tenéis que decir un *animal*. Si falláis *bebéis {int}* cada uno, si acertáis *repartís {int + 1}*.
+A la de 3, {name} y {name} tenéis que decir una *ciudad*. Si falláis *bebéis {int}* cada uno, si acertáis *repartís {int + 1}*.
+A la de 3, {name} y {name} tenéis que decir una *película*. Si falláis *bebéis {int}* cada uno, si acertáis *repartís {int + 1}*.
+A la de 3, {name} y {name} tenéis que decir una *serie*. Si falláis *bebéis {int}* cada uno, si acertáis *repartís {int + 1}*.
+A la de 3, {name} y {name} tenéis que decir un *cantante o grupo*. Si falláis *bebéis {int}* cada uno, si acertáis *repartís {int + 1}*.
+A la de 3, {name} y {name} tenéis que decir un *videojuego*. Si falláis *bebéis {int}* cada uno, si acertáis *repartís {int + 1}*.
+A la de 3, {name} y {name} tenéis que decir un *deporte*. Si falláis *bebéis {int}* cada uno, si acertáis *repartís {int + 1}*.
+A la de 3, {name} y {name} tenéis que decir un *superhéroe*. Si falláis *bebéis {int}* cada uno, si acertáis *repartís {int + 1}*.
+A la de 3, {name} y {name} tenéis que decir un *país*. Si falláis *bebéis {int}* cada uno, si acertáis *repartís {int + 1}*.
+A la de 3, {name} y {name} tenéis que decir una *bebida alcohólica*. Si falláis *bebéis {int}* cada uno, si acertáis *repartís {int + 1}*.
+A la de 3, {name} y {name} tenéis que decir una *comida rápida*. Si falláis *bebéis {int}* cada uno, si acertáis *repartís {int + 1}*.
+A la de 3, {name} y {name} tenéis que decir un *color*. Si falláis *bebéis {int}* cada uno, si acertáis *repartís {int + 1}*.
+A la de 3, {name} y {name} tenéis que decir una *red social*. Si falláis *bebéis {int}* cada uno, si acertáis *repartís {int + 1}*.
+A la de 3, {name} y {name} tenéis que decir un *famoso español*. Si falláis *bebéis {int}* cada uno, si acertáis *repartís {int + 1}*.
+A la de 3, {name} y {name} tenéis que decir una *marca de cerveza*. Si falláis *bebéis {int}* cada uno, si acertáis *repartís {int + 1}*.
+A la de 3, {name} y {name} tenéis que decir un *personaje de Disney*. Si falláis *bebéis {int}* cada uno, si acertáis *repartís {int + 1}*.
+A la de 3, {name} y {name} tenéis que decir una *capital europea*. Si falláis *bebéis {int}* cada uno, si acertáis *repartís {int + 1}*.
+A la de 3, {name} y {name} tenéis que decir una *fruta*. Si falláis *bebéis {int}* cada uno, si acertáis *repartís {int + 1}*.
+A la de 3, {name} y {name} tenéis que decir un *instrumento musical*. Si falláis *bebéis {int}* cada uno, si acertáis *repartís {int + 1}*.
+{name}, a la de 3 debes decir que 2 personas son mas probables de *tener algo esta NOCHE*, los elegidos deben darse un pico, sino bebeis {int + 3}
