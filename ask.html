@@ -29,27 +29,6 @@
         }
 
         /* ========================= */
-        /* BOTÓN MENÚ (ARRIBA IZQ)   */
-        /* ========================= */
-        .menu-btn {
-            position: fixed;
-            top: 20px;
-            left: 20px;
-            z-index: 50;
-            background: var(--bg-card);
-            color: var(--accent-yellow);
-            border: 1px solid #333;
-            padding: 8px 12px;
-            font-size: 24px;
-            border-radius: 6px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            line-height: 1;
-        }
-
-        .menu-btn:hover { background: #333; }
-
-        /* ========================= */
         /* SELECTOR INTENSIDAD (ARRIBA DER) */
         /* ========================= */
         #intensity-wrapper {
@@ -75,64 +54,11 @@
         select#intensity-select option { background-color: #1a1a1a; color: white; }
 
         /* ========================= */
-        /* SIDEBAR (MENÚ LATERAL)    */
-        /* ========================= */
-        .sidebar {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 260px;
-            height: 100%;
-            background: var(--bg-card);
-            color: white;
-            padding: 20px;
-            transform: translateX(-100%);
-            transition: transform 0.3s ease;
-            z-index: 60; /* Por encima de todo */
-            box-shadow: 4px 0 15px rgba(0,0,0,0.7);
-            border-right: 1px solid #333;
-        }
-
-        .sidebar.active { transform: translateX(0); }
-
-        .close-sidebar {
-            position: absolute;
-            top: 15px;
-            right: 20px;
-            font-size: 28px;
-            color: var(--accent-yellow);
-            cursor: pointer;
-            font-weight: bold;
-        }
-
-        .sidebar h2 {
-            margin-top: 10px;
-            margin-bottom: 30px;
-            font-size: 24px;
-            border-bottom: 2px solid var(--accent-yellow);
-            padding-bottom: 10px;
-            color: var(--accent-yellow);
-        }
-
-        .sidebar a {
-            display: block;
-            color: var(--text-main);
-            text-decoration: none;
-            padding: 15px;
-            border-radius: 5px;
-            margin-bottom: 10px;
-            font-size: 18px;
-            transition: background 0.2s;
-        }
-        .sidebar a:hover { background: #333; color: var(--accent-yellow); }
-
-
-        /* ========================= */
         /* ESTILOS JUEGO             */
         /* ========================= */
         .mode-selector { 
-            background-color: transparent; /* Transparente ahora */
-            margin-top: 60px; /* Espacio para los botones flotantes */
+            background-color: transparent;
+            margin-top: 20px; 
         }
         
         .btn-mode { background: transparent; color: #888; font-weight: 600; border: 2px solid transparent; }
@@ -176,15 +102,6 @@
     </style>
 </head>
 <body>
-
-    <button id="hamburger-btn" class="menu-btn" onclick="toggleMenu()">☰</button>
-
-    <div class="sidebar" id="sidebar">
-        <span class="close-sidebar" onclick="toggleMenu()">×</span>
-        <h2>Menú</h2>
-        <a href="index.html">🎵 Vinilos</a>
-        <a href="ask.html"> Ask</a>
-    </div>
 
     <div id="intensity-wrapper" class="hidden">
         <span class="text-xl">🍹</span>
@@ -237,14 +154,6 @@
     </main>
 
     <script>
-        // =========================
-        // LÓGICA DEL MENÚ LATERAL
-        // =========================
-        function toggleMenu() {
-            const sidebar = document.getElementById('sidebar');
-            sidebar.classList.toggle('active');
-        }
-
         // =========================
         // LÓGICA DEL JUEGO
         // =========================
