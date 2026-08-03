@@ -35,6 +35,10 @@ El que tenga el pelo *más corto* *bebe {int}*
 El que haya llegado *el primero*  *reparte {int + 1}*
 El que *no* lleve calcetines *bebe {int}*
 El que lleve *gafas* (de ver o de sol) *bebe {int - 1}*
+La persona que lleve más prendas negras *reparte {int}*
+El que tenga la pantalla del móvil rota *bebe {int}*
+La persona que tenga el pelo teñido *reparte {int - 1}*
+El más "influencer" *bebe {int + 1}*
 
 // ------ DECIDID----------------------------------------------------------------------------------------------------------------------------------------------------------------------
 Decidid quien es la persona *más graciosa*. Esa persona *bebe {int}*
@@ -63,6 +67,9 @@ Decidid si {name} va a ligar hoy, si la respuesta es *SI* bebeis todos 1, si la 
 A quien del grupo le queda mejor la frase *"No se entera ni del clima"* , el elegido *bebe {int}*
 Entre todos teneis que decidir quien va *menos borracho*, y cuantos tragos debería beber. La victima tiene que estar *en silencio*
 Entre todos teneis que decidir quien es el que tiene *menos ganas de fiesta*, y cuantos tragos debería beber.
+Decidid quién es el que *más tarda en responder* a los mensajes. Esa persona *bebe {int}*
+Decidid quién es el *más dramático* del grupo. Esa persona *bebe {int}*
+Decidid entre todos, que dos personas de aqui son *mas probables que se lien* en algun momento. Esas personas *beben {int + 1}*
 
 
 // ------ LADO OSCURO----------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -152,6 +159,11 @@ Prohibido beber con la *mano derecha*, quien lo haga bebe 1
 {name}, bebe tantos tragos como personas feas haya en la mesa
 {name}, di una persona que todos o casi todos conozcais, y {name} tendrá que darle like a una foto o historia antigua, si se niega bebe {int + 2}
 {name}, *bebe 1*, el de tu derecha *bebe 2*, y el siguiente *3*, hasta que hayais bebido *todos*
+*Moneda al aire:* {name} elige *cara o cruz* y lanza una moneda. Si acierta *reparte {int + 2}*, si falla *bebe {int + 2}.*
+*Pares o impares:* {name}, elige par o impar y {name} tendrá la otra opción, *sacar dedos a la de 3.* El que pierda se *termina la copa.*
+*Llamada a ciegas:* {name} debe *llamar a un contacto aleatorio*. Si le responden antes de 3 tonos *reparte {int + 2}*, si *no* le responden *bebe {int + 2}*. Si se niega a llamar, *te terminas la copa*
+{name} y {name}, poneos de pie y *haced contacto visual durante 20 segundos sin reíros*. El primero que sonría o se ría *bebe {int + 1}*.
+{name}, di en orden *5 cosas que te llevarías a una fiesta*. Tienes 5 segundos. Si te trabas o dudas *bebes {int}*.
 
 
 // ----- MODIFICADORES----------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -164,7 +176,15 @@ A partir de ahora {name}, no puede *hablar* hasta que se diga *3 veces su nombre
 *A partir de ahora hay que brindar antes de cada trago.* Si no lo haces *bebes otra vez*
 {name}, *No puedes señalar con el dedo.* Si lo haces *bebes*
 El primero que mire su móvil *se termina la copa*
+{name} y {name} os *intercambiais los vasos* hasta que ambos os acabeis la copa mientras jugais, si os *negais os terminais la copa*
 
+// ----- DI MI NOMBRE----------------------------------------------------------------------------------------------------------------------------------------------------------------------
+*La mano pegada: {name}* debe mantener *la mano izquierda* pegada a la mesa en *todo* momento. Si la levanta *bebe {int}*. Esto solo se eliminará si tu nombre es pronunciado
+*Silencio absoluto: {name}* no puede *hablar* ni emitir ningún sonido. Si lo hace, *bebe {int}.* La restricción se elimina únicamente cuando alguien diga su nombre.
+*Vaso confiscado: {name}* no puede tocar su propio vaso. Si lo toca, *bebe {int}.* Se elimina la penalización solo cuando alguien brinde contigo diciendo tu nombre. *El jugador de tu derecha* te tendrá que dar de beber
+*El mimo: {name}* debe *imitar* todos los movimientos que haga la persona a su *izquierda*. Si se despista, *bebe {int}.* La maldición acaba si esa persona dice tu nombre o puedes pagar *terminándote el vaso*
+*Tercera persona: {name}* solo puede hablar de *sí mismo/a en tercera persona.* Si usa el "yo", *bebe {int}.* La regla se elimina cuando alguien diga tu nombre.
+*El mocos: {name}* debe mantener un *dedo en la nariz.* Si lo quita, *bebe {int}.* Esto acaba cuando alguien diga tu nombre.
 
 //-------QUIEN ME CONOCE MEJOR----------------------------------------------------------------------------------------------------------------------------------------------------------------------
 {name}, ¿cuál es la *comida favorita* de {name}? Si fallas *bebes {int}*. Si aciertas, *repartís {int}* cada uno.
@@ -182,6 +202,7 @@ El primero que mire su móvil *se termina la copa*
 {name}, ¿cuál es la *copa de confianza* de {name}? Si fallas *bebes {int}*. Si aciertas, *repartís {int}* cada uno.
 {name}, ¿qué *cantante o grupo* escucha más {name}? Si fallas *bebes {int}*. Si aciertas, *repartís {int}* cada uno.
 {name}, ¿qué *helado* elegiría {name}? Si fallas *bebes {int}*. Si aciertas, *repartís {int}* cada uno.
+{name}, ¿qué deporte *practicaba {name} de pequeño*? Si fallas *bebes {int}.* Si aciertas, *repartís {int}* cada uno.
 
 
 //-------A LA DE 3----------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -207,3 +228,36 @@ A la de 3, {name} y {name} tenéis que decir una *capital europea*. Si falláis 
 A la de 3, {name} y {name} tenéis que decir una *fruta*. Si falláis *bebéis {int}* cada uno, si acertáis *repartís {int + 1}*.
 A la de 3, {name} y {name} tenéis que decir un *instrumento musical*. Si falláis *bebéis {int}* cada uno, si acertáis *repartís {int + 1}*.
 {name}, a la de 3 debes decir que 2 personas son mas probables de *tener algo esta NOCHE*, los elegidos deben darse un pico, sino bebeis {int + 3}
+
+// ----- DILEMA IMPOSIBLE----------------------------------------------------------------------------------------------------------------------------------------------------------------------
+{name}, ¿preferirías leerte todo tu historial de WhatsApp en voz alta o terminarte la copa? Elige o bebe {int + 2}.
+{name}, ¿preferirías *llamar a tu último/a ex* o *beberte {int + 2}* tragos ? 
+{name}, ¿preferirías *escribir a tu último/a ex* o *beberte {int}* tragos ? 
+{name}, ¿preferirías *subir un selfie ridículo* a tus historias de Instagram o *beberte {int + 2}* tragos?
+{name}, ¿preferirías dejar que {name} revise tus *mensajes directos de Instagram* durante 1 minuto o *beberte {int + 2}* tragos?
+{name}, ¿preferirías confesar quién de esta mesa te parece el *menos atractivo/a* o *terminarte la copa*?
+{name}, ¿preferirías confesar quién de esta mesa te parece el *mas atractivo/a* o *terminarte la copa*?
+{name}, ¿preferirías *darle 'like'* a una historia destacada del *que te gusta o ex* o *beberte {int + 1}*?
+{name}, ¿preferirías contar con todo detalle *la peor experiencia* que has tenido en *la cama* o *beberte {int + 2}* tragos?
+{name}, ¿preferirías *darle un beso en el cuello* a la persona a tu *izquierda* o *beberte {int + 2}*?
+{name}, ¿preferirías *darle un beso* a la persona a tu *derecha* o *beberte {int + 4}*?
+{name}, ¿preferirías dejar que {name} *te pinte algo en la cara* con un boli o *beberte {int + 2}*?
+{name}, ¿preferirías *cambiarte la camiseta* con {name} durante el resto de la partida o *terminarte la copa*?
+
+// ----- LA SUBASTA----------------------------------------------------------------------------------------------------------------------------------------------------------------------
+*Subasta de castigo:* ¿Cuántos tragos *estáis dispuestos a pagar* para que {name} se termine su copa? El jugador que haga la puja más alta *bebe esa cantidad* y obliga a {name} a *terminarse la copa*.
+*Subasta de castigo:* ¿Cuántos tragos *estáis dispuestos a pagar* para que {name} se termine su copa? El jugador que haga la puja más alta *bebe esa cantidad* y obliga a {name} a *terminarse la copa*.
+*Subasta de castigo:* ¿Cuántos tragos *estáis dispuestos a pagar* para que {name} se termine su copa? El jugador que haga la puja más alta *bebe esa cantidad* y obliga a {name} a *terminarse la copa*.
+*Subasta de tragos:* Teneis que ofertar *cuantos tragos estais dispuestos a beber* por *repartir {int + 2}* a 2 personas.
+*Subasta de tragos:* Teneis que ofertar *cuantos tragos estais dispuestos a beber* por *repartir {int + 2}* a 2 personas.
+*Subasta de tragos:* Teneis que ofertar *cuantos tragos estais dispuestos a beber* por *repartir {int + 2}* a 2 personas.
+*Subasta de tragos:* Teneis que ofertar *cuantos tragos estais dispuestos a beber* por *repartir {int + 2}* a 2 personas.
+*Subasta de tragos:* Teneis que ofertar *cuantos tragos estais dispuestos a beber* por *repartir {int + 2}* a 2 personas.
+*Subasta de tragos:* Teneis que ofertar *cuantos tragos estais dispuestos a beber* por *repartir {int + 2}* a 2 personas.
+*Subasta de tragos:* Teneis que ofertar *cuantos tragos estais dispuestos a beber* por *repartir {int + 2}* a 2 personas.
+*Subasta de tragos:* Teneis que ofertar *cuantos tragos estais dispuestos a beber* por *repartir {int + 2}* a 2 personas.
+*Subasta de tragos:* Teneis que ofertar *cuantos tragos estais dispuestos a beber* por *repartir {int + 2}* a 2 personas.
+*Subasta de tragos:* Teneis que ofertar *cuantos tragos estais dispuestos a beber* por *repartir {int + 2}* a 2 personas.
+*Subasta de tragos:* Teneis que ofertar *cuantos tragos estais dispuestos a beber* por *repartir {int + 2}* a 2 personas.
+*Subasta de tragos:* Teneis que ofertar *cuantos tragos estais dispuestos a beber* por *repartir {int + 2}* a 2 personas.
+*Subasta de tragos:* Teneis que ofertar *cuantos tragos estais dispuestos a beber* por *repartir {int + 2}* a 2 personas.
