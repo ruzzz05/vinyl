@@ -39,6 +39,7 @@ La persona que lleve más prendas negras *reparte {int}*
 El que tenga la pantalla del móvil rota *bebe {int}*
 La persona que tenga el pelo teñido *reparte {int - 1}*
 El más "influencer" *bebe {int + 1}*
+*Bebe {int + 1}*, al que le haya *dejado de seguir un ex.*
 
 // ------ DECIDID----------------------------------------------------------------------------------------------------------------------------------------------------------------------
 Decidid quien es la persona *más graciosa*. Esa persona *bebe {int}*
